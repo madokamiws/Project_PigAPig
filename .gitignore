@@ -1,0 +1,10 @@
+Library/
+Logs/
+UserSettings/
+.vsconfig
+*.csproj
+*.sln
+obj/
+.vs/
+Temp/
+Assets/Live2D/
