@@ -14,6 +14,84 @@ public class DeckController : MonoBehaviour
     public RectTransform deckTrans;//卡牌需要生成到的位置的transform引用
     public Transform[] pickDeckPosTrans;//捡牌堆的格子位置
     public RectTransform centerDeckTrans;//中间牌堆的基础位置（原点）
+    private int[,,] centerDeck = new int[,,]//层 行 列
+{
+        //后5层
+        {
+            {0,0,0,0},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,0,0,0}
+        },
+        {
+            {0,0,0,0},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,0,0,0}
+        },
+        {
+            {0,0,0,0},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,0,0,0}
+        },
+        {
+            {0,0,0,0},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,0,0,0}
+        },
+        {
+            {0,0,0,0},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,2,2,2},
+            {0,0,0,0}
+        },
+        //上两层
+        {
+            {0,0,0,0},
+            {0,1,1,1},
+            {0,0,1,1},
+            {0,0,1,1},
+            {0,1,2,2},
+            {0,2,2,1},
+            {0,0,0,0}
+        },
+        {
+            {0,0,0,0},
+            {0,1,1,3},
+            {0,0,2,2},
+            {3,3,3,3},
+            {0,0,0,3},
+            {0,0,3,3},
+            {0,0,0,0}
+        },
+        //最上层
+        {
+            {0,3,1,2},
+            {0,0,0,0},
+            {3,2,2,2},
+            {3,3,3,3},
+            {0,0,2,2},
+            {0,0,0,0},
+            {0,0,1,3}
+        }
+};
     public static DeckController Instance { get; set; }
     private void Awake()
     {
@@ -48,7 +126,20 @@ public class DeckController : MonoBehaviour
                         //偏移方向上下
                         dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
                     }
-
+                    CREATESTATE cs = (CREATESTATE)centerDeck[k, j, i];
+                    switch (cs)
+                    {
+                        case CREATESTATE.NONE:
+                            break;
+                        case CREATESTATE.CREATE:
+                            break;
+                        case CREATESTATE.RANDOM:
+                            break;
+                        case CREATESTATE.ONLYCREATE:
+                            break;
+                        default:
+                            break;
+                    }
 
                     GameObject go = Instantiate(cardGo, deckTrans);
                     go.GetComponent<RectTransform>().anchoredPosition = 
@@ -66,4 +157,14 @@ public class DeckController : MonoBehaviour
     {
 
     }
+}
+/// <summary>
+/// 卡牌的生成状态枚举
+/// </summary>
+public enum CREATESTATE
+{
+    NONE,//该位置不生成卡牌
+    CREATE,//生成并且位置可能偏移
+    RANDOM,//可能生成也可能偏移
+    ONLYCREATE//生成一定不偏移
 }
