@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1366142669863020457}
   - component: {fileID: 1366142669863020470}
   - component: {fileID: 1366142669863020471}
+  - component: {fileID: 1537437396694450554}
   m_Layer: 5
   m_Name: Button_card
   m_TagString: Untagged
@@ -93,7 +94,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -118,3 +119,48 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1537437396694450554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366142669863020469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d60adc170bd20b428b3c4c5608c9d7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnCard: {fileID: 1366142669863020471}
+  imgCard: {fileID: 1366142669863020470}
+  clickSprites:
+  - {fileID: 21300000, guid: 4754099053468a5428660ad2488acd94, type: 3}
+  - {fileID: 21300000, guid: 8af8d4109b34cc249981c31f479efab9, type: 3}
+  - {fileID: 21300000, guid: 086e11f23a53d4542967aad6e1d59762, type: 3}
+  - {fileID: 21300000, guid: f9dd484ce0b71274aa0ed62e11b8170b, type: 3}
+  - {fileID: 21300000, guid: f28ec80a0b6b5bb40b33bdc937c270b6, type: 3}
+  - {fileID: 21300000, guid: af4988776473437449f337bd13905dda, type: 3}
+  - {fileID: 21300000, guid: 1678aa68288ac624ba4de02fff14e04b, type: 3}
+  - {fileID: 21300000, guid: e6afa2fae1874654f9fbc413b4a8bc3c, type: 3}
+  - {fileID: 21300000, guid: 0c8d4a3ecaecc7149af19af8d779554f, type: 3}
+  - {fileID: 21300000, guid: 77d1af1a0339ae54a81be9edee3b73c3, type: 3}
+  - {fileID: 21300000, guid: 04cffa6223ac12c4290aedfa3f648af8, type: 3}
+  - {fileID: 21300000, guid: 087f57ac4fcbd8044b87040a1b3b2df7, type: 3}
+  - {fileID: 21300000, guid: 662ea1794554e5245a769136f14f06f5, type: 3}
+  - {fileID: 21300000, guid: 5ab5e29a664c4384887a4bacf0e297df, type: 3}
+  coveredSprites:
+  - {fileID: 21300000, guid: 1b3a7bfe74636654f873e8f95f3d2215, type: 3}
+  - {fileID: 21300000, guid: a0d13167fa6b2364b85bf3360070cea5, type: 3}
+  - {fileID: 21300000, guid: c6dd24676dc4248429b7ff99db1e410c, type: 3}
+  - {fileID: 21300000, guid: c8c7be83a19465b4ebd3748ec6d66bf7, type: 3}
+  - {fileID: 21300000, guid: 340145a6d2f85a345a4aaa38fc421b36, type: 3}
+  - {fileID: 21300000, guid: 9235a59d31844514d90ec7909cc3ca33, type: 3}
+  - {fileID: 21300000, guid: 33c204291fce1b6439196ffbe716ac69, type: 3}
+  - {fileID: 21300000, guid: 64819e649e0443c4cb4327da5f2e3c46, type: 3}
+  - {fileID: 21300000, guid: 3c374bcb92c5d744e916395eb1113aea, type: 3}
+  - {fileID: 21300000, guid: 7df966a98dc1cd549967123c68cc0238, type: 3}
+  - {fileID: 21300000, guid: c605a3a65203f7e47a8ac97cb1026715, type: 3}
+  - {fileID: 21300000, guid: fcd30542afcae20409c7b0c4307989d0, type: 3}
+  - {fileID: 21300000, guid: 0ed774bcb06e10f41a92c6782a1e6074, type: 3}
+  - {fileID: 21300000, guid: c9bb27e40f27fe345a3402e11aa14afa, type: 3}
+  id: 0

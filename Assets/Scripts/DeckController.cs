@@ -106,6 +106,8 @@ public class DeckController : MonoBehaviour
             //行
             for (int j = 0; j < row; j++)
             {
+                //对称生成后半部分
+                CREATESTATE[] halfState = new CREATESTATE[column / 2];
                 //列
                 for (int i = 0; i < column; i++)
                 {
@@ -126,30 +128,72 @@ public class DeckController : MonoBehaviour
                         //偏移方向上下
                         dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
                     }
-                    CREATESTATE cs = (CREATESTATE)centerDeck[k, j, i];
+
+                    GameObject go = null;
+
+                    CREATESTATE cs ;
+
+
+                    if (i <= column / 2)
+                    {
+                        //前半部分直接从三维数组取
+                        cs = (CREATESTATE)centerDeck[k, j, i];
+                        if (i != column / 2)
+                        {
+                            halfState[column / 2 - i - 1] = cs;
+                        }
+                    }
+                    else
+                    {
+                        cs = halfState[i - column / 2 - 1];
+                    }
+
                     switch (cs)
                     {
                         case CREATESTATE.NONE:
                             break;
                         case CREATESTATE.CREATE:
+                            go = CreatCardGo(i, j, dirX, dirY);
                             break;
                         case CREATESTATE.RANDOM:
+                            if (UnityEngine.Random.Range(0,2)==0?true:false)
+                            {
+                                //随机生成
+                                go = CreatCardGo(i, j, dirX, dirY);
+                            }
                             break;
                         case CREATESTATE.ONLYCREATE:
+                            go = CreatCardGo(i, j, 0, 0);
                             break;
                         default:
                             break;
                     }
+                    if (go)
+                    {
+                        Card card =  go.GetComponent<Card>();
+                        card.SetCardSprite();
+                        //设置覆盖关系
+                        cards.Add(card);
 
-                    GameObject go = Instantiate(cardGo, deckTrans);
-                    go.GetComponent<RectTransform>().anchoredPosition = 
-                        centerDeckTrans.anchoredPosition + 
-                        new Vector2(cardWidth * (i+0.5f*dirX), -cardHeight * (j + 0.5f * dirY));
-                    go.name = "I:" + i.ToString() + " J:" + j.ToString() + " K:" + k.ToString();
+                        go.name = "I:" + i.ToString() + " J:" + j.ToString() + " K:" + k.ToString();
+                    }
+
+                  
                 }
             }
         }
 
+    }
+    /// <summary>
+    /// 生成卡牌
+    /// </summary>
+    private GameObject CreatCardGo(int column,int row,int dirX,int dirY)
+    {
+        GameObject go = Instantiate(cardGo, deckTrans);
+        go.GetComponent<RectTransform>().anchoredPosition =
+            centerDeckTrans.anchoredPosition +
+            new Vector2(cardWidth * (column + 0.5f * dirX), -cardHeight * (row + 0.5f * dirY));
+        return go;
     }
 
     // Update is called once per frame
