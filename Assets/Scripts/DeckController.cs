@@ -106,28 +106,29 @@ public class DeckController : MonoBehaviour
             //行
             for (int j = 0; j < row; j++)
             {
+                //随机当前列是否偏移
+                bool ifMoveX = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
+                bool ifMoveY = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
+
+                int dirX = 0;
+                int dirY = 0;
+
+                if (ifMoveX)
+                {
+                    //偏移方向是做还是右
+                    dirX = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+                }
+                if (ifMoveY)
+                {
+                    //偏移方向上下
+                    dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+                }
                 //对称生成后半部分
                 CREATESTATE[] halfState = new CREATESTATE[column / 2];
                 //列
                 for (int i = 0; i < column; i++)
                 {
-                    //随机当前列是否偏移
-                    bool ifMoveX =  Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
-                    bool ifMoveY = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
 
-                    int dirX = 0;
-                    int dirY = 0;
-
-                    if (ifMoveX)
-                    {
-                        //偏移方向是做还是右
-                        dirX = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
-                    }
-                    if (ifMoveY)
-                    {
-                        //偏移方向上下
-                        dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
-                    }
 
                     GameObject go = null;
 
@@ -173,6 +174,9 @@ public class DeckController : MonoBehaviour
                         Card card =  go.GetComponent<Card>();
                         card.SetCardSprite();
                         //设置覆盖关系
+
+                        SetCoverState(card);
+
                         cards.Add(card);
 
                         go.name = "I:" + i.ToString() + " J:" + j.ToString() + " K:" + k.ToString();
@@ -185,7 +189,7 @@ public class DeckController : MonoBehaviour
 
     }
     /// <summary>
-    /// 生成卡牌
+    /// 产生卡牌游戏物体
     /// </summary>
     private GameObject CreatCardGo(int column,int row,int dirX,int dirY)
     {
@@ -194,6 +198,17 @@ public class DeckController : MonoBehaviour
             centerDeckTrans.anchoredPosition +
             new Vector2(cardWidth * (column + 0.5f * dirX), -cardHeight * (row + 0.5f * dirY));
         return go;
+    }
+    /// <summary>
+    /// 当前新生成的卡牌与其他卡牌之间的关系
+    /// </summary>
+    /// <param name="card"></param>
+    private void SetCoverState(Card card)
+    {
+        for (int i = 0; i < cards.Count; i++)
+        {
+            card.SetCoverCardState(cards[i]);
+        }
     }
 
     // Update is called once per frame
