@@ -12,6 +12,10 @@ public class Card : MonoBehaviour
     public int id;
 
     public RectTransform rtf;
+
+    public List<Card> coverCardList = new List<Card>();//当前卡牌覆盖的其他卡牌
+    public List<Card> aboveCardList = new List<Card>();//覆盖当前卡牌的其他卡牌
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +52,9 @@ public class Card : MonoBehaviour
         if (Mathf.Abs(cardPos.x - targetCardPos.x) < DeckController.Instance.cardWidth-0.01 && 
             Mathf.Abs(cardPos.y - targetCardPos.y)< DeckController.Instance.cardHeight-0.01 )
         {
+            targetCard.AddAboveCard(this);
             targetCard.ClosebuttonClickState();
+            coverCardList.Add(targetCard);
         }
     }
     /// <summary>
@@ -63,6 +69,38 @@ public class Card : MonoBehaviour
     /// </summary>
     public void CardClickEvent()
     {
+        //需要移出所有被覆盖的卡牌
+        for (int i = 0; i < coverCardList.Count; i++)
+        {
+            coverCardList[i].RemoveAboveCard(this);
+            coverCardList[i].JudgeCanClickState();
+        }
         Destroy(gameObject);
+
     }
+
+
+    /// <summary>
+    /// 目标卡牌覆盖了当前卡牌（我们自身去调用目标卡牌的方法）
+    /// </summary>
+    public void AddAboveCard(Card targetCard)
+    {
+        aboveCardList.Add(targetCard);
+    }
+    /// <summary>
+    /// 移除当前卡牌被目标卡牌覆盖的引用（我们自身被其他覆盖到我们的卡牌(目标卡牌)去调用）
+    /// </summary>
+    /// <param name="aboveCard"></param>
+    public void RemoveAboveCard(Card aboveCard)
+    {
+        aboveCardList.Remove(aboveCard);
+    }
+    /// <summary>
+    /// 判断当前是否可以点击
+    /// </summary>
+    public void JudgeCanClickState()
+    {
+        btnCard.interactable = aboveCardList.Count <= 0;
+    }
+
 }
