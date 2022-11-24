@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using DG.Tweening;
 public class Card : MonoBehaviour
 {
     public Button btnCard;
@@ -69,14 +69,29 @@ public class Card : MonoBehaviour
     /// </summary>
     public void CardClickEvent()
     {
+        transform.SetSiblingIndex(500);
         //需要移出所有被覆盖的卡牌
         for (int i = 0; i < coverCardList.Count; i++)
         {
             coverCardList[i].RemoveAboveCard(this);
             coverCardList[i].JudgeCanClickState();
         }
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        int posID = -1;
+        Transform targetTrans = DeckController.Instance.GetPickDeckTargetTrans(id,out  posID);
+        transform.DOMove(targetTrans.position,0.5f).OnComplete(()=> {
+            if (targetTrans.childCount > 0)
+            {
+                transform.SetParent(DeckController.Instance.GetEmptyPickDeckTargetTrans(posID));
+            }
+            else
+            {
+                transform.SetParent(targetTrans);
+            }
 
+            transform.localPosition = Vector3.zero;
+            DeckController.Instance.JudgeClearCard();
+        });
     }
 
 
