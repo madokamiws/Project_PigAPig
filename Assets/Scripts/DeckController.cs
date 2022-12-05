@@ -423,13 +423,3 @@ public class DeckController : MonoBehaviour
     }
 
 }
-/// <summary>
-/// 卡牌的生成状态枚举
-/// </summary>
-public enum CREATESTATE
-{
-    NONE,//该位置不生成卡牌
-    CREATE,//生成并且位置可能偏移
-    RANDOM,//可能生成也可能偏移
-    ONLYCREATE//生成一定不偏移
-}
