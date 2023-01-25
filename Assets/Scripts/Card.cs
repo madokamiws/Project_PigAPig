@@ -69,6 +69,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void CardClickEvent()
     {
+        btnCard.onClick.RemoveAllListeners();
         transform.SetSiblingIndex(500);
         //需要移出所有被覆盖的卡牌
         for (int i = 0; i < coverCardList.Count; i++)

@@ -95,10 +95,10 @@ public class DeckController : MonoBehaviour
         },
         //最上层
         {
-            {0,3,1,2},
-            {0,0,0,0},
-            {3,2,2,2},
+            {3,4,3,5},
+            {6,3,3,3},
             {3,3,3,3},
+            {7,3,3,3},
             {0,0,2,2},
             {0,0,0,0},
             {0,0,1,3}
@@ -181,6 +181,31 @@ public class DeckController : MonoBehaviour
                         case CREATESTATE.ONLYCREATE:
                             go = CreatCardGo(i, j, 0, 0);
                             break;
+                        case CREATESTATE.UPPERCREATE:
+                            go = CreatCardGo(i, j, 0, -1);
+                            break;//上
+                        case CREATESTATE.LOWERCREATE:
+                            go = CreatCardGo(i, j, 0, 1);
+                            break;//下
+                        case CREATESTATE.LEFTCREATE:
+                            go = CreatCardGo(i, j, -1, 0);
+                            break;//左
+                        case CREATESTATE.RIGHTCREATE:
+                            go = CreatCardGo(i, j, 1, 0);
+                            break;//右
+                        case CREATESTATE.UPPERLEFTCREATE:
+                            go = CreatCardGo(i, j, -1, -1);
+                            break;//左上
+                        case CREATESTATE.UPPERRIGHTCREATE:
+                            go = CreatCardGo(i, j, 1, -1);
+                            break;//右上
+                        case CREATESTATE.LOWERRLEFTCREATE:
+                            go = CreatCardGo(i, j, -1, 1);
+                            break;//左下
+                        case CREATESTATE.LOWERRIGHTCREATE:
+                            go = CreatCardGo(i, j, 1, 1);
+                            break;//右下
+
                         default:
                             break;
                     }

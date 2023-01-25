@@ -31,6 +31,7 @@ public enum CREATESTATE
     RANDOM = 2,//可能生成也可能偏移
 
     ONLYCREATE = 3,//生成一定不偏移  center
+
     UPPERCREATE = 4,//上
     LOWERCREATE = 5,//下
     LEFTCREATE = 6,//左
