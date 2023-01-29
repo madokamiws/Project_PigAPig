@@ -1,0 +1,18 @@
+
+{
+    "displayName" : "Stark SDK - Unity Tools",
+    "name"        : "com.bytedance.starksdk.unitytools",
+    "version"     : "2.6.2",
+    "description" : "* \u652F\u6301iOS Wasm\u5206\u5305\n* \u4FEE\u590D\u90E8\u5206bug",
+    "keywords"    : [
+    ],
+    "category"    : "Libraries",
+    "links"       : [
+        {
+            "label" : "View Document",
+            "url"   : "https://bytedance.feishu.cn/docs/doccnGEsOm0yquys4iAgtVi7nKh#"
+        }
+    ],
+    "unitySinceBuild" : "2019.4",
+    "unityUntilBuild" : "*"
+}
