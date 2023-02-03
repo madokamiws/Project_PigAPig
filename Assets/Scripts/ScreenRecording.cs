@@ -14,10 +14,10 @@ public class ScreenRecording : MonoBehaviour
     private AsyncOperation ao;
     public bool ifLoadGameScene;
 
-    
+    public Text tx_Logs;
     void Start()
     {
-       
+       //登录游戏
        StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
                    OnLoginFailedCallback,true);
 
@@ -28,7 +28,8 @@ public class ScreenRecording : MonoBehaviour
         ao = SceneManager.LoadSceneAsync(1);
         ao.allowSceneActivation = false;
     }
-
+    string sucesslog = "";
+    string failedlog = "";
     /// <summary>
     /// 登录成功回调
     /// </summary>
@@ -38,6 +39,8 @@ public class ScreenRecording : MonoBehaviour
     void OnLoginSuccessCallback(string code, string anonymousCode, bool isLogin)
     {
         Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
+        sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
+        tx_Logs.text = sucesslog;
     }
     /// <summary>
     /// 检查Session接口调用失败的回调函数
@@ -46,6 +49,8 @@ public class ScreenRecording : MonoBehaviour
     void OnLoginFailedCallback(string errMsg)
     {
         Debug.Log("OnLoginFailedCallback ... errMsg：" + errMsg);
+        failedlog = string.Format(sucesslog+ "登录失败\n OnLoginFailedCallback ... errMsg：" + errMsg + "\n");
+        tx_Logs.text = failedlog;
     }
 
 
