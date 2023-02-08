@@ -93,17 +93,17 @@ namespace Yes.Game.Chicken
 
 #if !UNITY_EDITOR
                 return new string[]{
-                    "https://api.h2hh.cn/api/",
-                    "https://api.h3hh.cn/api/",
-                    "https://api.h5hh.cn/api/"
+                    "https://106.14.176.92/",
+                    "https://106.14.176.92/",
+                    "https://106.14.176.92/"
                 };
 #endif
-                return new string[] { "https://api.h2hh.cn/api/" };
+                return new string[] { "https://106.14.176.92/" };
             }
             else
             {
                 return new string[]{
-                    "http://dev.hh3h.cn/api/"
+                    "http://106.14.176.92/"
                 };
             }
 

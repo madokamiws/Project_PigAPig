@@ -114,6 +114,8 @@ namespace Yes.Game.Chicken
         // Start is called before the first frame update
         void Start()
         {
+            DeckData.GetDeckData();
+
             pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
 
 

@@ -2,38 +2,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace Yes.Game.Chicken
 {
     public class DeckData
     {
-        public static void GetHeroSign(Action<DeckModel> callback = null)
+        public static void GetDeckData(Action<DeckModel> callback = null)
         {
             try
             {
 
-                string url = "hero_sign_ins/get_sign_in_lists";
+                string url = "robots.txt";
                 Dictionary<string, string> param = new Dictionary<string, string>();
                 if (Constant.IsDebug)
                 {
                     param.Add("debug", "1");
                 }
                 param.Add("", "");
-                //BaseHttpHelper.HttpMethod(url, param, (string data) =>
-                //{
-                ////Logs.Log("hero_sign_ins/get_sign_in_lists接口返回数据:" + data);
+                BaseHttpHelper.HttpMethod(url, param, (string data) =>
+                {
+                    //Logs.Log("hero_sign_ins/get_sign_in_lists接口返回数据:" + data);
 
-                //SignModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<SignModel>(data);
-                //    if (model.error_code >= 0)
-                //    {
+                    DeckModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<DeckModel>(data);
+                    if (model.error_code >= 0)
+                    {
 
-                //        if (callback != null)
-                //            callback(model);
-                //    }
-                //    else
-                //    {
-                //    //  Utils.CopyDebug("get_sign_in_lists获取签到数据失败！");
-                //}
-                //});
+                        if (callback != null)
+                            callback(model);
+                    }
+                    else
+                    {
+                        //  Utils.CopyDebug("get_sign_in_lists获取签到数据失败！");
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -41,7 +42,7 @@ namespace Yes.Game.Chicken
             }
         }
     }
-    public class DeckModel
+    public class DeckModel:BaseModel
     {
         public int checkpoint_type { get; set; }//关卡类型 1 闯关 2挑战
         public int checkpoint_num { get; set; }//第几关
@@ -49,9 +50,6 @@ namespace Yes.Game.Chicken
         public int totalcard_num { get; set; }//卡牌总数
         public int card_element { get; set; }//卡牌元素
         public int[] around_deck { get; set; }//是否生成周围牌堆 上左1，上右2，下左3，下右4 
-
-
-
 
     }
 
