@@ -8,3 +8,5 @@ obj/
 .vs/
 Temp/
 Assets/Live2D/
+Build/
+qrcodes/
