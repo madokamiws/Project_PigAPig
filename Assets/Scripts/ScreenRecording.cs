@@ -42,6 +42,7 @@ namespace Yes.Game.Chicken
             Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
             tx_Logs.text = sucesslog;
+            CopyDebug.OnClickCopyText(sucesslog);
         }
         /// <summary>
         /// 检查Session接口调用失败的回调函数
