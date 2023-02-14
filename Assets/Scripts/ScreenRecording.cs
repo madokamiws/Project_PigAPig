@@ -18,11 +18,11 @@ namespace Yes.Game.Chicken
         public Text tx_Logs;
         void Start()
         {
-            //开启关注抖音号API的MOCK
-            MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
+            ////开启关注抖音号API的MOCK
+            //MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
 
-            //调用API时会弹出调试框
-            StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
+            ////调用API时会弹出调试框
+            //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
 
             //登录游戏
             StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
@@ -48,6 +48,11 @@ namespace Yes.Game.Chicken
             Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
             tx_Logs.text = sucesslog;
+            LoginData.GetLoginData(code, (result) =>
+             {
+                 
+             });
+
             //CopyDebug.OnClickCopyText(sucesslog);
         }
         /// <summary>

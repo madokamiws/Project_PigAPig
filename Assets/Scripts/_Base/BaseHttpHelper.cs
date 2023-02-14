@@ -35,7 +35,7 @@ public class BaseHttpHelper
         try
         {
 
-            var requests = new HTTPRequest(uri, HTTPMethods.Get, (request, response) => {
+            var requests = new HTTPRequest(uri, HTTPMethods.Post, (request, response) => {
 
                 // Logs.Log(" *****HttpMethod返回数据***** url =" + api_url);
 
@@ -116,7 +116,20 @@ public class BaseHttpHelper
             requests.SetHeader("Content-Type", "text/html; charset=utf-8");
             requests.Timeout = TimeSpan.FromSeconds(30);
 
+            Dictionary<string, string> new_param = new Dictionary<string, string>();
+            if (param == null) param = new Dictionary<string, string>();
+            foreach (var item in param)
+            {
+                if (!new_param.ContainsKey(item.Key))
+                {
+                    new_param.Add(item.Key, item.Value);
+                    requests.AddField(item.Key, item.Value);
+                }
 
+
+                // Debug.Log(string.Format ( "  HttpMethod item.Key={0}, item.Value={1}", item.Key, item.Value ) ) ;
+            }
+            //string h = GetAppSignEx(new_param);
 
             /*
             Dictionary<string, string> list = BaseModel.GetCommonHttpFields();
@@ -163,7 +176,7 @@ public class BaseHttpHelper
 
             */
 
-
+ 
 
             requests.Send();
             // requests.DisableCache = true ;
@@ -208,7 +221,6 @@ public class BaseHttpHelper
         }
     }
 
-    /*
     public static string GetAppSignEx(Dictionary<string, string> dic)
     {
 
@@ -242,19 +254,12 @@ public class BaseHttpHelper
                              //}
                              //UnityEngine.Debug.Log("GetAppSignEx 1 =" + sign);
 
-        string sign_final = sign + EmpUser.CKEY + EmpUser.CKEY;
 
-
-        //UnityEngine.Debug.Log("GetAppSignEx 2 =" + sign_final );
-        //UnityEngine.Debug.Log("GetAppSignEx 2HotelUserHelper.CKEY =" + UserHelper.CKEY);
-
-        sign_final = GetMD5(sign_final);
 
         // UnityEngine.Debug.Log("GetAppSignEx 3 =" + sign_final );
         // Logs.Log(" - sign1 =" + sign);
-        return sign_final;
+        return sign;
     }
-    */
     public static string GetMD5(string myString)
     {
         MD5 md5 = new MD5CryptoServiceProvider();
