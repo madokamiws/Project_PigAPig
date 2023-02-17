@@ -12,13 +12,8 @@ namespace Yes.Game.Chicken
     [System.Serializable]
     public class BaseModel
     {
-
-        public int id { get; set; }
-
-        // [IgnoreAttribute]
-        // public string sid { get; set; }
-
         public int error_code { get; set; }
+        public string error_reason { get; set; }
 
 
         public BaseModel()
