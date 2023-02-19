@@ -14,16 +14,31 @@ namespace Yes.Game.Chicken
 		{
 			try
 			{
-				StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
-			OnLoginFailedCallback, true);
 
-			}
+                CheckSession();
+
+            }
 			catch (Exception ex)
 			{
 				Logs.Log("初始化错误:ex = " + ex.Message);
 			}
 
 		}
+        void CheckSession()
+        {
+            StarkSDK.API.GetAccountManager().CheckSession(OnCheckSessionSuccessCallback, OnCheckSessionFailedCallback);
+        }
+        void OnCheckSessionSuccessCallback()
+        { 
+        //登录游戏逻辑
+        }
+        void OnCheckSessionFailedCallback(string errMsg)
+        {
+            Logs.Log("errMsg = " + errMsg);
+            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+OnLoginFailedCallback);
+
+        }
         string sucesslog = "";
         string failedlog = "";
         /// <summary>
@@ -39,7 +54,8 @@ namespace Yes.Game.Chicken
             tx_Logs.text = sucesslog;
             LoginData.GetLoginData(code, (result) =>
             {
-
+                //记录 result
+                CheckSession();
             });
 
             //CopyDebug.OnClickCopyText(sucesslog);
@@ -57,4 +73,5 @@ namespace Yes.Game.Chicken
 
 
     }
+
 }
