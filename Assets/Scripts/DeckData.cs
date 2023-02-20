@@ -12,7 +12,7 @@ namespace Yes.Game.Chicken
             try
             {
 
-                string url = "robots.txt";
+                string url = "get_level_lists";
                 Dictionary<string, string> param = new Dictionary<string, string>();
                 if (Constant.IsDebug)
                 {
