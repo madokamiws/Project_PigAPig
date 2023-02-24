@@ -47,7 +47,7 @@ namespace Yes.Game.Chicken
         public string openid { get; set; }
         public string unionid { get; set; }
         public string session_key { get; set; }
-        public int token { get; set; }
+        public string token { get; set; }
         public int updated_at { get; set; }
         public int created_at { get; set; }
         public int id { get; set; }

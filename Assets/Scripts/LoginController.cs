@@ -54,6 +54,7 @@ OnLoginFailedCallback);
             tx_Logs.text = sucesslog;
             LoginData.GetLoginData(code, (result) =>
             {
+                PlayerPrefs.SetString("user_token", result.token);
                 //记录 result
                 CheckSession();
             });

@@ -8,12 +8,15 @@ namespace Yes.Game.Chicken
     {
 
         public List<CheckPoint> config_levels { get; set; }
-        public int page { get; set; }
-        public int per_page { get; set; }
-        public int total { get; set; }
+        public int page { get; set; }//当前页
+        public int per_page { get; set; }//每页多个数据
+        public int total { get; set; }//总条数
 
-
-        public static void GetDeckData(Action<CheckPointModel> callback = null)
+        /// <summary>
+        ///  获取关卡列表
+        /// </summary>
+        /// <param name="callback"></param>
+        public static void GetPointData(int page,int per_page,Action<CheckPointModel> callback = null)
         {
             try
             {
@@ -23,7 +26,16 @@ namespace Yes.Game.Chicken
                 {
                     param.Add("debug", "1");
                 }
-                param.Add("", "");
+                if (PlayerPrefs.HasKey("user_token"))
+                    param.Add("token", PlayerPrefs.GetString("user_token"));
+                else
+                {
+                    //没有token的逻辑
+                }
+
+                param.Add("page", page.ToString());
+                param.Add("per_page", per_page.ToString());
+
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     //Logs.Log("hero_sign_ins/get_sign_in_lists接口返回数据:" + data);
