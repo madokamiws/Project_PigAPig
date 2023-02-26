@@ -35,7 +35,7 @@ public class BaseHttpHelper
         try
         {
 
-            var requests = new HTTPRequest(uri, HTTPMethods.Post, (request, response) => {
+            var requests = new HTTPRequest(uri, HTTPMethods.Get, (request, response) => {
 
                 // Logs.Log(" *****HttpMethod返回数据***** url =" + api_url);
 

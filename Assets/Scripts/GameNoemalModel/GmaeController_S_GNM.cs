@@ -15,8 +15,13 @@ namespace Yes.Game.Chicken
 
             CheckPointModel.GetPointData(1, 20, (result) =>
             {
-
+                CheckPointController.Get.Display(result);
             });
+        }
+        public void OnClose()
+        {
+            gameObject.SetActive(false);
+
         }
 
     }

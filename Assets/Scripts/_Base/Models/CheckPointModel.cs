@@ -38,19 +38,19 @@ namespace Yes.Game.Chicken
 
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
-                    //Logs.Log("hero_sign_ins/get_sign_in_lists接口返回数据:" + data);
+                    Logs.Log("get_level_lists接口返回数据:" + data);
 
                     CheckPointModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<CheckPointModel>(data);
-                    if (model.error_code >= 0)
-                    {
+                    //if (model.error_code >= 0)
+                    //{
 
                         if (callback != null)
                             callback(model);
-                    }
-                    else
-                    {
-                        //  Utils.CopyDebug("get_sign_in_lists获取签到数据失败！");
-                    }
+                    //}
+                    //else
+                    //{
+                    //    //  Utils.CopyDebug("get_sign_in_lists获取签到数据失败！");
+                    //}
                 });
             }
             catch (Exception ex)
@@ -63,13 +63,15 @@ namespace Yes.Game.Chicken
     public class CheckPoint
     {
         public int id { get; set; }
-        public int level_id { get; set; }
-        public int golds { get; set; }
-        public int layer { get; set; }
-        public int length { get; set; }
-        public int width { get; set; }
-        public int card_total { get; set; }
-        public int card_kind { get; set; }
+
+        public int is_unlock { get; set; }
+        //public int level_id { get; set; }
+        //public int golds { get; set; }
+        //public int layer { get; set; }
+        //public int length { get; set; }
+        //public int width { get; set; }
+        //public int card_total { get; set; }
+        //public int card_kind { get; set; }
     }
 
 }

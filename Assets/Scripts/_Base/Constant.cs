@@ -39,8 +39,8 @@ namespace Yes.Game.Chicken
         // public static Vector2[] vector2s = { Vector2.left, Vector2.right, Vector2.up, Vector2.down } ;
         // GameType
 
-        public const string UserAgreement = "http://123le.com/idiomempire/protocoluser2.html";
-        public const string PrivacyPolicy = "http://123le.com/idiomempire/protocolPrivacy2.html";
+        //public const string UserAgreement = "http://123le.com/idiomempire/protocoluser2.html";
+        //public const string PrivacyPolicy = "http://123le.com/idiomempire/protocolPrivacy2.html";
 
 
         public static string ckey = "com.yes.IdiomEmpire";

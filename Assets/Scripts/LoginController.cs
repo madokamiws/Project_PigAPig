@@ -29,8 +29,11 @@ namespace Yes.Game.Chicken
             StarkSDK.API.GetAccountManager().CheckSession(OnCheckSessionSuccessCallback, OnCheckSessionFailedCallback);
         }
         void OnCheckSessionSuccessCallback()
-        { 
-        //登录游戏逻辑
+        {
+            //登录游戏逻辑
+            Logs.Log("CheckSession = ");
+            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+OnLoginFailedCallback);
         }
         void OnCheckSessionFailedCallback(string errMsg)
         {
