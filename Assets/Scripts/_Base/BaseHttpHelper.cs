@@ -35,7 +35,7 @@ public class BaseHttpHelper
         try
         {
 
-            var requests = new HTTPRequest(uri, HTTPMethods.Get, (request, response) => {
+            var requests = new HTTPRequest(uri, HTTPMethods.Post, (request, response) => {
 
                 // Logs.Log(" *****HttpMethod返回数据***** url =" + api_url);
 
@@ -44,6 +44,7 @@ public class BaseHttpHelper
 
                     if (response != null)
                     {
+                        ErrorLogs.Get.DisplayLog(string.Format(" ErrorLogs:{0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
                         Logs.Log(string.Format(" {0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
                     }
 

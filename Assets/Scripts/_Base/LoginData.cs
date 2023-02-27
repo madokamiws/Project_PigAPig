@@ -19,10 +19,11 @@ namespace Yes.Game.Chicken
                     param.Add("debug", "1");
                 }
                 param.Add("code", code);
+                ErrorLogs.Get.DisplayLog(code);
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     Logs.Log("api/login接口返回数据:" + data);
-
+                    ErrorLogs.Get.DisplayLog("api/login接口返回数据:" + data);
                     LoginUserData model = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginUserData>(data);
                     if (model.error_code >= 0)
                     {

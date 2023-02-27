@@ -10,12 +10,15 @@ namespace Yes.Game.Chicken
 	public class LoginController : MonoBehaviour
 	{
         public Text tx_Logs;
+        public Text api_Log;
         void Start()
 		{
 			try
 			{
 
-                CheckSession();
+                //CheckSession();
+                StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+OnLoginFailedCallback);
 
             }
 			catch (Exception ex)
@@ -32,8 +35,8 @@ namespace Yes.Game.Chicken
         {
             //登录游戏逻辑
             Logs.Log("CheckSession = ");
-            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
-OnLoginFailedCallback);
+//            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+//OnLoginFailedCallback);
         }
         void OnCheckSessionFailedCallback(string errMsg)
         {
@@ -59,6 +62,7 @@ OnLoginFailedCallback);
             {
                 PlayerPrefs.SetString("user_token", result.token);
                 //记录 result
+                api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
                 CheckSession();
             });
 

@@ -18,13 +18,11 @@ namespace Yes.Game.Chicken
 
         void Start()
         {
-            ////开启关注抖音号API的MOCK
+            //开启关注抖音号API的MOCK
             //MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
 
-            ////调用API时会弹出调试框
+            //调用API时会弹出调试框
             //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
-
-            //登录游戏
 
 
 

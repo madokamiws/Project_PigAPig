@@ -24,6 +24,10 @@ namespace Yes.Game.Chicken
                 return (CheckPointController)_instance;
             }
         }
+        public override void Awake()
+        {
+            _instance = this;
+        }
         public void Display(CheckPointModel model)
         {
             BaseDialogController.DestoryChilds(tf_contentMain);
@@ -50,9 +54,6 @@ namespace Yes.Game.Chicken
 
         }
 
-        public override void Awake()
-        {
-            _instance = this;
-        }
+
     }
 }
