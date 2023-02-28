@@ -60,8 +60,10 @@ OnLoginFailedCallback);
             tx_Logs.text = sucesslog;
             LoginData.GetLoginData(code, (result) =>
             {
-                PlayerPrefs.SetString("user_token", result.token);
+                PlayerPrefs.SetString("user_token", result.user.token);
+                PlayerPrefs.Save();
                 //记录 result
+                ErrorLogs.Get.DisplayLog("记录 token = "+result.user.token);
                 api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
                 CheckSession();
             });

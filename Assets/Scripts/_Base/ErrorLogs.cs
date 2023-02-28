@@ -30,7 +30,7 @@ namespace Yes.Game.Chicken
         public void DisplayLog(string logs)
         {
 
-            tx_logs.text += "\n======="+logs;
+            tx_logs.text += "\n------"+logs;
         }
 
     }

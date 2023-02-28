@@ -27,10 +27,16 @@ namespace Yes.Game.Chicken
                     param.Add("debug", "1");
                 }
                 if (PlayerPrefs.HasKey("user_token"))
-                    param.Add("token", PlayerPrefs.GetString("user_token"));
+                {
+                    string _token = PlayerPrefs.GetString("user_token");
+                    param.Add("token", _token);
+                    //ErrorLogs.Get.DisplayLog("有token");
+                    //ErrorLogs.Get.DisplayLog(_token);
+                }
                 else
                 {
                     //没有token的逻辑
+                    ErrorLogs.Get.DisplayLog("token没有获取到");
                 }
 
                 param.Add("page", page.ToString());
@@ -39,7 +45,7 @@ namespace Yes.Game.Chicken
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     Logs.Log("get_level_lists接口返回数据:" + data);
-
+                    ErrorLogs.Get.DisplayLog(data);
                     CheckPointModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<CheckPointModel>(data);
                     //if (model.error_code >= 0)
                     //{
@@ -64,7 +70,7 @@ namespace Yes.Game.Chicken
     {
         public int id { get; set; }
 
-        public int is_unlock { get; set; }
+        public int unlock { get; set; }
         //public int level_id { get; set; }
         //public int golds { get; set; }
         //public int layer { get; set; }

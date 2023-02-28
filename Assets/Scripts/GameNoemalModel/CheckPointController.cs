@@ -45,7 +45,7 @@ namespace Yes.Game.Chicken
                     CheckPointItem itemView = item.GetComponent<CheckPointItem>();
                     if (itemView)
                     {
-                        //itemView.LoadData(point, i);
+                        itemView.LoadData(point);
                     }
 
                 }
