@@ -58,8 +58,10 @@ OnLoginFailedCallback);
             Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
             tx_Logs.text = sucesslog;
+            Loading.Show();
             LoginData.GetLoginData(code, (result) =>
             {
+                Loading.Hide();
                 PlayerPrefs.SetString("user_token", result.user.token);
                 PlayerPrefs.Save();
                 //记录 result
