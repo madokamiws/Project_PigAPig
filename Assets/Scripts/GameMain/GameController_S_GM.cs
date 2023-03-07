@@ -12,7 +12,11 @@ namespace Yes.Game.Chicken
         // Start is called before the first frame update
         void Start()
         {
-            btn_modelNormal.onClick.AddListener(OnClickModelNormal);
+            //btn_modelNormal.onClick.AddListener(OnClickModelNormal);
+            CheckPointModel.GetPointData(1, 20, (result) =>
+            {
+                CheckPointController.Get.Display(result);
+            });
 
         }
         public void OnClickModelNormal()
