@@ -47,16 +47,16 @@ namespace Yes.Game.Chicken
                     Logs.Log("get_level_lists接口返回数据:" + data);
                     ErrorLogs.Get.DisplayLog(data);
                     CheckPointModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<CheckPointModel>(data);
-                    //if (model.error_code >= 0)
-                    //{
-
+                    if (model.error_code >= 0)
+                    {
+                        ErrorLogs.Get.DisplayLog("序列化成功");
                         if (callback != null)
                             callback(model);
-                    //}
-                    //else
-                    //{
-                    //    //  Utils.CopyDebug("get_sign_in_lists获取签到数据失败！");
-                    //}
+                    }
+                    else
+                    {
+                        //  Utils.CopyDebug("get_sign_in_lists获取签到数据失败！");
+                    }
                 });
             }
             catch (Exception ex)

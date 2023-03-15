@@ -30,11 +30,13 @@ namespace Yes.Game.Chicken
         }
         public void Display(CheckPointModel model)
         {
+            ErrorLogs.Get.DisplayLog("进入display");
             BaseDialogController.DestoryChilds(tf_contentMain);
             if (model!=null)
             {
                 for (int i = 0; i < model.config_levels.Count; i++)
                 {
+                    ErrorLogs.Get.DisplayLog("显示关卡循环"+i);
                     CheckPoint point = model.config_levels[i];
 
                     GameObject item = Instantiate(itemViewPointPrefab) as GameObject;
@@ -47,7 +49,6 @@ namespace Yes.Game.Chicken
                     {
                         itemView.LoadData(point);
                     }
-
                 }
             }
 

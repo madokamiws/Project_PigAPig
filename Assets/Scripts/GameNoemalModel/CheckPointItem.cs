@@ -19,10 +19,13 @@ namespace Yes.Game.Chicken
 
         public void LoadData(CheckPoint point)
         {
+            ErrorLogs.Get.DisplayLog("LoadData");
+            pointID.gameObject.SetActive(true);
             pointID.text = point.id.ToString();
-            if (point.unlock==0)
+            if (point.unlock == 0)
             {
                 isUnlock.SetActive(true);
+
             }
         }
     }
