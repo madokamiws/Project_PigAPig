@@ -20,6 +20,7 @@ namespace Yes.Game.Chicken
         {
             CheckPointModel.GetPointData(1, 20, (result) =>
             {
+                ErrorLogs.Get.DisplayLog("回调成功");
                 CheckPointController.Get.Display(result);
             });
         }
