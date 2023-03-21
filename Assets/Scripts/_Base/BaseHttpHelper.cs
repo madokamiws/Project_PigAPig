@@ -154,8 +154,6 @@ public class BaseHttpHelper
 
                 // Debug.Log(string.Format ( "  HttpMethod item.Key={0}, item.Value={1}", item.Key, item.Value ) ) ;
             }
-
-
             //new_param
 
             foreach (var item in new_param)
@@ -168,7 +166,6 @@ public class BaseHttpHelper
 
                 }
             }
-
             string h = GetAppSignEx(new_param);
             // Logs.Log("h:" + h);
 
@@ -176,9 +173,6 @@ public class BaseHttpHelper
             // Logs.Log("requests:" + Newtonsoft.Json.JsonConvert.SerializeObject(requests.GetFormFields()));
 
             */
-
- 
-
             requests.Send();
             // requests.DisableCache = true ;
 
@@ -254,8 +248,6 @@ public class BaseHttpHelper
                              //    Util.CopyDebug("*********sign:" + sign);
                              //}
                              //UnityEngine.Debug.Log("GetAppSignEx 1 =" + sign);
-
-
 
         // UnityEngine.Debug.Log("GetAppSignEx 3 =" + sign_final );
         // Logs.Log(" - sign1 =" + sign);

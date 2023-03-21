@@ -35,7 +35,7 @@ namespace Yes.Game.Chicken
         /// </summary>
         public void SetCardSprite()
         {
-            id = Random.Range(1, 15);
+            id = Random.Range(1, 11);
             imgCard.sprite = clickSprites[id - 1];
             SpriteState ss = btnCard.spriteState;
             ss.disabledSprite = coveredSprites[id - 1];

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 namespace Yes.Game.Chicken
 {
-    public class ScreenRecording : MonoBehaviour
+    public class GameStart : MonoBehaviour
     {
         public Button startBtn;
         public Button endBtn;
@@ -23,9 +23,6 @@ namespace Yes.Game.Chicken
 
             //调用API时会弹出调试框
             //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
-
-
-
             startBtn.onClick.AddListener(StartVideo);
             //endBtn.onClick.AddListener(StopVideo);
             shareBtn.onClick.AddListener(ShareVideo);
@@ -60,10 +57,7 @@ namespace Yes.Game.Chicken
             {
                 Destroy(gameObject);
             }
-
-
         }
-
         void StopVideo()
         {
             Debug.Log("抖音 停止录制视频 ...");
@@ -82,7 +76,6 @@ namespace Yes.Game.Chicken
             Debug.Log("录制视频失败回调执行 ... 错误码是：" + errCode + " ，错误消息是：" + errMsg);
             // 失败回调逻辑，比如：隐藏录屏中按钮
         }
-
         void SuccessCallback(string videoPath)
         {
             Debug.Log("视频录制完成实际路径：" + videoPath);

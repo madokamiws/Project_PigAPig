@@ -28,5 +28,9 @@ namespace Yes.Game.Chicken
 
             }
         }
+        public void OnClose()
+        {
+            Destroy(gameObject);
+        }
     }
 } 
