@@ -30,6 +30,14 @@ namespace Yes.Game.Chicken
         {
 
         }
+        public void SetCardSprite(int cardIndex)
+        {
+            id = cardIndex;
+            imgCard.sprite = clickSprites[cardIndex - 1];
+            SpriteState ss = btnCard.spriteState;
+            ss.disabledSprite = coveredSprites[cardIndex - 1];
+            btnCard.spriteState = ss;
+        }
         /// <summary>
         /// 设置卡牌图案 id
         /// </summary>

@@ -10,9 +10,9 @@ namespace Yes.Game.Chicken
         public float cardWidth = 204.6f;
         public float cardHeight = 220.8f;
         public GameObject cardGo;
-        private int row = 7;
-        private int column = 7;
-        private int layer = 8;
+        private int row;
+        private int column;
+        private int layer;
         private List<Card> cards = new List<Card>();
         public RectTransform deckTrans;//卡牌需要生成到的位置的transform引用
         public Transform[] pickDeckPosTrans;//捡牌堆的格子位置
@@ -24,88 +24,36 @@ namespace Yes.Game.Chicken
         public RectTransform rightDownDeckTrans;
 
         public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
-
-        private int totalCardNum = 168;
         private int createCardNum = 0;
+
+        /// <summary>
+        /// 卡牌总数
+        /// </summary>
+        private int totalCardNum = 15;
+
 
         private int[,,] centerDeck = new int[,,]//层 行 列
     {
-        //后5层
         {
-            {0,0,0,0},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,0,0,0}
-        },
-        {
-            {0,0,0,0},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,0,0,0}
-        },
-        {
-            {0,0,0,0},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,0,0,0}
-        },
-        {
-            {0,0,0,0},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,0,0,0}
-        },
-        {
-            {0,0,0,0},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,2,2,2},
-            {0,0,0,0}
-        },
-        //上两层
-        {
-            {0,0,0,0},
-            {0,1,1,1},
-            {0,0,1,1},
-            {0,0,1,1},
-            {0,1,2,2},
-            {0,2,2,1},
-            {0,0,0,0}
-        },
-        {
-            {0,0,0,0},
-            {0,1,1,3},
-            {0,0,2,2},
             {3,3,3,3},
-            {0,0,0,3},
-            {0,0,3,3},
-            {0,0,0,0}
+            {3,0,3,3}
         },
-        //最上层
         {
-            {3,4,3,5},
-            {6,3,3,3},
             {3,3,3,3},
-            {7,3,3,3},
-            {0,0,2,2},
-            {0,0,0,0},
-            {0,0,1,3}
+            {3,3,3,3}
         }
     };
+        private int[,,] centerCardIndex = new int[,,]//层 行 列
+{
+        {
+            {1,1,1,2},
+            {2,0,2,3}
+        },
+        {
+            {3,3,4,4},
+            {4,1,1,1}
+        }
+};
         public static DeckController Instance { get; set; }
         private void Awake()
         {
@@ -122,6 +70,9 @@ namespace Yes.Game.Chicken
 
             pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
 
+            layer = centerDeck.GetLength(0);
+            row = centerDeck.GetLength(1);
+            column = centerDeck.GetLength(2);
 
             //遍历层--------------中间组
             for (int k = 0; k < layer; k++)
@@ -147,7 +98,7 @@ namespace Yes.Game.Chicken
                         dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
                     }
                     //对称生成后半部分
-                    CREATESTATE[] halfState = new CREATESTATE[column / 2];
+                    //CREATESTATE[] halfState = new CREATESTATE[column / 2];
                     //列
                     for (int i = 0; i < column; i++)
                     {
@@ -156,21 +107,21 @@ namespace Yes.Game.Chicken
                         GameObject go = null;
 
                         CREATESTATE cs;
+                        cs = (CREATESTATE)centerDeck[k, j, i];
 
-
-                        if (i <= column / 2)
-                        {
-                            //前半部分直接从三维数组取
-                            cs = (CREATESTATE)centerDeck[k, j, i];
-                            if (i != column / 2)
-                            {
-                                halfState[column / 2 - i - 1] = cs;
-                            }
-                        }
-                        else
-                        {
-                            cs = halfState[i - column / 2 - 1];
-                        }
+                        //if (i <= column / 2)
+                        //{
+                        //    //前半部分直接从三维数组取
+                        //    cs = (CREATESTATE)centerDeck[k, j, i];
+                        //    if (i != column / 2)
+                        //    {
+                        //        halfState[column / 2 - i - 1] = cs;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    cs = halfState[i - column / 2 - 1];
+                        //}
 
                         switch (cs)
                         {
@@ -220,8 +171,9 @@ namespace Yes.Game.Chicken
                         if (go)
                         {
                             Card card = go.GetComponent<Card>();
-                            card.SetCardSprite();
-
+                            //card.SetCardSprite();
+                            card.SetCardSprite(centerCardIndex[k, j, i]);
+                            
                             //设置覆盖关系
                             SetCoverState(card);
 
