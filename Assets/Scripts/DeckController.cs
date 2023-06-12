@@ -29,50 +29,87 @@ namespace Yes.Game.Chicken
         /// <summary>
         /// 卡牌总数
         /// </summary>
-        private int totalCardNum = 15;
+        private int totalCardNum = 100;
 
 
         private int[,,] centerDeck = new int[,,]//层 行 列
     {
         {
-            {3,3,3,3},
-            {3,0,3,3}
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3}
         },
         {
-            {3,3,3,3},
-            {3,3,3,3}
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3}
         }
     };
         private int[,,] centerCardIndex = new int[,,]//层 行 列
-{
+    {
         {
-            {1,1,1,2},
-            {2,0,2,3}
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3}
         },
         {
-            {3,3,4,4},
-            {4,1,1,1}
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3},
+            {3,3,3}
         }
-};
+    };
         public static DeckController Instance { get; set; }
         private void Awake()
         {
             Instance = this;
         }
+        void AdjustCenterDeckPosition()
+        {
+
+            int col_offset = column > 7 ? 7 : column;
+
+            int row_offset = row > 8 ? 7 : row;
+
+            float offsetX = (7 - col_offset) * cardWidth * 0.5f;
+            float offsetY = (8 - row_offset) * cardHeight * 1f;
+
+    // 在现有位置上进行微调
+    Vector2 currentCenterDeckPosition = centerDeckTrans.anchoredPosition;
+    Vector2 adjustedCenterDeckPosition = currentCenterDeckPosition + new Vector2(offsetX, -offsetY);
+    centerDeckTrans.anchoredPosition = adjustedCenterDeckPosition;
+        }
         // Start is called before the first frame update
         void Start()
         {
-            DeckData.GetDeckData((result)=> 
+            DeckData.GetDeckData((result) =>
             {
-            
-            
-            });
 
+
+            });
+            layer = centerDeck.GetLength(0);
+            row = centerDeck.GetLength(1); //行
+            column = centerDeck.GetLength(2);//列
+
+            AdjustCenterDeckPosition();
             pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
 
-            layer = centerDeck.GetLength(0);
-            row = centerDeck.GetLength(1);
-            column = centerDeck.GetLength(2);
+
 
             //遍历层--------------中间组
             for (int k = 0; k < layer; k++)
@@ -173,7 +210,7 @@ namespace Yes.Game.Chicken
                             Card card = go.GetComponent<Card>();
                             //card.SetCardSprite();
                             card.SetCardSprite(centerCardIndex[k, j, i]);
-                            
+
                             //设置覆盖关系
                             SetCoverState(card);
 
