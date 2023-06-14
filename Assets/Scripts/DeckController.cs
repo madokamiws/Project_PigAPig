@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 namespace Yes.Game.Chicken
 {
@@ -159,7 +160,6 @@ namespace Yes.Game.Chicken
                         //{
                         //    cs = halfState[i - column / 2 - 1];
                         //}
-
                         switch (cs)
                         {
                             case CREATESTATE.NONE:
@@ -299,7 +299,7 @@ namespace Yes.Game.Chicken
                 if (pickDeckCardIDs[i] == currentID && i + 1 <= pickDeckCardIDs.Length)
                 {
                     posID = i + 1;
-                    return pickDeckPosTrans[i + 1];
+                    return pickDeckPosTrans[posID];
                 }
             }
             Transform sf = GetEmptyPickDeckTargetTrans(posID);
@@ -325,7 +325,11 @@ namespace Yes.Game.Chicken
 
                     if (posID != -1)
                     {
+                        //pickDeckPosTrans[i].SetSiblingIndex(posID);
+                        //Vector3 targetPos = pickDeckPosTrans[i].position;
+                        //pickDeckPosTrans[i-1].DOMove(targetPos, 0.5f);
                         pickDeckPosTrans[i].SetSiblingIndex(posID);
+
                     }
                     return pickDeckPosTrans[i];
                 }
@@ -382,7 +386,7 @@ namespace Yes.Game.Chicken
         {
             SortCardAndCardID();
             ClearCards();
-            Invoke("SortGridPos", 0.25f);
+            //Invoke("SortGridPos", 0.25f);
         }
         /// <summary>
         /// 三消算法
@@ -420,14 +424,31 @@ namespace Yes.Game.Chicken
                 }
                 if (sameCount >= 3)
                 {
+                    int countToFinish = 3;
                     for (int j = startIndex; j < startIndex + 3; j++)
                     {
+                        Transform child = pickDeckPosTrans[j].GetChild(0);
                         pickDeckCardIDs[j] = -1;
-                        Destroy(pickDeckPosTrans[j].GetChild(0).gameObject);
+                        child.DOScale(Vector3.zero, 0.25f).OnComplete(() =>
+                        {
+                                Destroy(child.gameObject);
+                                countToFinish--;
+                                if (countToFinish == 0)
+                                {
+                                    StartCoroutine(DestroyAndSort(child.gameObject));
+                                }
+                        });
                     }
                     break;
                 }
             }
+        }
+        /// <summary>
+        /// 撤回一步功能
+        /// </summary>
+        public void OnBackSelection()
+        { 
+        
         }
         /// <summary>
         /// 排序消除后的格子位置
@@ -442,6 +463,12 @@ namespace Yes.Game.Chicken
                 }
             }
             SortCardAndCardID();
+        }
+        IEnumerator DestroyAndSort(GameObject obj)
+        {
+            yield return new WaitForEndOfFrame();
+            //Destroy(obj);
+            SortGridPos();
         }
 
     }

@@ -18,6 +18,8 @@ namespace Yes.Game.Chicken
         public List<Card> coverCardList = new List<Card>();//当前卡牌覆盖的其他卡牌
         public List<Card> aboveCardList = new List<Card>();//覆盖当前卡牌的其他卡牌
 
+        
+
         // Start is called before the first frame update
         void Start()
         {
@@ -90,10 +92,29 @@ namespace Yes.Game.Chicken
             //Destroy(gameObject);
             int posID = -1;
             Transform targetTrans = DeckController.Instance.GetPickDeckTargetTrans(id, out posID);
+            //移动posID及其之后的卡牌向后排列一格
+            var pickDeckPosTrans = DeckController.Instance.pickDeckPosTrans;
+            var pickDeckCardIDs = DeckController.Instance.pickDeckCardIDs;
+            if (posID!=-1)
+            {
+                for (int i = posID; i < pickDeckPosTrans.Length; i++)
+                {
+                    if (pickDeckCardIDs[i] != -1)
+                    {
+                        Vector3 _pos = new Vector3(pickDeckPosTrans[i].position.x + DeckController.Instance.cardWidth/2+15, pickDeckPosTrans[i].position.y, pickDeckPosTrans[i].position.z);
+                        pickDeckPosTrans[i].DOMove(_pos, 0.5f);
+                    }
+                }
+            }
+
+            
             transform.DOMove(targetTrans.position, 0.5f).OnComplete(() =>
             {
                 if (targetTrans.childCount > 0)
                 {
+                    //Transform newParent = DeckController.Instance.GetEmptyPickDeckTargetTrans(posID);
+                    //transform.SetParent(newParent);
+                    //transform.DOLocalMove(Vector3.zero, 10f);
                     transform.SetParent(DeckController.Instance.GetEmptyPickDeckTargetTrans(posID));
                 }
                 else
