@@ -6,6 +6,7 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 namespace Yes.Game.Chicken
 {
+
     public class DeckController : MonoBehaviour
     {
         public float cardWidth = 204.6f;
@@ -27,6 +28,8 @@ namespace Yes.Game.Chicken
         public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
 
+
+        public Stack<CardMoveRecord> cardMoveHistory = new Stack<CardMoveRecord>();
         /// <summary>
         /// 卡牌总数
         /// </summary>
@@ -447,8 +450,25 @@ namespace Yes.Game.Chicken
         /// 撤回一步功能
         /// </summary>
         public void OnBackSelection()
-        { 
-        
+        {
+            if (cardMoveHistory.Count > 0)
+            {
+                CardMoveRecord lastMove = cardMoveHistory.Pop();
+
+                Transform tf_lastCard = lastMove.CardTransform;
+                tf_lastCard.SetParent(deckTrans);
+                // 将卡牌移回原来的位置
+                tf_lastCard.DOMove(lastMove.OriginalPos, 0.5f);
+
+                Card card = tf_lastCard.GetComponent<Card>();
+                //设置覆盖关系
+                SetCoverState(card);
+
+            }
+            else
+            {
+                Debug.Log("No more moves to undo.");
+            }
         }
         /// <summary>
         /// 排序消除后的格子位置
@@ -469,6 +489,21 @@ namespace Yes.Game.Chicken
             yield return new WaitForEndOfFrame();
             //Destroy(obj);
             SortGridPos();
+        }
+        public struct CardMoveRecord
+        {
+            // 记录被移动的卡牌的Transform组件
+            public Transform CardTransform;
+
+            public Vector3 OriginalPos;
+        }
+        public void AddCardToPickDeck(Transform cardTransform, Vector3 originalPos)
+        {
+            cardMoveHistory.Push(new CardMoveRecord
+            {
+                CardTransform = cardTransform,
+                OriginalPos = originalPos,
+            });
         }
 
     }

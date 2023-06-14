@@ -107,9 +107,10 @@ namespace Yes.Game.Chicken
                 }
             }
 
-            
+            DeckController.Instance.AddCardToPickDeck(transform, transform.position);
             transform.DOMove(targetTrans.position, 0.5f).OnComplete(() =>
             {
+                coverCardList.Clear();
                 if (targetTrans.childCount > 0)
                 {
                     //Transform newParent = DeckController.Instance.GetEmptyPickDeckTargetTrans(posID);
