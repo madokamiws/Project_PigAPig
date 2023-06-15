@@ -9,6 +9,7 @@ namespace Yes.Game.Chicken
     public class CheckPointItem : MonoBehaviour
     {
         public Text pointID;
+        public int self_ID = 0;
         public GameObject isUnlock;
         // Start is called before the first frame update
         void Start()
@@ -21,13 +22,26 @@ namespace Yes.Game.Chicken
         {
             ErrorLogs.Get.DisplayLog("LoadData");
             pointID.gameObject.SetActive(true);
-            pointID.text = point.id.ToString();
+            self_ID = point.id;
+            pointID.text = self_ID.ToString();
+
             if (point.unlock == 0)
             {
                 isUnlock.SetActive(true);
 
             }
         }
+        public void OnClickPoint()
+        {
+            if (self_ID > 0)
+            {
+                PlayerPrefs.SetInt("CurrentLevelID", self_ID);
+                PlayerPrefs.Save();
+
+                SceneManager.LoadScene("GameScence");
+            }
+        }
+
         public void OnClose()
         {
             Destroy(gameObject);

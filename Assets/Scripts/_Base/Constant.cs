@@ -33,21 +33,9 @@ namespace Yes.Game.Chicken
         public static int BuffQDGold = 200;
         public static int TreasureBoxRewardGold = 200;
 
-        // Gold
-
-        // 0.0001158f
-        // public static Vector2[] vector2s = { Vector2.left, Vector2.right, Vector2.up, Vector2.down } ;
-        // GameType
-
-        //public const string UserAgreement = "http://123le.com/idiomempire/protocoluser2.html";
-        //public const string PrivacyPolicy = "http://123le.com/idiomempire/protocolPrivacy2.html";
-
-
         public static string ckey = "com.yes.IdiomEmpire";
         public static string fr = "yingyongbao";//ios
         public static string code = "idiom_empire";
-
-        public static string share_url = "http://dev.hotkk.cn/m/hotel/";
 
         public static readonly string HTTP_DATA_EMPTY = "";
         public static readonly Vector2[] Vector2s = { Vector2.left, Vector2.right, Vector2.up, Vector2.down };
@@ -93,17 +81,17 @@ namespace Yes.Game.Chicken
 
 #if !UNITY_EDITOR
                 return new string[]{
-                    "http://106.14.176.92/api/",
-                    "http://106.14.176.92/api/",
-                    "http://106.14.176.92/api/"
+                    "https://api.glgj.top/api/",
+                    "https://api.glgj.top/api/",
+                    "https://api.glgj.top/api/"
                 };
 #endif
-                return new string[] { "http://106.14.176.92/api/" };
+                return new string[] { "https://api.glgj.top/api/" };
             }
             else
             {
                 return new string[]{
-                    "http://106.14.176.92/api/"
+                    "https://api.glgj.top/api/"
                 };
             }
 

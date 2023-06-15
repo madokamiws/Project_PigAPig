@@ -19,10 +19,10 @@ namespace Yes.Game.Chicken
         void Start()
         {
             //开启关注抖音号API的MOCK
-            //MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
+            StarkSDKSpace.MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
 
             //调用API时会弹出调试框
-            //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
+            StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
             startBtn.onClick.AddListener(StartVideo);
             //endBtn.onClick.AddListener(StopVideo);
             shareBtn.onClick.AddListener(ShareVideo);

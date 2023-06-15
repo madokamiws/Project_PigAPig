@@ -11,7 +11,24 @@ namespace Yes.Game.Chicken
         public Button btn_modelNormal;
         
         public GameObject checkpointObj;
-        // Start is called before the first frame update
+
+        public CheckPointModel checkPointModel;
+        public static GameController_S_GM Instance { get; private set; }
+        public static GameController_S_GM Get
+        {
+            get
+            {
+                if (!Instance)
+                {
+                    Instance = new GameController_S_GM();
+                }
+                return Instance;
+            }
+        }
+        void Awake()
+        {
+            Instance = this;
+        }
         void Start()
         {
             //btn_modelNormal.onClick.AddListener(OnClickModelNormal);
@@ -22,8 +39,10 @@ namespace Yes.Game.Chicken
         {
             CheckPointModel.GetPointData(1, 20, (result) =>
             {
+                checkPointModel = result;
                 ErrorLogs.Get.DisplayLog("回调成功");
-                CheckPointController.Get.Display(result);
+
+                CheckPointController.Get.Display(checkPointModel);
             });
         }
         public void OnClickModelNormal()

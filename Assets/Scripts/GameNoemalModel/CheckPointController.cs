@@ -51,8 +51,6 @@ namespace Yes.Game.Chicken
                     }
                 }
             }
-
-
         }
 
 

@@ -13,10 +13,10 @@ namespace Yes.Game.Chicken
         void Start()
         {
 
-            CheckPointModel.GetPointData(1, 20, (result) =>
-            {
-                CheckPointController.Get.Display(result);
-            });
+            //CheckPointModel.GetPointData(1, 20, (result) =>
+            //{
+            //    CheckPointController.Get.Display(result);
+            //});
         }
         public void OnClose()
         {

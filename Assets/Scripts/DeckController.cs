@@ -30,6 +30,9 @@ namespace Yes.Game.Chicken
 
 
         public Stack<CardMoveRecord> cardMoveHistory = new Stack<CardMoveRecord>();
+
+        private const string LevelIDKey = "CurrentLevelID";
+
         /// <summary>
         /// 卡牌总数
         /// </summary>
@@ -78,7 +81,18 @@ namespace Yes.Game.Chicken
             {3,3,3}
         }
     };
-        public static DeckController Instance { get; set; }
+        public static DeckController Instance { get; private set; }
+        public static DeckController Get
+        {
+            get
+            {
+                if (!Instance)
+                {
+                    Instance = new DeckController();
+                }
+                return Instance;
+            }
+        }
         private void Awake()
         {
             Instance = this;
@@ -99,154 +113,169 @@ namespace Yes.Game.Chicken
     centerDeckTrans.anchoredPosition = adjustedCenterDeckPosition;
         }
         // Start is called before the first frame update
+        public static int GetCurrentLevelID()
+        {
+            return PlayerPrefs.GetInt(LevelIDKey);
+        }
         void Start()
         {
-            DeckData.GetDeckData((result) =>
+            int currentId = GetCurrentLevelID();
+            if (currentId > 0)
             {
-
-
-            });
-            layer = centerDeck.GetLength(0);
-            row = centerDeck.GetLength(1); //行
-            column = centerDeck.GetLength(2);//列
-
-            AdjustCenterDeckPosition();
-            pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
-
-
-
-            //遍历层--------------中间组
-            for (int k = 0; k < layer; k++)
-            {
-                //行
-                for (int j = 0; j < row; j++)
+                DeckData.GetDeckData(currentId, (result) =>
                 {
-                    //随机当前列是否偏移
-                    bool ifMoveX = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
-                    bool ifMoveY = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
+                    ErrorLogs.Get.DisplayLog("currentId"+ currentId);
+                    centerDeck = result.level_map_data.centerDeck;
 
-                    int dirX = 0;
-                    int dirY = 0;
+                    centerCardIndex = result.level_map_data.centerCardIndex;
+                    ErrorLogs.Get.DisplayLog("centerCardIndex" + centerCardIndex);
+                    totalCardNum = result.level_map_data.totalCardNum;
+                    ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
+                });
+            }
 
-                    if (ifMoveX)
+            {
+                layer = centerDeck.GetLength(0);
+                row = centerDeck.GetLength(1); //行
+                column = centerDeck.GetLength(2);//列
+
+                AdjustCenterDeckPosition();
+                pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
+
+
+
+                //遍历层--------------中间组
+                for (int k = 0; k < layer; k++)
+                {
+                    //行
+                    for (int j = 0; j < row; j++)
                     {
-                        //偏移方向是做还是右
-                        dirX = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
-                    }
-                    if (ifMoveY)
-                    {
-                        //偏移方向上下
-                        dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
-                    }
-                    //对称生成后半部分
-                    //CREATESTATE[] halfState = new CREATESTATE[column / 2];
-                    //列
-                    for (int i = 0; i < column; i++)
-                    {
+                        //随机当前列是否偏移
+                        bool ifMoveX = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
+                        bool ifMoveY = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
 
+                        int dirX = 0;
+                        int dirY = 0;
 
-                        GameObject go = null;
-
-                        CREATESTATE cs;
-                        cs = (CREATESTATE)centerDeck[k, j, i];
-
-                        //if (i <= column / 2)
-                        //{
-                        //    //前半部分直接从三维数组取
-                        //    cs = (CREATESTATE)centerDeck[k, j, i];
-                        //    if (i != column / 2)
-                        //    {
-                        //        halfState[column / 2 - i - 1] = cs;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    cs = halfState[i - column / 2 - 1];
-                        //}
-                        switch (cs)
+                        if (ifMoveX)
                         {
-                            case CREATESTATE.NONE:
-                                break;
-                            case CREATESTATE.CREATE:
-                                go = CreatCardGo(i, j, dirX, dirY);
-                                break;
-                            case CREATESTATE.RANDOM:
-                                if (UnityEngine.Random.Range(0, 2) == 0 ? true : false)
-                                {
-                                    //随机生成
-                                    go = CreatCardGo(i, j, dirX, dirY);
-                                }
-                                break;
-                            case CREATESTATE.ONLYCREATE:
-                                go = CreatCardGo(i, j, 0, 0);
-                                break;
-                            case CREATESTATE.UPPERCREATE:
-                                go = CreatCardGo(i, j, 0, -1);
-                                break;//上
-                            case CREATESTATE.LOWERCREATE:
-                                go = CreatCardGo(i, j, 0, 1);
-                                break;//下
-                            case CREATESTATE.LEFTCREATE:
-                                go = CreatCardGo(i, j, -1, 0);
-                                break;//左
-                            case CREATESTATE.RIGHTCREATE:
-                                go = CreatCardGo(i, j, 1, 0);
-                                break;//右
-                            case CREATESTATE.UPPERLEFTCREATE:
-                                go = CreatCardGo(i, j, -1, -1);
-                                break;//左上
-                            case CREATESTATE.UPPERRIGHTCREATE:
-                                go = CreatCardGo(i, j, 1, -1);
-                                break;//右上
-                            case CREATESTATE.LOWERRLEFTCREATE:
-                                go = CreatCardGo(i, j, -1, 1);
-                                break;//左下
-                            case CREATESTATE.LOWERRIGHTCREATE:
-                                go = CreatCardGo(i, j, 1, 1);
-                                break;//右下
-
-                            default:
-                                break;
+                            //偏移方向是做还是右
+                            dirX = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
                         }
-                        if (go)
+                        if (ifMoveY)
                         {
-                            Card card = go.GetComponent<Card>();
-                            //card.SetCardSprite();
-                            card.SetCardSprite(centerCardIndex[k, j, i]);
+                            //偏移方向上下
+                            dirY = UnityEngine.Random.Range(0, 2) == 0 ? 1 : -1;
+                        }
+                        //对称生成后半部分
+                        //CREATESTATE[] halfState = new CREATESTATE[column / 2];
+                        //列
+                        for (int i = 0; i < column; i++)
+                        {
 
-                            //设置覆盖关系
-                            SetCoverState(card);
 
-                            cards.Add(card);
-                            createCardNum++;
-                            go.name = "I:" + i.ToString() + " J:" + j.ToString() + " K:" + k.ToString();
+                            GameObject go = null;
+
+                            CREATESTATE cs;
+                            cs = (CREATESTATE)centerDeck[k, j, i];
+
+                            //if (i <= column / 2)
+                            //{
+                            //    //前半部分直接从三维数组取
+                            //    cs = (CREATESTATE)centerDeck[k, j, i];
+                            //    if (i != column / 2)
+                            //    {
+                            //        halfState[column / 2 - i - 1] = cs;
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    cs = halfState[i - column / 2 - 1];
+                            //}
+                            switch (cs)
+                            {
+                                case CREATESTATE.NONE:
+                                    break;
+                                case CREATESTATE.CREATE:
+                                    go = CreatCardGo(i, j, dirX, dirY);
+                                    break;
+                                case CREATESTATE.RANDOM:
+                                    if (UnityEngine.Random.Range(0, 2) == 0 ? true : false)
+                                    {
+                                        //随机生成
+                                        go = CreatCardGo(i, j, dirX, dirY);
+                                    }
+                                    break;
+                                case CREATESTATE.ONLYCREATE:
+                                    go = CreatCardGo(i, j, 0, 0);
+                                    break;
+                                case CREATESTATE.UPPERCREATE:
+                                    go = CreatCardGo(i, j, 0, -1);
+                                    break;//上
+                                case CREATESTATE.LOWERCREATE:
+                                    go = CreatCardGo(i, j, 0, 1);
+                                    break;//下
+                                case CREATESTATE.LEFTCREATE:
+                                    go = CreatCardGo(i, j, -1, 0);
+                                    break;//左
+                                case CREATESTATE.RIGHTCREATE:
+                                    go = CreatCardGo(i, j, 1, 0);
+                                    break;//右
+                                case CREATESTATE.UPPERLEFTCREATE:
+                                    go = CreatCardGo(i, j, -1, -1);
+                                    break;//左上
+                                case CREATESTATE.UPPERRIGHTCREATE:
+                                    go = CreatCardGo(i, j, 1, -1);
+                                    break;//右上
+                                case CREATESTATE.LOWERRLEFTCREATE:
+                                    go = CreatCardGo(i, j, -1, 1);
+                                    break;//左下
+                                case CREATESTATE.LOWERRIGHTCREATE:
+                                    go = CreatCardGo(i, j, 1, 1);
+                                    break;//右下
+
+                                default:
+                                    break;
+                            }
+                            if (go)
+                            {
+                                Card card = go.GetComponent<Card>();
+                                //card.SetCardSprite();
+                                card.SetCardSprite(centerCardIndex[k, j, i]);
+
+                                //设置覆盖关系
+                                SetCoverState(card);
+
+                                cards.Add(card);
+                                createCardNum++;
+                                go.name = "I:" + i.ToString() + " J:" + j.ToString() + " K:" + k.ToString();
+                            }
                         }
                     }
                 }
+                int createGroupNum = (totalCardNum - createCardNum) / 4;
+                int redundantNum = totalCardNum - createCardNum - createGroupNum * 4;
+                //左竖
+                for (int i = createGroupNum + redundantNum; i > 0; i--)
+                {
+                    CreatCard(leftColumnDeckTrans, 0, -i);
+                }
+                //右竖
+                for (int i = createGroupNum; i > 0; i--)
+                {
+                    CreatCard(rightColumnDeckTrans, 0, -i);
+                }
+                //左下
+                for (int i = 0; i < createGroupNum; i++)
+                {
+                    CreatCard(leftDownDeckTrans, i, 0);
+                }
+                //右下
+                for (int i = createGroupNum; i > 0; i--)
+                {
+                    CreatCard(rightDownDeckTrans, i, 0);
+                }
             }
-            int createGroupNum = (totalCardNum - createCardNum) / 4;
-            int redundantNum = totalCardNum - createCardNum - createGroupNum * 4;
-            //左竖
-            for (int i = createGroupNum + redundantNum; i > 0; i--)
-            {
-                CreatCard(leftColumnDeckTrans, 0, -i);
-            }
-            //右竖
-            for (int i = createGroupNum; i > 0; i--)
-            {
-                CreatCard(rightColumnDeckTrans, 0, -i);
-            }
-            //左下
-            for (int i = 0; i < createGroupNum; i++)
-            {
-                CreatCard(leftDownDeckTrans, i, 0);
-            }
-            //右下
-            for (int i = createGroupNum; i > 0; i--)
-            {
-                CreatCard(rightDownDeckTrans, i, 0);
-            }
-
         }
         /// <summary>
         /// 旁边卡碟
