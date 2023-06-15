@@ -284,7 +284,11 @@ namespace Yes.Game.Chicken
         {
             for (int i = 0; i < cards.Count; i++)
             {
-                card.SetCoverCardState(cards[i]);
+                if (card!= cards[i])
+                {
+                    card.SetCoverCardState(cards[i]);
+                }
+
             }
         }
         /// <summary>
@@ -328,9 +332,6 @@ namespace Yes.Game.Chicken
 
                     if (posID != -1)
                     {
-                        //pickDeckPosTrans[i].SetSiblingIndex(posID);
-                        //Vector3 targetPos = pickDeckPosTrans[i].position;
-                        //pickDeckPosTrans[i-1].DOMove(targetPos, 0.5f);
                         pickDeckPosTrans[i].SetSiblingIndex(posID);
 
                     }
@@ -451,21 +452,50 @@ namespace Yes.Game.Chicken
         /// </summary>
         public void OnBackSelection()
         {
-            if (cardMoveHistory.Count > 0)
+            while (cardMoveHistory.Count > 0)
             {
                 CardMoveRecord lastMove = cardMoveHistory.Pop();
+                if (lastMove.CardTransform == null)
+                {
+                    // CardTransform 已被销毁，继续出栈下一个记录
+                    continue;
+                }
 
                 Transform tf_lastCard = lastMove.CardTransform;
                 tf_lastCard.SetParent(deckTrans);
+                if (lastMove.tranIdIndex >= 0)
+                {
+                    pickDeckCardIDs[lastMove.tranIdIndex] = -1;
+                }
+                else
+                {
+                    for (int i = 0; i < pickDeckCardIDs.Length; i++)
+                    {
+                        if (pickDeckCardIDs[i]<0 && i-1>=0)
+                        {
+                            pickDeckCardIDs[i - 1] = -1;
+                        }    
+                    }     
+                }
+
                 // 将卡牌移回原来的位置
-                tf_lastCard.DOMove(lastMove.OriginalPos, 0.5f);
-
-                Card card = tf_lastCard.GetComponent<Card>();
-                //设置覆盖关系
-                SetCoverState(card);
-
+                tf_lastCard.DOMove(lastMove.OriginalPos, 0.5f).OnComplete(()=> {
+                    if (tf_lastCard != null)
+                    {
+                        Card card = tf_lastCard.GetComponent<Card>();
+                        card.Btn_AddListnener();
+                        SortGridPos();
+                        // 设置覆盖关系
+                        SetCoverState(card);
+                    }
+                    else
+                    {
+                        Debug.Log("CardTransform has been destroyed.");
+                    }
+                });
+                break;
             }
-            else
+            if (cardMoveHistory.Count == 0)
             {
                 Debug.Log("No more moves to undo.");
             }
@@ -496,13 +526,16 @@ namespace Yes.Game.Chicken
             public Transform CardTransform;
 
             public Vector3 OriginalPos;
+
+            public int tranIdIndex;
         }
-        public void AddCardToPickDeck(Transform cardTransform, Vector3 originalPos)
+        public void AddCardToPickDeck(Transform cardTransform, Vector3 originalPos,int posid)
         {
             cardMoveHistory.Push(new CardMoveRecord
             {
                 CardTransform = cardTransform,
                 OriginalPos = originalPos,
+                tranIdIndex = posid,
             });
         }
 

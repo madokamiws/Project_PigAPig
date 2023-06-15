@@ -32,6 +32,10 @@ namespace Yes.Game.Chicken
         {
 
         }
+        public void Btn_AddListnener()
+        {
+            btnCard.onClick.AddListener(CardClickEvent);
+        }
         public void SetCardSprite(int cardIndex)
         {
             id = cardIndex;
@@ -107,7 +111,7 @@ namespace Yes.Game.Chicken
                 }
             }
 
-            DeckController.Instance.AddCardToPickDeck(transform, transform.position);
+            DeckController.Instance.AddCardToPickDeck(transform, transform.position,posID);
             transform.DOMove(targetTrans.position, 0.5f).OnComplete(() =>
             {
                 coverCardList.Clear();
