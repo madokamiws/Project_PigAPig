@@ -55,8 +55,10 @@ OnLoginFailedCallback);
         /// <param name="isLogin">判断在当前 APP(头条、抖音等)是否处于登录状态</param>
         void OnLoginSuccessCallback(string code, string anonymousCode, bool isLogin)
         {
+            ErrorLogs.Get.DisplayLog("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
+            ErrorLogs.Get.DisplayLog(sucesslog);
             tx_Logs.text = sucesslog;
             Loading.Show();
             LoginData.GetLoginData(code, (result) =>
@@ -79,6 +81,7 @@ OnLoginFailedCallback);
         void OnLoginFailedCallback(string errMsg)
         {
             Debug.Log("OnLoginFailedCallback ... errMsg：" + errMsg);
+            ErrorLogs.Get.DisplayLog("OnLoginFailedCallback ... errMsg：" + errMsg);
             failedlog = string.Format(sucesslog + "登录失败\n OnLoginFailedCallback ... errMsg：" + errMsg + "\n");
             tx_Logs.text = failedlog;
         }

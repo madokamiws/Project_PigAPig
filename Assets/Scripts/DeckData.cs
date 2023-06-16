@@ -7,7 +7,7 @@ namespace Yes.Game.Chicken
 {
     public class DeckData
     {
-        public static void GetDeckData(int id, Action<SinglePointData> callback = null)
+        public static void GetDeckData(int id, Action<DeckModel> callback = null)
         {
             try
             {
@@ -29,12 +29,13 @@ namespace Yes.Game.Chicken
                     //没有token的逻辑
                     ErrorLogs.Get.DisplayLog("token没有获取到");
                 }
-                param.Add("id", id.ToString());
+                param.Add("config_level_id", id.ToString());
+                ErrorLogs.Get.DisplayLog("请求的 id =  "+ id);
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     Logs.Log("get_item_level接口返回数据:" + data);
                     ErrorLogs.Get.DisplayLog(data);
-                    SinglePointData model = Newtonsoft.Json.JsonConvert.DeserializeObject<SinglePointData>(data);
+                    DeckModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<DeckModel>(data);
                     if (model.error_code >= 0)
                     {
                         ErrorLogs.Get.DisplayLog("序列化成功");
@@ -53,22 +54,15 @@ namespace Yes.Game.Chicken
             }
         }
     }
-    public class SinglePointData : BaseModel
+    public class DeckModel:BaseModel
     {
-        public int id { get; set; }//第几关
         public int level_id { get; set; }//第几关
+        public int user_level_record_id { get; set; }//第几关
 
-        public DeckModel level_map_data { get; set; }
-    }
-    public class DeckModel
-    {
-        //public int checkpoint_type { get; set; }//关卡类型 1 闯关 2挑战
-        //public int checkpoint_num { get; set; }//第几关
-        public int[,,] centerDeck { get; set; } //主排队三维数组
-        public int[,,] centerCardIndex { get; set; } //元素索引
-        public int totalCardNum { get; set; }//卡牌总数
-        //public int card_element { get; set; }//卡牌元素
-        //public int[] around_deck { get; set; }//是否生成周围牌堆 上左1，上右2，下左3，下右4 
+        public int[,,] center_deck { get; set; } //主排队三维数组
+        public int[,,] center_card_index { get; set; } //元素索引
+        public int card_total { get; set; }//卡牌总数
+
 
     }
 

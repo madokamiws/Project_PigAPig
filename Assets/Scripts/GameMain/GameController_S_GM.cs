@@ -10,7 +10,7 @@ namespace Yes.Game.Chicken
     {
         public Button btn_modelNormal;
         
-        public GameObject checkpointObj;
+        //public GameObject checkpointObj;
 
         public CheckPointModel checkPointModel;
         public static GameController_S_GM Instance { get; private set; }
@@ -50,14 +50,14 @@ namespace Yes.Game.Chicken
             //SceneManager.LoadScene("GameNormalModel");
         }
 
-        public void ShowcheckpointObj()
-        {
-            checkpointObj.SetActive(true);
-        }
-        public void HidecheckpointObj()
-        {
-            checkpointObj.SetActive(false);
-        }
+        //public void ShowcheckpointObj()
+        //{
+        //    checkpointObj.SetActive(true);
+        //}
+        //public void HidecheckpointObj()
+        //{
+        //    checkpointObj.SetActive(false);
+        //}
         public void EXstart()
         {
             SceneManager.LoadScene("GameScence");

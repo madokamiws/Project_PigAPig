@@ -37,7 +37,7 @@ namespace Yes.Game.Chicken
             {
                 PlayerPrefs.SetInt("CurrentLevelID", self_ID);
                 PlayerPrefs.Save();
-
+                ErrorLogs.Get.DisplayLog("保存CurrentLevelID ：" + self_ID);
                 SceneManager.LoadScene("GameScence");
             }
         }

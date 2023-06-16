@@ -13,6 +13,10 @@ namespace Yes.Game.Chicken
         public Sprite[] coveredSprites;
         public int id;
 
+        public int row;
+        public int column;
+        public int layer;
+
         public RectTransform rtf;
 
         public List<Card> coverCardList = new List<Card>();//当前卡牌覆盖的其他卡牌

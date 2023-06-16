@@ -32,6 +32,10 @@ namespace Yes.Game.Chicken
 
             tx_logs.text += "\n------" + logs;
         }
+        public void OnClickCloseLog()
+        {
+            Destroy(transform);
+        }
 
     }
 }
