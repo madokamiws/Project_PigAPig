@@ -35,51 +35,13 @@ namespace Yes.Game.Chicken
         /// <summary>
         /// 卡牌总数
         /// </summary>
-    //    private int totalCardNum = 100;
+        private int totalCardNum = 42;
 
 
-    //    private int[,,] centerDeck = new int[,,]//层 行 列
-    //{
-    //    {
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3}
-    //    },
-    //    {
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3}
-    //    }
-    //};
-    //    private int[,,] centerCardIndex = new int[,,]//层 行 列
-    //{
-    //    {
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3}
-    //    },
-    //    {
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3},
-    //        {3,3,3}
-    //    }
-    //};
+        //private int[,,] centerDeck = new int[,,]//层 行 列
+
+        //private int[,,] centerCardIndex = new int[,,]//层 行 列
+
         public static DeckController Instance { get; private set; }
         public static DeckController Get
         {
@@ -119,49 +81,33 @@ namespace Yes.Game.Chicken
         void Start()
         {
 #if UNITY_EDITOR
-        int totalCardNum = 100;
+        int totalCardNum = 16;
 
 
         int[,,] centerDeck = new int[,,]//层 行 列
     {
                 {
                     {3,3,3},
+                    {3,0,3},
                     {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3}
                 },
                 {
                     {3,3,3},
+                    {3,0,3},
                     {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3}
                 }
     };
         int[,,] centerCardIndex = new int[,,]//层 行 列
     {
                 {
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3}
+                    {1,2,3},
+                    {4,5,6},
+                    {7,8,9},
                 },
                 {
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3},
-                    {3,3,3}
+                    {1,2,3},
+                    {4,5,6},
+                    {7,8,9}
                 }
     };
             DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
@@ -182,7 +128,7 @@ namespace Yes.Game.Chicken
                     var centerCardIndex = result.center_card_index;
                     ErrorLogs.Get.DisplayLog("centerCardIndex" + centerCardIndex);
 
-                    var totalCardNum = result.card_total;
+                    totalCardNum = result.card_total;
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
                     DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
@@ -310,6 +256,7 @@ namespace Yes.Game.Chicken
                             card.row = j;
                             card.column = i;
                             card.layer = k;
+                            card.cardDir = (int)cs;
                             go.name = "I:" + i.ToString() + " J:" + j.ToString() + " K:" + k.ToString();
                         }
                     }
@@ -578,6 +525,11 @@ namespace Yes.Game.Chicken
                         SortGridPos();
                         // 设置覆盖关系
                         SetCoverState(card);
+                        if (!cards.Contains(card))
+                        {
+                            cards.Add(card);
+                        }
+
                     }
                     else
                     {
@@ -591,9 +543,98 @@ namespace Yes.Game.Chicken
                 Debug.Log("No more moves to undo.");
             }
         }
-        public void OnClickRearrange()
-        { 
-        
+        /// <summary>
+        /// 打乱重新生成的数组
+        /// </summary>
+        public void ShuffleCenterDeckAndIndex(int[,,] centerDeck, int[,,] centerCardIndex, int totalCardNum)
+        {
+            List<(int deck, int index)> list = new List<(int deck, int index)>();
+
+            for (int i = 0; i < layer; i++)
+            {
+                for (int j = 0; j < row; j++)
+                {
+                    for (int k = 0; k < column; k++)
+                    {
+                        list.Add((centerDeck[i, j, k], centerCardIndex[i, j, k]));
+                    }
+                }
+            }
+
+            System.Random rng = new System.Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                var value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+
+            for (int i = 0; i < layer; i++)
+            {
+                for (int j = 0; j < row; j++)
+                {
+                    for (int k = 0; k < column; k++)
+                    {
+                        var pair = list[i * row * column + j * column + k];
+                        centerDeck[i, j, k] = pair.deck;
+                        centerCardIndex[i, j, k] = pair.index;
+                    }
+                }
+            }
+            DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
+
+        }
+
+        public void UpdateCenterDeckAndIndex()
+        {
+            var temp_centerDeck = new int[layer, row, column];
+            var temp_centerCardIndex = new int[layer, row, column];
+
+            // 初始化所有的值为 0，表示没有卡牌
+            for (int i = 0; i < layer; i++)
+            {
+                for (int j = 0; j < row; j++)
+                {
+                    for (int k = 0; k < column; k++)
+                    {
+                        temp_centerDeck[i, j, k] = 0;
+                        temp_centerCardIndex[i, j, k] = 0;
+                    }
+                }
+            }
+
+            int temp_totalCardNum = 0;
+
+            //遍历所有的卡牌，更新相应的值
+            foreach (Card card in cards)
+            {
+                temp_centerDeck[card.layer, card.row, card.column] = card.cardDir;
+                temp_centerCardIndex[card.layer, card.row, card.column] = card.id;
+
+                if (card.gameObject.activeSelf) // 如果卡牌对象仍然存在
+                {
+                    temp_totalCardNum++;
+                }
+            }
+
+            ShuffleCenterDeckAndIndex(temp_centerDeck, temp_centerCardIndex, temp_totalCardNum);
+        }
+        /// <summary>
+        /// cards中删掉选中的卡牌
+        /// </summary>
+        public void DeleteSelectedCard(Card card)
+        {
+            if (cards.Contains(card))
+            {
+                cards.Remove(card);
+            }
+            else
+            {
+                Debug.Log("Card not found in the list.");
+            }
         }
         /// <summary>
         /// 排序消除后的格子位置

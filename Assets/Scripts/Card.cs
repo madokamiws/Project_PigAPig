@@ -16,6 +16,7 @@ namespace Yes.Game.Chicken
         public int row;
         public int column;
         public int layer;
+        public int cardDir;
 
         public RectTransform rtf;
 
@@ -91,6 +92,7 @@ namespace Yes.Game.Chicken
         {
             btnCard.onClick.RemoveAllListeners();
             transform.SetSiblingIndex(500);
+            DeckController.Get.DeleteSelectedCard(this);
             //需要移出所有被覆盖的卡牌
             for (int i = 0; i < coverCardList.Count; i++)
             {
