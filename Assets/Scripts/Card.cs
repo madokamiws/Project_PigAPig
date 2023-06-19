@@ -112,13 +112,13 @@ namespace Yes.Game.Chicken
                     if (pickDeckCardIDs[i] != -1)
                     {
                         Vector3 _pos = new Vector3(pickDeckPosTrans[i].position.x + DeckController.Instance.cardWidth/2+15, pickDeckPosTrans[i].position.y, pickDeckPosTrans[i].position.z);
-                        pickDeckPosTrans[i].DOMove(_pos, 0.5f);
+                        pickDeckPosTrans[i].DOMove(_pos, 0.1f);
                     }
                 }
             }
 
             DeckController.Instance.AddCardToPickDeck(transform, transform.position,posID);
-            transform.DOMove(targetTrans.position, 0.5f).OnComplete(() =>
+            transform.DOMove(targetTrans.position, 0.2f).OnComplete(() =>
             {
                 coverCardList.Clear();
                 if (targetTrans.childCount > 0)

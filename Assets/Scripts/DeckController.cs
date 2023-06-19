@@ -25,6 +25,8 @@ namespace Yes.Game.Chicken
         public RectTransform leftDownDeckTrans;
         public RectTransform rightDownDeckTrans;
 
+        public Transform tf_CenterDeckList;
+
         public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
 
@@ -364,6 +366,7 @@ namespace Yes.Game.Chicken
         private GameObject CreatCardGo(int column, int row, int dirX, int dirY)
         {
             GameObject go = Instantiate(cardGo, deckTrans);
+            go.transform.SetParent(tf_CenterDeckList);
             go.GetComponent<RectTransform>().anchoredPosition =
                 centerDeckTrans.anchoredPosition +
                 new Vector2(cardWidth * (column + 0.5f * dirX), -cardHeight * (row + 0.5f * dirY));
@@ -381,7 +384,6 @@ namespace Yes.Game.Chicken
                 {
                     card.SetCoverCardState(cards[i]);
                 }
-
             }
         }
         /// <summary>
@@ -662,37 +664,46 @@ namespace Yes.Game.Chicken
 
         public void UpdateCenterDeckAndIndex()
         {
-            var temp_centerDeck = new int[layer, row, column];
-            var temp_centerCardIndex = new int[layer, row, column];
-
-            // 初始化所有的值为 0，表示没有卡牌
-            for (int i = 0; i < layer; i++)
+            // Get all child objects
+            List<Transform> children = new List<Transform>();
+            foreach (Transform child in tf_CenterDeckList)
             {
-                for (int j = 0; j < row; j++)
+                if (child.GetComponent<Card>() != null) // If the child has Card script attached
                 {
-                    for (int k = 0; k < column; k++)
+                    children.Add(child);
+                }
+            }
+
+            // Print the number of child objects with Card script
+            Debug.Log("Number of cards: " + children.Count);
+
+            // Shuffle the child objects
+            for (int i = 0; i < children.Count; i++)
+            {
+                // Choose a random index
+                int randomIndex = UnityEngine.Random.Range(i, children.Count);
+                // Swap positions
+                children[i].SetSiblingIndex(randomIndex);
+                children[randomIndex].SetSiblingIndex(i);
+            }
+            List<Card> children2 = new List<Card>();
+            foreach (Transform child in tf_CenterDeckList)
+            {
+                if (child.GetComponent<Card>() != null)
+                {
+                    children2.Add(child.GetComponent<Card>());
+                }
+            }
+            for (int i = 0; i < children2.Count; i++)
+            {
+                for (int j  = 0; j < children2.Count; j++)
+                {
+                    if (children2[i] != children2[j])
                     {
-                        temp_centerDeck[i, j, k] = 0;
-                        temp_centerCardIndex[i, j, k] = 0;
+                        children2[i].SetCoverCardState(children2[j]);
                     }
                 }
             }
-
-            int temp_totalCardNum = 0;
-
-            //遍历所有的卡牌，更新相应的值
-            foreach (Card card in cards)
-            {
-                temp_centerDeck[card.layer, card.row, card.column] = card.cardDir;
-                temp_centerCardIndex[card.layer, card.row, card.column] = card.id;
-
-                if (card.gameObject.activeSelf) // 如果卡牌对象仍然存在
-                {
-                    temp_totalCardNum++;
-                }
-            }
-
-            ShuffleCenterDeckAndIndex(temp_centerDeck, temp_centerCardIndex, temp_totalCardNum);
         }
         /// <summary>
         /// cards中删掉选中的卡牌
