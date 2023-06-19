@@ -167,16 +167,17 @@ namespace Yes.Game.Chicken
                         nonZeroCount++;
                     }
                 }
+                if (totalCardNum % 3 != 0)
+                {
+                    ErrorLogs.Get.DisplayLog("卡牌总数不为3的倍数,请检查配置");
+                    return;
+                }
                 if (nonZeroCount != totalCardNum)
                 {
                     ErrorLogs.Get.DisplayLog("配置totalCardNum与centerDeck配置数量不符，请检查配置");
                     return;
                 }
-                if (totalCardNum % 3 != 0)
-                {
-                    ErrorLogs.Get.DisplayLog("卡牌总数不为3的倍数");
-                    return;
-                }
+
 
                 for (int i = 0; i < totalCardNum; i += 3)
                 {
