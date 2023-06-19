@@ -31,6 +31,7 @@ namespace Yes.Game.Chicken
         {
 
             tx_logs.text += "\n------" + logs;
+            Debug.LogError(logs);
         }
         public void OnClickCloseLog()
         {

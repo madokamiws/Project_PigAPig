@@ -61,6 +61,8 @@ namespace Yes.Game.Chicken
 
         public int[,,] center_deck { get; set; } //主排队三维数组
         public int[,,] center_card_index { get; set; } //元素索引
+
+        public int[] deckElementlist;//该关生成那些元素
         public int card_total { get; set; }//卡牌总数
 
 

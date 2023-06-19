@@ -78,10 +78,11 @@ namespace Yes.Game.Chicken
         {
             return PlayerPrefs.GetInt(LevelIDKey);
         }
+        //public void 
         void Start()
         {
 #if UNITY_EDITOR
-        int totalCardNum = 16;
+        int totalCardNum = 15;
 
 
         int[,,] centerDeck = new int[,,]//层 行 列
@@ -93,24 +94,30 @@ namespace Yes.Game.Chicken
                 },
                 {
                     {3,3,3},
-                    {3,0,3},
+                    {3,0,0},
                     {3,3,3},
                 }
     };
-        int[,,] centerCardIndex = new int[,,]//层 行 列
-    {
-                {
-                    {1,2,3},
-                    {4,5,6},
-                    {7,8,9},
-                },
-                {
-                    {1,2,3},
-                    {4,5,6},
-                    {7,8,9}
-                }
-    };
-            DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
+
+            int[] DeckElementlist = new int[]
+                {1,2,3};
+
+
+    //        int[,,] centerCardIndex = new int[,,]//层 行 列
+    //{
+    //            {
+    //                {1,2,3},
+    //                {4,5,6},
+    //                {7,8,9},
+    //            },
+    //            {
+    //                {1,2,3},
+    //                {4,5,6},
+    //                {7,8,9}
+    //            }
+    //};
+            
+            DisplayPointData(centerDeck, DeckElementlist, totalCardNum);
 
 
 
@@ -125,30 +132,68 @@ namespace Yes.Game.Chicken
                     var centerDeck = result.center_deck;
                     ErrorLogs.Get.DisplayLog("centerDeck" + centerDeck);
 
+                    var deckElementlist = result.deckElementlist;
+                    ErrorLogs.Get.DisplayLog("deckElementlist" + deckElementlist);
+
                     var centerCardIndex = result.center_card_index;
                     ErrorLogs.Get.DisplayLog("centerCardIndex" + centerCardIndex);
+
 
                     totalCardNum = result.card_total;
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
-                    DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
+                    DisplayPointData(centerDeck, deckElementlist, totalCardNum, centerCardIndex);
                 });
             }
 #endif
 
         }
-        public void DisplayPointData(int[,,] centerDeck,int[,,] centerCardIndex,int totalCardNum)
+        public void DisplayPointData(int[,,] centerDeck,int[] deckElementlist ,int totalCardNum, int[,,] centerCardIndex = null)
         {
 
             layer = centerDeck.GetLength(0);
             row = centerDeck.GetLength(1); //行
             column = centerDeck.GetLength(2);//列
 
+            List<int> temp_centerDecklist= new List<int>();
+
+            if (centerCardIndex == null )
+            {
+                int nonZeroCount = 0;
+                foreach (int item in centerDeck)
+                {
+                    if (item != 0)
+                    {
+                        nonZeroCount++;
+                    }
+                }
+                if (nonZeroCount != totalCardNum)
+                {
+                    ErrorLogs.Get.DisplayLog("配置totalCardNum与centerDeck配置数量不符，请检查配置");
+                    return;
+                }
+                if (totalCardNum % 3 != 0)
+                {
+                    ErrorLogs.Get.DisplayLog("卡牌总数不为3的倍数");
+                    return;
+                }
+
+                for (int i = 0; i < totalCardNum; i += 3)
+                {
+                    int index = UnityEngine.Random.Range(0, deckElementlist.Length);
+                    temp_centerDecklist.Add(deckElementlist[index]);
+                    temp_centerDecklist.Add(deckElementlist[index]);
+                    temp_centerDecklist.Add(deckElementlist[index]);
+                }
+                Shuffle(temp_centerDecklist);
+
+
+            }
+
+
             AdjustCenterDeckPosition();
             pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
-
-
-
+            int temp_centerDecklist_index = 0;
             //遍历层--------------中间组
             for (int k = 0; k < layer; k++)
             {
@@ -246,7 +291,16 @@ namespace Yes.Game.Chicken
                         {
                             Card card = go.GetComponent<Card>();
                             //card.SetCardSprite();
-                            card.SetCardSprite(centerCardIndex[k, j, i]);
+                            if (centerCardIndex != null)
+                            {
+                                card.SetCardSprite(centerCardIndex[k, j, i]);
+                            }
+                            else
+                            {
+                                card.SetCardSprite(temp_centerDecklist[temp_centerDecklist_index]);
+                                temp_centerDecklist_index++;
+                            }
+
 
                             //设置覆盖关系
                             SetCoverState(card);
@@ -544,6 +598,23 @@ namespace Yes.Game.Chicken
             }
         }
         /// <summary>
+        /// 洗牌算法
+        /// </summary>
+        /// <param name="list"></param>
+        public void Shuffle(List<int> list)
+        {
+            System.Random rand = new System.Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rand.Next(n + 1);
+                int value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+        /// <summary>
         /// 打乱重新生成的数组
         /// </summary>
         public void ShuffleCenterDeckAndIndex(int[,,] centerDeck, int[,,] centerCardIndex, int totalCardNum)
@@ -584,7 +655,7 @@ namespace Yes.Game.Chicken
                     }
                 }
             }
-            DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
+            //DisplayPointData(centerDeck, centerCardIndex, totalCardNum);
 
         }
 
