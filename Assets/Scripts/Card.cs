@@ -161,6 +161,12 @@ namespace Yes.Game.Chicken
         {
             btnCard.interactable = aboveCardList.Count <= 0;
         }
+        public void CleanCardData()
+        {
+            btnCard.interactable = true;
+            coverCardList.Clear();
+            aboveCardList.Clear();
+        }
 
     }
 }
