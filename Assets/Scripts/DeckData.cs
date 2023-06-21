@@ -59,10 +59,10 @@ namespace Yes.Game.Chicken
         public int level_id { get; set; }//第几关
         public int user_level_record_id { get; set; }//第几关
 
-        public int[,,] center_deck { get; set; } //主排队三维数组
+        public int[,,] center_deck { get; set; } //主牌堆三维数组
         public int[,,] center_card_index { get; set; } //元素索引
 
-        public int[] deckElementlist;//该关生成那些元素
+        public int[] deck_element_list;//该关生成那些元素
         public int card_total { get; set; }//卡牌总数
 
 

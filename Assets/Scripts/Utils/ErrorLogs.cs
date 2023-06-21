@@ -27,15 +27,27 @@ namespace Yes.Game.Chicken
             _instance = this;
         }
 
-        public void DisplayLog(string logs)
+        public void DisplayLog(string logs,bool ishuanhang = true)
         {
+            if (ishuanhang)
+            {
+                tx_logs.text += "\n------" + logs;
+                Debug.Log(logs);
+            }
+            else
+            {
+                tx_logs.text +=  logs;
+                Debug.Log(logs);
+            }
 
-            tx_logs.text += "\n------" + logs;
-            Debug.LogError(logs);
+        }
+        public void ShowLog()
+        {
+            gameObject.SetActive(true);
         }
         public void OnClickCloseLog()
         {
-            Destroy(transform);
+            gameObject.SetActive(false);
         }
 
     }
