@@ -118,7 +118,7 @@ namespace Yes.Game.Chicken
             }
 
             DeckController.Instance.AddCardToPickDeck(transform, transform.position,posID);
-            transform.DOMove(targetTrans.position, 0.2f).OnComplete(() =>
+            transform.DOMove(targetTrans.position, 0.1f).OnComplete(() =>
             {
                 coverCardList.Clear();
                 if (targetTrans.childCount > 0)

@@ -26,7 +26,6 @@ namespace Yes.Game.Chicken
                 }
                 else
                 {
-                    //没有token的逻辑
                     ErrorLogs.Get.DisplayLog("token没有获取到");
                 }
                 param.Add("config_level_id", id.ToString());
