@@ -203,31 +203,28 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("currentId:"+ currentId);
 
                     int[,,] _centerDeck = result.center_deck;
-                    for (int layer = 0; layer < _centerDeck.GetLength(0); layer++)
-                    {
-                        for (int row = 0; row < _centerDeck.GetLength(1); row++)
-                        {
-                            for (int column = 0; column < _centerDeck.GetLength(2); column++)
-                            {
-                                int element = _centerDeck[layer, row, column];
-                                ErrorLogs.Get.DisplayLog(element.ToString(),false);
-                            }
+                    //for (int layer = 0; layer < _centerDeck.GetLength(0); layer++)
+                    //{
+                    //    for (int row = 0; row < _centerDeck.GetLength(1); row++)
+                    //    {
+                    //        for (int column = 0; column < _centerDeck.GetLength(2); column++)
+                    //        {
+                    //            int element = _centerDeck[layer, row, column];
+                    //            ErrorLogs.Get.DisplayLog(element.ToString(),false);
+                    //        }
 
-                            ErrorLogs.Get.DisplayLog(""); // 在每行结束后打印换行符
-                        }
+                    //        ErrorLogs.Get.DisplayLog(""); // 在每行结束后打印换行符
+                    //    }
 
-                        ErrorLogs.Get.DisplayLog(""); // 在每层结束后打印换行符
-                    }
-                    ErrorLogs.Get.DisplayLog("centerDeck:");
+                    //    ErrorLogs.Get.DisplayLog(""); // 在每层结束后打印换行符
+                    //}
+                    //ErrorLogs.Get.DisplayLog("centerDeck:");
 
                     int[] _deckElementlist = result.deck_element_list;
-                    ErrorLogs.Get.DisplayLog("deckElementlist:");
+                    //ErrorLogs.Get.DisplayLog("deckElementlist:");
 
-                    //int[,,] _centerCardIndex = result.center_card_index;
-                    //if (_centerCardIndex != null)
-                    //{
-                    //    ErrorLogs.Get.DisplayLog("centerCardIndex:");
-                    //}
+                    int[,,] _centerCardIndex = result.center_card_index;
+
 
 
 
@@ -235,7 +232,7 @@ namespace Yes.Game.Chicken
                     totalCardNum = result.card_total;
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
-                    DisplayPointData(_centerDeck, _deckElementlist, totalCardNum/*, _centerCardIndex*/);
+                    DisplayPointData(_centerDeck, _deckElementlist, totalCardNum, _centerCardIndex);
                 });
             }
 #endif
@@ -321,13 +318,10 @@ namespace Yes.Game.Chicken
                     //列
                     for (int i = 0; i < column; i++)
                     {
-
-                        ErrorLogs.Get.DisplayLog("--------1______");
                         GameObject go = null;
 
                         CREATESTATE cs;
                         cs = (CREATESTATE)centerDeck[k, j, i];
-                        ErrorLogs.Get.DisplayLog("--------2______");
                         switch (cs)
                         {
                             case CREATESTATE.NONE:
@@ -375,20 +369,17 @@ namespace Yes.Game.Chicken
                         }
                         if (go)
                         {
-                            ErrorLogs.Get.DisplayLog("if (go)");
                             Card card = go.GetComponent<Card>();
                             //go.transform.SetSiblingIndex(createCardNum);
                             //card.SetCardSprite();
                             if (centerCardIndex != null)
                             {
                                 card.SetCardSprite(centerCardIndex[k, j, i]);
-                                ErrorLogs.Get.DisplayLog("if (go)1");
                             }
                             else
                             {
                                 card.SetCardSprite(temp_centerDecklist[temp_centerDecklist_index]);
                                 temp_centerDecklist_index++;
-                                ErrorLogs.Get.DisplayLog("if (go)2");
                             }
 
 
@@ -453,15 +444,11 @@ namespace Yes.Game.Chicken
         /// </summary>
         private GameObject CreatCardGo(int column, int row, int dirX, int dirY)
         {
-            ErrorLogs.Get.DisplayLog("CreatCardGo1");
             GameObject go = Instantiate(cardGo, deckTrans);
-            ErrorLogs.Get.DisplayLog("CreatCardGo2");
             go.transform.SetParent(tf_CenterDeckList);
-            ErrorLogs.Get.DisplayLog("CreatCardGo3");
             go.GetComponent<RectTransform>().anchoredPosition =
                 centerDeckTrans.anchoredPosition +
                 new Vector2(cardWidth * (column + 0.5f * dirX), -cardHeight * (row + 0.5f * dirY));
-            ErrorLogs.Get.DisplayLog("CreatCardGo4");
             return go;
         }
         /// <summary>
