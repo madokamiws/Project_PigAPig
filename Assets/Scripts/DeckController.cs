@@ -859,6 +859,15 @@ namespace Yes.Game.Chicken
             ErrorLogs.Get.ShowLog();
             //ErrorLogs.Get.DisplayLog("dasdasdasdasdasdasdasdasddasdhdfkhfjljfldjlakjfldjjfsl3or3980orj3lnrl3knc0q399399cjq c3qc9o3qcero9qec9oquec2queoq2ce9mqceojwlkahjflkjflsjfldjfdlsjflskjfdksjfjowjliamntnhshannzjkuzjm tgyayalliiuzjnmgj;lliujunhsutgnmnqa1010101010ajsjz8988888k2k1k****J1899Z0023834");
         }
+        public void OnShowBannerAd()
+        {
+            AdController.Get.CreateBannerAd("1d4sorsmjwt5bajk29");
+            
+        }
+        public void OnShowRewardAd()
+        {
+            AdController.Get.ShowRewardVideoAd("o2rfpjvnbi3me7479l");
 
+        }
     }
 }
