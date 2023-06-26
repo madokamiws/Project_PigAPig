@@ -85,8 +85,9 @@ namespace Yes.Game.Chicken
         //public void 
         void Start()
         {
+            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
 #if UNITY_EDITOR
-        int totalCardNum = 114;
+            int totalCardNum = 114;
 
 
         int[,,] centerDeck = new int[,,]//层 行 列
@@ -862,7 +863,7 @@ namespace Yes.Game.Chicken
         public void OnShowBannerAd()
         {
             //AdController.Instance.CreateBannerAd("1d4sorsmjwt5bajk29");
-            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
+            AdController.Instance.DisplayInterstitialAd();
 
         }
         public void OnShowRewardAd()
