@@ -861,12 +861,25 @@ namespace Yes.Game.Chicken
         }
         public void OnShowBannerAd()
         {
-            AdController.Get.CreateBannerAd("1d4sorsmjwt5bajk29");
-            
+            //AdController.Instance.CreateBannerAd("1d4sorsmjwt5bajk29");
+            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
+
         }
         public void OnShowRewardAd()
         {
-            AdController.Get.ShowRewardVideoAd("o2rfpjvnbi3me7479l");
+            AdController.Instance.ShowRewardVideoAd("o2rfpjvnbi3me7479l", (isWatchedTimeGreater) =>
+            {
+                if (isWatchedTimeGreater)
+                {
+                    // watchedTime 大于 effectiveTime 的处理逻辑
+                    ErrorLogs.Get.DisplayLog("watchedTime 大于 effectiveTime");
+                }
+                else
+                {
+                    // watchedTime 小于等于 effectiveTime 的处理逻辑
+                    ErrorLogs.Get.DisplayLog("watchedTime 小于等于 effectiveTime");
+                }
+            });
 
         }
     }

@@ -1,44 +1,110 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using StarkSDKSpace;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 namespace Yes.Game.Chicken
 {
-public class AdController : MonoBehaviour
+public class AdController
     {
         private StarkAdManager.BannerStyle m_style;
         private StarkAdManager.BannerAd m_bannerAdIns;
-        private StarkAdManager.InterstitialAd m_InterAdIns;
+        private StarkAdManager.InterstitialAd interstitialAd;
 
+
+        private bool videoAdResult;
         private static AdController instance;
-        //private StarkAdManager adManager = StarkSDK.API.GetStarkAdManager();
 
-
-        public static AdController Instance { get; private set; }
-        public static AdController Get
+        public static AdController Instance
         {
             get
             {
-                if (!Instance)
+                if (instance == null)
                 {
-                    Instance = new AdController();
+                    instance = new AdController();
                 }
-                return Instance;
+                return instance;
             }
         }
-        private void Awake()
-        {
-            Instance = this;
-        }
-        private void Start()
+        private AdController()
         {
             m_style = new StarkAdManager.BannerStyle();
         }
+        #region 激励视频
+        //public delegate void VideoCloseCallback(bool isWatchedTimeGreaterThanEffectiveTime);
 
+        //public event VideoCloseCallback OnVideoCloseCallback;
+        public void ShowRewardVideoAd(string videoAdId, Action<bool> Callback)
+        {
+            //MyVideoAdCallbacks rewardcallbacks = new MyVideoAdCallbacks(onVideoClose);
+            MyVideoAdCallbacks rewardcallbacks = new MyVideoAdCallbacks();
+            StarkSDK.API.GetStarkAdManager().ShowVideoAdWithId(
+                videoAdId, (CloseCallback)=>
+                {
+                    Callback(CloseCallback);
+                }, OnRewardAdError, rewardcallbacks);
+        }
+        private void OnRewardAdError(int errorCode, string errorMsg)
+        {
+            ErrorLogs.Get.DisplayLog("errorCode = " + errorCode + "errorDescription = " + errorMsg);
+        }
+        void CloseCallback(bool closeCallback, Action<bool> Callback)
+        {
+            if (closeCallback)
+            {
+                ErrorLogs.Get.DisplayLog("closeCall返回true");
+            }
+            else
+            {
+                ErrorLogs.Get.DisplayLog("closeCall返回false");
+            }
+            Callback(closeCallback);
+        }
+#endregion
+
+#region 插屏广告
+        public void ShowInterstitialAd(string ad_id)
+        {
+
+            interstitialAd = StarkSDK.API.GetStarkAdManager().CreateInterstitialAd(
+                ad_id, OnInsAdError, OnInsAdClose, OnInsAdLoaded);
+
+            if (interstitialAd != null)
+            {
+                interstitialAd.Load(); // 将加载插屏广告的操作放在这里，不在加载完成后立即显示
+            }
+        }
+        private void OnInsAdError(int errorCode, string errorMsg)
+        {
+            ErrorLogs.Get.DisplayLog("errorCode = " + errorCode + "errorDescription = " + errorMsg);
+            interstitialAd = null; // Dispose ad after error
+        }
+        private void OnInsAdClose()
+        {
+            if (interstitialAd != null)
+            {
+                interstitialAd.Destory();
+                interstitialAd = null;
+            }
+        }
+
+        private void OnInsAdLoaded()
+        {
+            if (interstitialAd != null)
+            {
+                interstitialAd.Show();
+            }
+        }
+        public void DisplayInterstitialAd()
+        {
+            if (interstitialAd != null && interstitialAd.IsLoaded())
+            {
+                interstitialAd.Show();
+            }
+        }
+        #endregion
+
+        #region banner广告
         private int px2dp(int px) => (int)(px * (160 / Screen.dpi));
-
         // 创建Banner广告
         public void CreateBannerAd(string adId)
         {
@@ -49,46 +115,6 @@ public class AdController : MonoBehaviour
 
 
         }
-        public void ShowRewardVideoAd(string videoAdId/*, Action<bool> closeCallback = null, Action<int, string> errorCallback = null, VideoAdCallback adCallback = null*/)
-        {
-            StarkSDK.API.GetStarkAdManager().ShowVideoAdWithId(videoAdId, CloseCallback, ErrorCallback/*adCallback*/);
-        }
-
-        void CloseCallback(bool closeCallback)
-        {
-            if (closeCallback)
-            {
-                ErrorLogs.Get.DisplayLog("closeCall返回true");
-            }
-            else
-            {
-                ErrorLogs.Get.DisplayLog("closeCall返回false");
-            }
-        }
-        //void VideoAdCallback.OnError(int errCode, string errorMessage)
-        //{
-        //    // 在这里处理广告失败的情况
-        //    ErrorLogs.Get.DisplayLog("广告失败：" + errorMessage + "，错误码：" + errCode);
-        //}
-
-        //void VideoAdCallback.OnVideoClose(int watchedTime, int effectiveTime, int duration)
-        //{
-        //    // 在这里处理广告关闭的情况
-        //    ErrorLogs.Get.DisplayLog("广告关闭，已播放时长：" + watchedTime + "，有效播放时长：" + effectiveTime + "，视频总时长：" + duration);
-        //}
-
-        //void VideoAdCallback.OnVideoLoaded()
-        //{
-        //    // 在这里处理广告加载成功的情况
-        //    ErrorLogs.Get.DisplayLog("广告加载成功");
-        //}
-
-        //void VideoAdCallback.OnVideoShow(long timestamp)
-        //{
-        //    // 在这里处理广告播放成功的情况
-        //    ErrorLogs.Get.DisplayLog("广告播放成功，触发时间：" + timestamp);
-        //}
-
 
         // 展示Banner广告
         public void ShowBannerAd()
@@ -114,40 +140,6 @@ public class AdController : MonoBehaviour
             m_bannerAdIns.ReSize(m_style);
         }
 
-        // 创建插屏广告
-        public void CreateInterstitialAd(string adId)
-        {
-            m_InterAdIns = StarkSDK.API.GetStarkAdManager().CreateInterstitialAd(adId);
-        }
-
-        // 加载插屏广告
-        public void LoadInterstitialAd()
-        {
-            if (m_InterAdIns != null)
-            {
-                m_InterAdIns.Load();
-            }
-        }
-
-        // 展示插屏广告
-        public void ShowInterstitialAd()
-        {
-            if (m_InterAdIns != null)
-            {
-                m_InterAdIns.Show();
-            }
-        }
-
-        // 销毁插屏广告
-        public void DestroyInterstitialAd()
-        {
-            if (m_InterAdIns != null)
-            {
-                m_InterAdIns.Destory();
-                m_InterAdIns = null;
-            }
-        }
-
         void ErrorCallback(int errorCode, string errorDescription)
         {
             // 在此处理广告错误回调
@@ -170,6 +162,8 @@ public class AdController : MonoBehaviour
             // width 表示广告宽度
             // height 表示广告高度
         }
+        #endregion
     }
+
 
 }
