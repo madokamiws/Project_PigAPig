@@ -85,8 +85,9 @@ namespace Yes.Game.Chicken
         //public void 
         void Start()
         {
+            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
 #if UNITY_EDITOR
-        int totalCardNum = 114;
+            int totalCardNum = 114;
 
 
         int[,,] centerDeck = new int[,,]//层 行 列
@@ -859,6 +860,38 @@ namespace Yes.Game.Chicken
             ErrorLogs.Get.ShowLog();
             //ErrorLogs.Get.DisplayLog("dasdasdasdasdasdasdasdasddasdhdfkhfjljfldjlakjfldjjfsl3or3980orj3lnrl3knc0q399399cjq c3qc9o3qcero9qec9oquec2queoq2ce9mqceojwlkahjflkjflsjfldjfdlsjflskjfdksjfjowjliamntnhshannzjkuzjm tgyayalliiuzjnmgj;lliujunhsutgnmnqa1010101010ajsjz8988888k2k1k****J1899Z0023834");
         }
+        public void OnShowBannerAd()
+        {
+            AdController.Instance.CreateBannerAd("1d4sorsmjwt5bajk29");
+            //AdController.Instance.DisplayInterstitialAd();
 
+        }
+        public void OnShowRewardAd()
+        {
+            AdController.Instance.ShowRewardVideoAd("o2rfpjvnbi3me7479l", (isWatchedTimeGreater) =>
+            {
+                if (isWatchedTimeGreater)
+                {
+                    // watchedTime 大于 effectiveTime 的处理逻辑
+                    ErrorLogs.Get.DisplayLog("watchedTime 大于 effectiveTime");
+                }
+                else
+                {
+                    // watchedTime 小于等于 effectiveTime 的处理逻辑
+                    ErrorLogs.Get.DisplayLog("watchedTime 小于等于 effectiveTime");
+                }
+            });
+
+        }
+        public void OnLoadInsAd()
+        {
+
+            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
+        }
+        public void OnShowInsAd()
+        {
+
+            AdController.Instance.DisplayInterstitialAd();
+        }
     }
 }

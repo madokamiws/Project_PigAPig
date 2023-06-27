@@ -13,12 +13,15 @@ namespace Yes.Game.Chicken
         public Text api_Log;
         void Start()
 		{
-			try
+
+            //调用API时会弹出调试框
+            StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
+            try
 			{
 
-                //CheckSession();
-                StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
-OnLoginFailedCallback);
+                CheckSession();
+//                StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+//OnLoginFailedCallback);
 
             }
 			catch (Exception ex)
@@ -31,16 +34,24 @@ OnLoginFailedCallback);
         {
             StarkSDK.API.GetAccountManager().CheckSession(OnCheckSessionSuccessCallback, OnCheckSessionFailedCallback);
         }
+
         void OnCheckSessionSuccessCallback()
         {
             //登录游戏逻辑
-            Logs.Log("CheckSession = ");
-//            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
-//OnLoginFailedCallback);
+            ErrorLogs.Get.DisplayLog("CheckSession 接口调用成功 ");
+            if (PlayerPrefs.HasKey("user_token"))
+            {
+                GameStart.Get.StartGame();
+            }
+            else
+            {
+                StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+OnLoginFailedCallback);
+            }
         }
         void OnCheckSessionFailedCallback(string errMsg)
         {
-            Logs.Log("errMsg = " + errMsg);
+            ErrorLogs.Get.DisplayLog("CheckSession 接口调用失败，进入登录流程");
             StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
 OnLoginFailedCallback);
 
@@ -69,7 +80,7 @@ OnLoginFailedCallback);
                 //记录 result
                 ErrorLogs.Get.DisplayLog("记录 token = "+result.user.token);
                 api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
-                CheckSession();
+                //CheckSession();
             });
 
             //CopyDebug.OnClickCopyText(sucesslog);
@@ -84,6 +95,15 @@ OnLoginFailedCallback);
             ErrorLogs.Get.DisplayLog("OnLoginFailedCallback ... errMsg：" + errMsg);
             failedlog = string.Format(sucesslog + "登录失败\n OnLoginFailedCallback ... errMsg：" + errMsg + "\n");
             tx_Logs.text = failedlog;
+        }
+
+        void OnFollowCallback()
+        {
+            ErrorLogs.Get.DisplayLog("OnFollowCallback");
+        }
+        void OnFollowError(int num1, string str_2)
+        {
+            ErrorLogs.Get.DisplayLog("num1 ="+ num1+ "-----str_2=" + str_2);
         }
 
 

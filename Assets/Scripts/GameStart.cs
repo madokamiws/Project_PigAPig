@@ -14,7 +14,22 @@ namespace Yes.Game.Chicken
 
         private AsyncOperation ao;
         public bool ifLoadGameScene;
-
+        public static GameStart Instance { get; private set; }
+        public static GameStart Get
+        {
+            get
+            {
+                if (!Instance)
+                {
+                    Instance = new GameStart();
+                }
+                return Instance;
+            }
+        }
+        void Awake()
+        {
+            Instance = this;
+        }
 
         void Start()
         {
@@ -22,8 +37,8 @@ namespace Yes.Game.Chicken
             StarkSDKSpace.MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
 
             //调用API时会弹出调试框
-            StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
-            startBtn.onClick.AddListener(StartVideo);
+            //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
+            startBtn.onClick.AddListener(StartGame);
             //endBtn.onClick.AddListener(StopVideo);
             shareBtn.onClick.AddListener(ShareVideo);
             ao = SceneManager.LoadSceneAsync(1);
@@ -38,7 +53,17 @@ namespace Yes.Game.Chicken
         { 
         
         }
-
+        public void StartGame()
+        {
+            if (ifLoadGameScene)
+            {
+                ao.allowSceneActivation = true;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         void StartVideo()
         {
             Debug.Log("抖音 开启录制视频 ...");
@@ -49,14 +74,7 @@ namespace Yes.Game.Chicken
             bool isStart = StarkSDK.API.GetStarkGameRecorder().StartRecord(true, 200,
                 StartCallback, FailedCallback, SuccessCallback);
             Debug.Log("视频开启录制结果 ..." + isStart);
-            if (ifLoadGameScene)
-            {
-                ao.allowSceneActivation = true;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+
         }
         void StopVideo()
         {
