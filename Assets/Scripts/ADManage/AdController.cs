@@ -9,7 +9,7 @@ public class AdController
         private StarkAdManager.BannerStyle m_style;
         private StarkAdManager.BannerAd m_bannerAdIns;
         private StarkAdManager.InterstitialAd interstitialAd;
-
+        StarkAdManager starkManager = StarkSDK.API.GetStarkAdManager();
 
         private bool videoAdResult;
         private static AdController instance;
@@ -28,6 +28,7 @@ public class AdController
         private AdController()
         {
             m_style = new StarkAdManager.BannerStyle();
+            ErrorLogs.Get.DisplayLog("什么时候");
         }
         #region 激励视频
         //public delegate void VideoCloseCallback(bool isWatchedTimeGreaterThanEffectiveTime);
@@ -37,7 +38,7 @@ public class AdController
         {
             //MyVideoAdCallbacks rewardcallbacks = new MyVideoAdCallbacks(onVideoClose);
             MyVideoAdCallbacks rewardcallbacks = new MyVideoAdCallbacks();
-            StarkSDK.API.GetStarkAdManager().ShowVideoAdWithId(
+            starkManager.ShowVideoAdWithId(
                 videoAdId, (CloseCallback)=>
                 {
                     Callback(CloseCallback);
@@ -64,9 +65,9 @@ public class AdController
 #region 插屏广告
         public void ShowInterstitialAd(string ad_id)
         {
-
-            interstitialAd = StarkSDK.API.GetStarkAdManager().CreateInterstitialAd(
-                ad_id, OnInsAdError, OnInsAdClose, OnInsAdLoaded);
+            DestoryInterstitialAd();
+            interstitialAd = starkManager.CreateInterstitialAd(
+                ad_id, OnInsAdError/*, OnInsAdClose, OnInsAdLoaded*/);
 
             if (interstitialAd != null)
             {
@@ -76,30 +77,36 @@ public class AdController
         private void OnInsAdError(int errorCode, string errorMsg)
         {
             ErrorLogs.Get.DisplayLog("errorCode = " + errorCode + "errorDescription = " + errorMsg);
-            interstitialAd = null; // Dispose ad after error
+            //interstitialAd = null; // Dispose ad after error
         }
         private void OnInsAdClose()
         {
-            if (interstitialAd != null)
-            {
-                interstitialAd.Destory();
-                interstitialAd = null;
-            }
+            //if (interstitialAd != null)
+            //{
+            //    interstitialAd.Destory();
+            //    interstitialAd = null;
+            //}
         }
 
         private void OnInsAdLoaded()
         {
-            if (interstitialAd != null)
-            {
-                interstitialAd.Show();
-            }
         }
         public void DisplayInterstitialAd()
         {
-            if (interstitialAd != null && interstitialAd.IsLoaded())
-            {
+            ErrorLogs.Get.DisplayLog("显示插屏AD");
+            if (interstitialAd != null)
                 interstitialAd.Show();
+            else
+            {
+                ErrorLogs.Get.DisplayLog("插屏AD未创建");
             }
+        }
+        void DestoryInterstitialAd()
+        {
+            ErrorLogs.Get.DisplayLog("销毁插屏AD");
+            if (interstitialAd != null)
+                interstitialAd.Destory();
+            interstitialAd = null;
         }
         #endregion
 

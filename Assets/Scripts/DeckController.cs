@@ -862,8 +862,8 @@ namespace Yes.Game.Chicken
         }
         public void OnShowBannerAd()
         {
-            //AdController.Instance.CreateBannerAd("1d4sorsmjwt5bajk29");
-            AdController.Instance.DisplayInterstitialAd();
+            AdController.Instance.CreateBannerAd("1d4sorsmjwt5bajk29");
+            //AdController.Instance.DisplayInterstitialAd();
 
         }
         public void OnShowRewardAd()
@@ -882,6 +882,16 @@ namespace Yes.Game.Chicken
                 }
             });
 
+        }
+        public void OnLoadInsAd()
+        {
+
+            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
+        }
+        public void OnShowInsAd()
+        {
+
+            AdController.Instance.DisplayInterstitialAd();
         }
     }
 }
