@@ -23,7 +23,7 @@ namespace Yes.Game.Chicken
         public List<Card> coverCardList = new List<Card>();//当前卡牌覆盖的其他卡牌
         public List<Card> aboveCardList = new List<Card>();//覆盖当前卡牌的其他卡牌
 
-        
+        public AudioClip sound_Click;
 
         // Start is called before the first frame update
         void Start()
@@ -90,6 +90,7 @@ namespace Yes.Game.Chicken
         /// </summary>
         public void CardClickEvent()
         {
+            AudioManager.Instance.PlaySound(sound_Click);
             btnCard.onClick.RemoveAllListeners();
             transform.SetSiblingIndex(500);
             DeckController.Get.DeleteSelectedCard(this);

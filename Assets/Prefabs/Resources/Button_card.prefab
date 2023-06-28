@@ -156,6 +156,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 116841a19698b7a4090589fbbdf75d42, type: 3}
   - {fileID: 21300000, guid: 960d6b0af2a01f34893fa1955bb1815d, type: 3}
   id: 0
+  row: 0
+  column: 0
+  layer: 0
+  cardDir: 0
   rtf: {fileID: 1366142669863020468}
   coverCardList: []
   aboveCardList: []
+  sound_Click: {fileID: 8300000, guid: 88348d9c7fd00d7438599d362b779f8a, type: 3}
