@@ -943,7 +943,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 677968215}
-        m_MethodName: HidecheckpointObj
+        m_MethodName: OnStarkGameRecorder
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

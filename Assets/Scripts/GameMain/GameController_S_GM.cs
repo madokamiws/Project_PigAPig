@@ -34,7 +34,7 @@ namespace Yes.Game.Chicken
         void Start()
         {
             //btn_modelNormal.onClick.AddListener(OnClickModelNormal);
-
+            //GameRecorderController.Instance.Show();
             AudioManager.Instance.PlayBGM(BGM_Click);
         }
         public void ShowCheckpoint()
@@ -55,6 +55,10 @@ namespace Yes.Game.Chicken
         public void OnShowSetting()
         {
             SettingController.Get.Show();
+        }
+        public void OnStarkGameRecorder()
+        {
+            GameRecorderController.Instance.StartRecord();
         }
         public void EXstart()
         {
