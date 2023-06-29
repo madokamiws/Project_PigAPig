@@ -15,7 +15,6 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
     GameObject bgmController;
     GameObject soundController;
     GameObject sound2D;
-    GameObject sound3D;
     GameObject bgsController;
     GameObject msController;
     GameObject voiceController;
@@ -25,13 +24,13 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
     string soundControllerName ="SoundController";
     string soundPool2DName = "SoundPool2D";
     string soundClip2DName = "SoundClip2D";
-    string soundPool3DName = "SoundPool3D";
-    string soundClip3DName = "SoundClip3D";
     string bgsControllerName ="BgsController";
     string msControllerName ="MsController";
     string msClipName = "MsClip";
     string voiceControllerName ="VoiceController";
 
+    public bool isBGMEnabled = true;
+    public bool is2DSoundEnabled = true;
     /// <summary>
     /// 播放BGM
     /// </summary>
@@ -46,6 +45,10 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
         bgmAudioSource.loop = loop;
         bgmAudioSource.clip = bgm;
         bgmAudioSource.Play();
+        if (!isBGMEnabled)
+        {
+            bgmAudioSource.Pause();
+        }
     }
 
     /// <summary>
@@ -78,6 +81,11 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
     /// </summary>
     public void PlaySound(AudioClip sound)
     {
+        if (!is2DSoundEnabled)
+        {
+            Debug.LogWarning("2D sound is disabled!");
+            return;
+        }
         if (sound==null)
         {
             Debug.LogWarning("播放Sound失败！要播放的Sound为null");
@@ -137,160 +145,6 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
                 go.SetActive(false);
             }
 
-        }
-    }
-
-
-    /// <summary>
-    /// 播放3D音效
-    /// </summary>
-    public void PlaySound(AudioClip sound,GameObject target)
-    {
-        if (sound == null)
-        {
-            Debug.LogWarning("播放Sound失败！要播放的Sound为null");
-            return;
-        }
-
-        if (target==null)
-        {
-            Debug.LogWarning("播放Sound失败！无法在目标对象身上播放Sound，因为目标对象为null");
-            return;
-        }
-
-        //临时的空物体，用来播放音效。
-        GameObject go = null;
-
-        for (int i = 0; i < sound3D.transform.childCount; i++)
-        {
-            //如果对象池中有，则从对象池中取出来用。
-            if (!sound3D.transform.GetChild(i).gameObject.activeSelf)
-            {
-                go = sound3D.transform.GetChild(i).gameObject;
-                go.SetActive(true);
-                break;
-            }
-        }
-        //如果对象池中没有，则创建一个游戏对象。
-        if (go==null)
-        {
-            go = new GameObject(soundClip3DName);
-        }
-
-        //把用于播放音效的游戏对象放到目标物体之下，作为它的子物体
-        go.transform.SetParent(target.transform);
-        go.transform.localPosition = Vector3.zero;
-
-        //如果该游戏对象身上没有AudioSource组件，则添加AudioSource组件并设置参数。
-        if (!go.TryGetComponent<AudioSource>(out AudioSource audioSource))
-        {
-            audioSource = go.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
-            audioSource.loop = false;
-            audioSource.spatialBlend = 1f;//3D效果，近大远小。
-        }
-
-        //设置要播放的音频
-        audioSource.clip = sound;
-
-        //播放音频
-        audioSource.Play();
-
-        //每隔1秒检测一次，如果该音频播放完毕，则销毁游戏对象。
-        StartCoroutine(DestoryWhenFinisied());
-
-        //每隔1秒检测一次，如果该音频播放完毕，则销毁游戏对象。
-        IEnumerator DestoryWhenFinisied()
-        {
-            do
-            {
-                yield return new WaitForSeconds(1);
-
-                if (go == null || audioSource == null) yield break;//如果播放音频的游戏对象，或者AudioSource组件被销毁了，则直接跳出协程。
-            } while (audioSource!=null&&audioSource.time>0);
-
-            if (go != null)
-            {
-                //放入对象池
-                go.transform.SetParent(sound3D.transform);
-                go.transform.localPosition = Vector3.zero;
-                audioSource.clip = null;
-                go.SetActive(false);
-            }
-
-        }
-    }
-
-    /// <summary>
-    /// 在世界空间中指定的位置播放3D音效
-    /// </summary>
-    public void PlaySound(AudioClip sound,Vector3 worldPosition,Transform parent=null)
-    {
-        if (sound==null)
-        {
-            Debug.LogWarning("播放Sound失败！要播放的Sound为null");
-            return;
-        }
-
-        //临时的空物体，用来播放音效。
-        GameObject go = null;
-
-        for (int i = 0; i < sound3D.transform.childCount; i++)
-        {
-            //如果对象池中有，则从对象池中取出来用。
-            if (!sound3D.transform.GetChild(i).gameObject.activeSelf)
-            {
-                go = sound3D.transform.GetChild(i).gameObject;
-                go.SetActive(true);
-                break;
-            }
-        }
-        //如果对象池没有，则创建一个游戏对象。
-        if (go==null)
-        {
-            go = new GameObject(soundClip3DName);
-        }
-
-        go.transform.position = worldPosition;
-        go.transform.SetParent(parent);
-
-
-        //如果该游戏对象身上没有AudioSource组件，则添加AudioSource组件并设置参数。
-        if (!go.TryGetComponent<AudioSource>(out AudioSource audioSource))
-        {
-            audioSource = go.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
-            audioSource.loop = false;
-            audioSource.spatialBlend = 1f;//3D效果，近大远小。
-        }
-
-        //设置要播放的音频
-        audioSource.clip = sound;
-
-        //播放音频
-        audioSource.Play();
-
-        //每隔一秒检测一次，如果该音频播放完毕，则销毁该游戏对象。
-        StartCoroutine(DestroyWhenFinished());
-
-        IEnumerator DestroyWhenFinished()
-        {
-            do
-            {
-                yield return new WaitForSeconds(1);
-
-                if (go == null || audioSource == null) yield break;//如果播放音频的游戏对象，或者AudioSource组件被销毁了，则直接跳出协程。
-
-            } while (audioSource!=null&&audioSource.time>0);
-
-            if (go!=null)
-            {
-                //放入对象池
-                go.transform.SetParent(sound3D.transform);
-                go.transform.localPosition = Vector3.zero;
-                audioSource.clip = null;
-                go.SetActive(false);
-            }
         }
     }
 
@@ -423,14 +277,6 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
     }
 
 
-
-
-
-
-
-
-
-
     void Awake()
     {
         //创建并设置背景音乐的控制器
@@ -442,7 +288,6 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
         //创建音效控制器
         soundController = CreateController(soundControllerName,transform);
         sound2D = CreateController(soundPool2DName, soundController.transform);
-        sound3D = CreateController(soundPool3DName,soundController.transform);
 
         //创建并设置环境音效的控制器
         bgsController = CreateController(bgsControllerName, transform);
@@ -465,31 +310,8 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
         go.transform.SetParent(parent);
         return go;
     }
-
-
-
-
-
     public void Print()
     {
         Debug.Log("AudioManager");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -9,8 +9,9 @@ namespace Yes.Game.Chicken
     public class GameController_S_GM : MonoBehaviour
     {
         public Button btn_modelNormal;
-        
+
         //public GameObject checkpointObj;
+        public AudioClip BGM_Click;
 
         public CheckPointModel checkPointModel;
         public static GameController_S_GM Instance { get; private set; }
@@ -28,12 +29,13 @@ namespace Yes.Game.Chicken
         void Awake()
         {
             Instance = this;
+            
         }
         void Start()
         {
             //btn_modelNormal.onClick.AddListener(OnClickModelNormal);
 
-
+            AudioManager.Instance.PlayBGM(BGM_Click);
         }
         public void ShowCheckpoint()
         {
@@ -50,17 +52,14 @@ namespace Yes.Game.Chicken
             //SceneManager.LoadScene("GameNormalModel");
         }
 
-        //public void ShowcheckpointObj()
-        //{
-        //    checkpointObj.SetActive(true);
-        //}
-        //public void HidecheckpointObj()
-        //{
-        //    checkpointObj.SetActive(false);
-        //}
+        public void OnShowSetting()
+        {
+            SettingController.Get.Show();
+        }
         public void EXstart()
         {
             SceneManager.LoadScene("GameScence");
         }
+
     }
 }
