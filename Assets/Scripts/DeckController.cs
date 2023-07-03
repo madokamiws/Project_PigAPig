@@ -27,7 +27,7 @@ namespace Yes.Game.Chicken
         public RectTransform empPos_BackThree;
 
         public Transform tf_CenterDeckList;
-        public List<Transform> xxx = new List<Transform>();
+
 
         public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
@@ -36,6 +36,9 @@ namespace Yes.Game.Chicken
         public Stack<CardMoveRecord> cardMoveHistory = new Stack<CardMoveRecord>();
 
         private const string LevelIDKey = "CurrentLevelID";
+        private const string MaxLevelIDKey = "CurrentLevelIDMax";
+
+        public int currentLevelID = -1;
         /// <summary>
         /// 卡牌总数
         /// </summary>
@@ -82,102 +85,54 @@ namespace Yes.Game.Chicken
         {
             return PlayerPrefs.GetInt(LevelIDKey);
         }
+        public static int GetCurrentMaxLevelID()
+        {
+            if (PlayerPrefs.HasKey(MaxLevelIDKey))
+            {
+                return PlayerPrefs.GetInt(MaxLevelIDKey);
+            }
+            else
+            {
+                return -1;
+            }
+
+
+        }
         //public void 
         void Start()
         {
-            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
+            AdController.Instance.ShowInterstitialAd();
+            currentLevelID = GetCurrentMaxLevelID();
+            InitCreatDeck(currentLevelID);
+
+        }
+
+        public void InitCreatDeck(int level)
+        {
+            InitData();
+
 #if UNITY_EDITOR
-            int totalCardNum = 114;
+            int totalCardNum = 12;
 
 
-        int[,,] centerDeck = new int[,,]//层 行 列
-    {
+            int[,,] centerDeck = new int[,,]//层 行 列
+        {
                 {
-            {0,0,0,0,0,0,0},
-            {0,4,4,4,4,4,0},
-            {0,0,4,4,4,0,0},
-            {0,0,0,4,0,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0}
-        },
-        {
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0},
-            {0,3,3,3,3,3,0},
-            {0,8,8,8,8,8,0},
-            {0,0,8,8,8,0,0},
-            {0,0,4,0,4,0,0},
-            {0,8,0,8,0,8,0},
-            {0,0,0,0,0,0,0}
-        },
-        {
-            {0,0,0,0,0,0,0},
-            {0,0,7,0,7,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,7,0,0,0},
-            {0,0,7,0,7,0,0},
-            {0,0,7,7,7,0,0},
-            {0,0,0,7,0,0,0},
-            {0,0,0,0,0,0,0}
-        },
-        {
-            {0,0,0,0,0,0,0},
-            {0,0,6,0,6,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,6,0,0,0},
-            {0,0,6,0,6,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0}
-        },
-        {
-            {0,0,0,0,0,0,0},
-            {0,4,0,0,0,4,0},
-            {0,0,4,0,4,0,0},
-            {0,0,0,4,0,0,0},
-            {0,0,4,0,4,0,0},
-            {0,4,0,0,0,4,0},
-            {0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0}
-        },
-        {
-            {0,0,0,0,0,0,0},
-            {0,0,0,3,0,0,0},
-            {0,0,0,3,0,0,0},
-            {0,0,3,3,3,0,0},
-            {0,0,3,3,3,0,0},
-            {0,0,0,3,0,0,0},
-            {0,0,0,3,0,0,0},
-            {0,0,0,0,0,0,0}
-        },
-        {
-            {0,3,8,0,9,3,0,},
-            {0,3,8,0,9,3,0,},
-            {0,3,8,0,9,3,0,},
-            {0,3,0,4,0,3,0,},
-            {0,3,0,4,0,3,0,},
-            {0,3,8,0,9,3,0,},
-            {0,3,8,0,9,3,0,},
-            {0,3,8,0,9,3,0,}
+            {0,0,4,0,0,0,0},
+            {0,4,4,4,4,4,0}
         },
         {
             {0,4,0,4,0,3,0},
-            {0,3,0,5,0,4,0},
-            {0,5,0,5,0,3,0},
-            {0,0,3,8,0,6,0},
-            {0,4,7,5,4,6,0},
-            {0,0,5,6,0,0,0},
-            {0,4,0,0,0,5,0},
-            {3,0,4,0,8,0,0}
+            {0,3,0,5,0,4,0}
 
                 }
-    };
+        };
 
             int[] DeckElementlist = new int[]
                 {1,2,3,4,5,6,7,8,9,10};
-
+            int[] deckElementlist_weight = new int[]
+                {100,200};
+                
             //        int[,,] centerCardIndex = new int[,,]//层 行 列
             //{
             //            {
@@ -195,14 +150,14 @@ namespace Yes.Game.Chicken
             DisplayPointData(centerDeck, DeckElementlist, totalCardNum);
 
 
-
 #else
             int currentId = GetCurrentLevelID();
-            if (currentId > 0)
+
+            if (level > 0)
             {
-                DeckData.GetDeckData(currentId, (result) =>
+                DeckData.GetDeckData(level, (result) =>
                 {
-                    ErrorLogs.Get.DisplayLog("currentId:"+ currentId);
+                    ErrorLogs.Get.DisplayLog("currentlevelId:" + level);
 
                     int[,,] _centerDeck = result.center_deck;
                     //for (int layer = 0; layer < _centerDeck.GetLength(0); layer++)
@@ -238,9 +193,42 @@ namespace Yes.Game.Chicken
                 });
             }
 #endif
+        }
+        public void InitData()
+        {
+            for (int i = 0; i < pickDeckCardIDs.Length; i++)
+            {
+                pickDeckCardIDs[i] = -1;
+            }
+            for (int i = 0; i < pickDeckPosTrans.Length; i++)
+            {
+                ClearChilds(pickDeckPosTrans[i]);
+            }
+            ClearChilds(tf_CenterDeckList);
+            ClearChilds(centerDeckTrans);
+            ClearChilds(leftColumnDeckTrans);
+            ClearChilds(rightColumnDeckTrans);
+            ClearChilds(leftDownDeckTrans);
+            ClearChilds(rightDownDeckTrans);
+            ClearChilds(empPos_BackThree);
 
         }
-        public void DisplayPointData(int[,,] centerDeck,int[] deckElementlist ,int totalCardNum, int[,,] centerCardIndex = null)
+        /// <summary>
+        /// 清除父物体下面的所有子物体
+        /// </summary>
+        /// <param name="parent"></param>
+        private void ClearChilds(Transform parent)
+        {
+            if (parent.childCount > 0)
+            {
+                for (int i = 0; i < parent.childCount; i++)
+                {
+                    Destroy(parent.GetChild(i).gameObject);
+                }
+            }
+
+        }
+            public void DisplayPointData(int[,,] centerDeck,int[] deckElementlist ,int totalCardNum, int[,,] centerCardIndex = null)
         {
 
             layer = centerDeck.GetLength(0);
@@ -399,7 +387,6 @@ namespace Yes.Game.Chicken
                     }
                 }
             }
-            ErrorLogs.Get.DisplayLog("生成之后");
             int createGroupNum = (totalCardNum - createCardNum) / 4;
             int redundantNum = totalCardNum - createCardNum - createGroupNum * 4;
             //左竖
@@ -424,6 +411,7 @@ namespace Yes.Game.Chicken
             }
 
         }
+
         /// <summary>
         /// 旁边卡碟
         /// </summary>
@@ -490,7 +478,7 @@ namespace Yes.Game.Chicken
             {
                 return sf;
             }
-            Debug.Log("游戏结束");
+            Debug.Log("游戏结束1");
             return null;
         }
         /// <summary>
@@ -514,7 +502,8 @@ namespace Yes.Game.Chicken
                     return pickDeckPosTrans[i];
                 }
             }
-            Debug.Log("游戏结束");
+
+            Debug.Log("游戏结束2");
             return null;
         }
         /// <summary>
@@ -621,7 +610,26 @@ namespace Yes.Game.Chicken
                     }
                     break;
                 }
+
             }
+        }
+        public void JudgeGameover()
+        {
+            if (tf_CenterDeckList.childCount == 0)
+            {
+                Debug.Log("游戏胜利");
+                GameOverGontroller.Get.ShowSuccess();
+                return;
+            }
+            for (int i = 0; i < pickDeckCardIDs.Length; i++)
+            {
+                if (pickDeckCardIDs[i]==-1)
+                {
+                    return;
+                }
+            }
+            Debug.Log("游戏失败");
+            GameOverGontroller.Get.ShowFailure();
         }
         /// <summary>
         /// 撤回三张卡牌
@@ -862,13 +870,13 @@ namespace Yes.Game.Chicken
         }
         public void OnShowBannerAd()
         {
-            AdController.Instance.CreateBannerAd("1d4sorsmjwt5bajk29");
+            AdController.Instance.CreateBannerAd();
             //AdController.Instance.DisplayInterstitialAd();
 
         }
         public void OnShowRewardAd()
         {
-            AdController.Instance.ShowRewardVideoAd("o2rfpjvnbi3me7479l", (isWatchedTimeGreater) =>
+            AdController.Instance.ShowRewardVideoAd((isWatchedTimeGreater) =>
             {
                 if (isWatchedTimeGreater)
                 {
@@ -886,7 +894,7 @@ namespace Yes.Game.Chicken
         public void OnLoadInsAd()
         {
 
-            AdController.Instance.ShowInterstitialAd("2ola8sqldo9f93o6h3");
+            AdController.Instance.ShowInterstitialAd();
         }
         public void OnShowInsAd()
         {

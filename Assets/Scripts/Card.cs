@@ -136,6 +136,8 @@ namespace Yes.Game.Chicken
 
                 transform.localPosition = Vector3.zero;
                 DeckController.Instance.JudgeClearCard();
+                DeckController.Instance.JudgeGameover();
+
             });
         }
 

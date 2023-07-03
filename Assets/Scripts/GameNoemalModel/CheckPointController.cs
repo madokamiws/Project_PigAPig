@@ -49,6 +49,15 @@ namespace Yes.Game.Chicken
                     {
                         itemView.LoadData(point);
                     }
+                    if (i-1>=0)
+                    {
+                        if (model.config_levels[i - 1].unlock == 1 && point.unlock == 0)
+                        {
+                            PlayerPrefs.SetInt("CurrentLevelIDMax", model.config_levels[i - 1].id);
+                            PlayerPrefs.Save();
+                        }
+                    }
+ 
                 }
             }
         }

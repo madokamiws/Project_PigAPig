@@ -20,6 +20,14 @@ namespace Yes.Game.Chicken
                 }
                 //string code_test = "nL1FWUGAPvVJrBrVkOAB78MdBUVOw-kUp7PeN07UL-udCL_h3QziRowaKpmYk3O0-UZKRF2L03RPRK7TBJKvJm8YChKGgfcLltPMEeR1KjNMyqYfybdpBK-t7eQ";
                 param.Add("code", code);
+                param.Add("avatar_url", Constant.avatarUrl);
+                param.Add("nick_name", Constant.nickName);
+                param.Add("gender", Constant.gender.ToString());
+                param.Add("city", Constant.city);
+                param.Add("province", Constant.province);
+                param.Add("country", Constant.country);
+                //param.Add("language", Constant.language);
+ 
                 //ErrorLogs.Get.DisplayLog(code);
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {

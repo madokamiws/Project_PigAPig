@@ -130,7 +130,7 @@ public class BaseHttpHelper
 
                 // Debug.Log(string.Format ( "  HttpMethod item.Key={0}, item.Value={1}", item.Key, item.Value ) ) ;
             }
-            //string h = GetAppSignEx(new_param);
+            string h = GetAppSignEx(new_param);
 
             /*
             Dictionary<string, string> list = BaseModel.GetCommonHttpFields();

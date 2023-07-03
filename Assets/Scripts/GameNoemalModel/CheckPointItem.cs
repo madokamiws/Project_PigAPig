@@ -28,6 +28,11 @@ namespace Yes.Game.Chicken
             if (point.unlock == 0)
             {
                 isUnlock.SetActive(true);
+                //if (self_ID-1 >= 0)
+                //{
+                //    PlayerPrefs.SetInt("CurrentLevelIDMax", self_ID-1);
+                //    PlayerPrefs.Save();
+                //}
 
             }
         }

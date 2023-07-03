@@ -316,8 +316,8 @@ MonoBehaviour:
   rightDownDeckTrans: {fileID: 1718795220}
   empPos_BackThree: {fileID: 873527720}
   tf_CenterDeckList: {fileID: 2027689223}
-  xxx: []
   pickDeckCardIDs: 
+  currentLevelID: -1
 --- !u!1 &78985829
 GameObject:
   m_ObjectHideFlags: 0

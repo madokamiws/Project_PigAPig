@@ -11,67 +11,17 @@ namespace Yes.Game.Chicken
     public class Constant
     {
 
-        public static readonly string app_version = Application.version;// "0.15";
-
-        // areaYield
-
-        public static float foodConsumption = 0.0001158f; //  正常计算 0.0001158f
-        public static float foodConsumptionSimulation = 0.0333f; // 0.1666f ; // 一天2斤
-        public static int daySecond = 60;
-        public static int reliefFood = 200000;
-        public static float areaYield = 600;
-
-        public static int hint = 4;
-
-        public static float foodStore = 100000;
-        public static float goldStore = 100000;
-
-        public static float landUseRate = 0.1f; // 0.05f ; // * 1500
-        public static bool isLineUp = false;
-
-
-        public static int BuffQDGold = 200;
-        public static int TreasureBoxRewardGold = 200;
-
-        public static string ckey = "com.yes.IdiomEmpire";
-        public static string fr = "yingyongbao";//ios
-        public static string code = "idiom_empire";
-
         public static readonly string HTTP_DATA_EMPTY = "";
-        public static readonly Vector2[] Vector2s = { Vector2.left, Vector2.right, Vector2.up, Vector2.down };
-        public static Vector2[] Vector2Directions = { Vector2.left, Vector2.right, Vector2.up, Vector2.down };
-
-
-        // Frame DroppedExp
-        // Boss Player Enemy HeroWeapon
-        public readonly static string TagHeroWeapon = "HeroWeapon";
-        public readonly static string TagEnemy = "HeroEnemy";
-        public readonly static string TagEnemyBird = "HeroEnemy";
-
-
-        public readonly static string TagPlayer = "Player";
-        public readonly static string TagBoss = "Boss";
-        public readonly static string TagFrame = "Frame";
-
-        public readonly static string TagDroppedExp = "HeroDroppedExp";
-        public readonly static string TagDroppedItem = "HeroDroppedItem";
-
-        public readonly static string TagDroppedBox = "HeroDroppedBox";
-        public readonly static string TagDroppedBoxItem = "HeroDroppedBoxItem";
-        // BlockDroppedBoxItem
-
-        public readonly static string TagArrowBomb = "ArrowBomb";
-        public readonly static string TagTreasureBox = "TreasureBox";
-        public readonly static string TagHeroMagicBox = "HeroMagicBox";
-        public readonly static string TagHealingGrape = "HealingGrape";
-        public readonly static string TagCharacter = "Character";
-
-        public readonly static string TagHeroBlockFrame = "HeroBlockFrame";
-
-
-        #region 2022年08月12日新增
 
         public static readonly bool IsDebug = true;
+
+        public static string avatarUrl { get; set; }
+        public static string nickName { get; set; }
+        public static int gender { get; set; }
+        public static string city { get; set; }
+        public static string province { get; set; }
+        public static string country { get; set; }
+        public static string language { get; set; }
 
         public static string[] IP_LIST = GetAllUrl();
         public static string[] GetAllUrl()
@@ -96,7 +46,6 @@ namespace Yes.Game.Chicken
             }
 
         }
-
         public static Dictionary<string, IPConfig> IPS = new Dictionary<string, IPConfig>();
         public static string IP
         {
@@ -128,28 +77,8 @@ namespace Yes.Game.Chicken
                 }
             }
         }
-        #endregion
-
-
-
-        // HeroBlockFrame
-        // Character
-        // TreasureBox
-        // ArrowBomb
-
-        Constant()
-        {
-
-        }
-
-
-        public static void DeleteAll()
-        {
-            PlayerPrefs.DeleteAll();
-        }
     }
 
-    #region 8月12日新增
     public class IPConfig
     {
 
@@ -164,6 +93,5 @@ namespace Yes.Game.Chicken
             this.error_count = error_count;
         }
     }
-    #endregion
 }
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   isDevBuild: 0
   stripEngineCode: 0
   appId: tt48113eacd72de81907
-  wasmResourceUrl: 
+  wasmResourceUrl: http://
   webglPackagePath: 
   useByteAudioAPI: 0
   wasmMemorySize: 512

@@ -4,27 +4,19 @@ using UnityEngine;
 
 namespace Yes.Game.Chicken
 {
-public class AdController
+public class AdController: SingletonPatternBase<AdController>
     {
+        private static readonly string videoAdId = "o2rfpjvnbi3me7479l";
+        private static readonly string interstitialAdId = "2ola8sqldo9f93o6h3";
+        private static readonly string bannerAdId = "1d4sorsmjwt5bajk29";
+
         private StarkAdManager.BannerStyle m_style;
         private StarkAdManager.BannerAd m_bannerAdIns;
         private StarkAdManager.InterstitialAd interstitialAd;
         StarkAdManager starkManager = StarkSDK.API.GetStarkAdManager();
 
         private bool videoAdResult;
-        private static AdController instance;
 
-        public static AdController Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new AdController();
-                }
-                return instance;
-            }
-        }
         private AdController()
         {
             m_style = new StarkAdManager.BannerStyle();
@@ -34,7 +26,7 @@ public class AdController
         //public delegate void VideoCloseCallback(bool isWatchedTimeGreaterThanEffectiveTime);
 
         //public event VideoCloseCallback OnVideoCloseCallback;
-        public void ShowRewardVideoAd(string videoAdId, Action<bool> Callback)
+        public void ShowRewardVideoAd(Action<bool> Callback)
         {
             //MyVideoAdCallbacks rewardcallbacks = new MyVideoAdCallbacks(onVideoClose);
             MyVideoAdCallbacks rewardcallbacks = new MyVideoAdCallbacks();
@@ -63,11 +55,11 @@ public class AdController
 #endregion
 
 #region 插屏广告
-        public void ShowInterstitialAd(string ad_id)
+        public void ShowInterstitialAd()
         {
             DestoryInterstitialAd();
             interstitialAd = starkManager.CreateInterstitialAd(
-                ad_id, OnInsAdError/*, OnInsAdClose, OnInsAdLoaded*/);
+                interstitialAdId, OnInsAdError/*, OnInsAdClose, OnInsAdLoaded*/);
 
             if (interstitialAd != null)
             {
@@ -113,14 +105,12 @@ public class AdController
         #region banner广告
         private int px2dp(int px) => (int)(px * (160 / Screen.dpi));
         // 创建Banner广告
-        public void CreateBannerAd(string adId)
+        public void CreateBannerAd()
         {
             m_style.width = 320;
             m_style.left = 10;
             m_style.top = 100;
-            m_bannerAdIns = StarkSDK.API.GetStarkAdManager().CreateBannerAd(adId, m_style, 60, ErrorCallback, LoadedCallback, ResizeCallback);
-
-
+            m_bannerAdIns = starkManager.CreateBannerAd(bannerAdId, m_style, 60, ErrorCallback, LoadedCallback, ResizeCallback);
         }
 
         // 展示Banner广告
@@ -172,5 +162,17 @@ public class AdController
         #endregion
     }
 
+    //private static AdController instance;
 
+    //public static AdController Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //        {
+    //            instance = new AdController();
+    //        }
+    //        return instance;
+    //    }
+    //}
 }

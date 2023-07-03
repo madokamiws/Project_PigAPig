@@ -66,22 +66,36 @@ OnLoginFailedCallback);
         /// <param name="isLogin">判断在当前 APP(头条、抖音等)是否处于登录状态</param>
         void OnLoginSuccessCallback(string code, string anonymousCode, bool isLogin)
         {
-            ErrorLogs.Get.DisplayLog("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
-            Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
-            sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
-            ErrorLogs.Get.DisplayLog(sucesslog);
-            tx_Logs.text = sucesslog;
-            Loading.Show();
-            LoginData.GetLoginData(code, (result) =>
+            StarkSDK.API.GetAccountManager().GetScUserInfo((ref ScUserInfo scUserInfo) =>
             {
-                Loading.Hide();
-                PlayerPrefs.SetString("user_token", result.user.token);
-                PlayerPrefs.Save();
-                //记录 result
-                ErrorLogs.Get.DisplayLog("记录 token = "+result.user.token);
-                api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
-                //CheckSession();
-            });
+                Constant.avatarUrl = scUserInfo.avatarUrl;
+                Constant.nickName = scUserInfo.nickName;
+                Constant.gender = scUserInfo.gender;
+                Constant.city = scUserInfo.city;
+                Constant.province = scUserInfo.province;
+                Constant.country = scUserInfo.country;
+                Constant.language = scUserInfo.language;
+
+                ErrorLogs.Get.DisplayLog("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
+                Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
+                sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
+                ErrorLogs.Get.DisplayLog(sucesslog);
+                tx_Logs.text = sucesslog;
+                Loading.Show();
+                LoginData.GetLoginData(code, (result) =>
+                {
+                    Loading.Hide();
+                    PlayerPrefs.SetString("user_token", result.user.token);
+                    PlayerPrefs.Save();
+                    //记录 result
+                    ErrorLogs.Get.DisplayLog("记录 token = " + result.user.token);
+                    api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
+                    //CheckSession();
+                });
+
+
+            }, OnGetScUserInfoFailedCallback);
+
 
             //CopyDebug.OnClickCopyText(sucesslog);
         }
@@ -105,7 +119,10 @@ OnLoginFailedCallback);
         {
             ErrorLogs.Get.DisplayLog("num1 ="+ num1+ "-----str_2=" + str_2);
         }
-
+        void OnGetScUserInfoFailedCallback(string errMsg)
+        {
+            ErrorLogs.Get.DisplayLog("errMsg =" + errMsg);
+        }
 
     }
 
