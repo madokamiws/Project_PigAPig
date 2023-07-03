@@ -17,6 +17,13 @@ namespace Yes.Game.Chicken
                 {
                     param.Add("debug", "1");
                 }
+                if (PlayerPrefs.HasKey("user_token"))
+                {
+                    string _token = PlayerPrefs.GetString("user_token");
+                    param.Add("token", _token);
+                }
+                else
+                    ErrorLogs.Get.DisplayLog("token没有获取到");
                 param.Add("user_level_record_id", id.ToString());
                 param.Add("is_pass", is_pass.ToString());
                 //param.Add("h", ));
