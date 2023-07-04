@@ -12,6 +12,10 @@ namespace Yes.Game.Chicken
         public int per_page { get; set; }//每页多个数据
         public int total { get; set; }//总条数
 
+        public int level_id { get; set; }//第几关
+
+        public int config_level_id { get; set; }//关卡配置后台记录id
+
         /// <summary>
         ///  获取关卡列表
         /// </summary>
@@ -30,7 +34,7 @@ namespace Yes.Game.Chicken
                 {
                     string _token = PlayerPrefs.GetString("user_token");
                     param.Add("token", _token);
-                    //ErrorLogs.Get.DisplayLog("有token");
+                    ErrorLogs.Get.DisplayLog("有token = "+ _token);
                     //ErrorLogs.Get.DisplayLog(_token);
                 }
                 else
@@ -69,15 +73,7 @@ namespace Yes.Game.Chicken
     public class CheckPoint
     {
         public int id { get; set; }
-
         public int unlock { get; set; }
-        //public int level_id { get; set; }
-        //public int golds { get; set; }
-        //public int layer { get; set; }
-        //public int length { get; set; }
-        //public int width { get; set; }
-        //public int card_total { get; set; }
-        //public int card_kind { get; set; }
     }
 
 }

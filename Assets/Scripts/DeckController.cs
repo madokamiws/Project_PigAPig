@@ -20,6 +20,8 @@ namespace Yes.Game.Chicken
         public Transform[] pickDeckPosTrans;//捡牌堆的格子位置
 
         public RectTransform centerDeckTrans;//中间牌堆的基础位置（原点）
+        private Vector2 pos_centerDeckTrans;
+
         public RectTransform leftColumnDeckTrans;
         public RectTransform rightColumnDeckTrans;
         public RectTransform leftDownDeckTrans;
@@ -101,13 +103,14 @@ namespace Yes.Game.Chicken
         //public void 
         void Start()
         {
+            pos_centerDeckTrans = centerDeckTrans.anchoredPosition;
             AdController.Instance.ShowInterstitialAd();
             currentLevelID = GetCurrentMaxLevelID();
             InitCreatDeck(currentLevelID);
 
         }
 
-        public void InitCreatDeck(int level)
+        public void InitCreatDeck(int level = -1)
         {
             InitData();
 
@@ -150,9 +153,12 @@ namespace Yes.Game.Chicken
             DisplayPointData(centerDeck, DeckElementlist, totalCardNum);
 
 
-#else
-            int currentId = GetCurrentLevelID();
-
+//#else
+            int currentMaxId = GetCurrentMaxLevelID();
+            if (level < 0)
+            {
+                level = currentMaxId;
+            }
             if (level > 0)
             {
                 DeckData.GetDeckData(level, (result) =>
@@ -196,6 +202,7 @@ namespace Yes.Game.Chicken
         }
         public void InitData()
         {
+            centerDeckTrans.anchoredPosition = pos_centerDeckTrans;
             for (int i = 0; i < pickDeckCardIDs.Length; i++)
             {
                 pickDeckCardIDs[i] = -1;

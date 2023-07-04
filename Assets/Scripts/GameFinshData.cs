@@ -53,6 +53,7 @@ namespace Yes.Game.Chicken
 
     public class FinishCallBackModel : BaseModel
     {
-        //public int level_id { get; set; }
+        public int level_id { get; set; }//第几关
+        public int config_level_id { get; set; }//关卡配置后台记录id
     }
 }

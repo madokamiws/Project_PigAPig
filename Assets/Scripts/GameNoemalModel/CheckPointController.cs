@@ -34,6 +34,11 @@ namespace Yes.Game.Chicken
             BaseDialogController.DestoryChilds(tf_contentMain);
             if (model!=null)
             {
+                if (model.level_id > 0)
+                {
+                    PlayerPrefs.SetInt("CurrentLevelIDMax", model.level_id);
+                    PlayerPrefs.Save();
+                }
                 for (int i = 0; i < model.config_levels.Count; i++)
                 {
                     ErrorLogs.Get.DisplayLog("显示关卡循环"+i);
@@ -49,14 +54,7 @@ namespace Yes.Game.Chicken
                     {
                         itemView.LoadData(point);
                     }
-                    if (i-1>=0)
-                    {
-                        if (model.config_levels[i - 1].unlock == 1 && point.unlock == 0)
-                        {
-                            PlayerPrefs.SetInt("CurrentLevelIDMax", model.config_levels[i - 1].id);
-                            PlayerPrefs.Save();
-                        }
-                    }
+
  
                 }
             }

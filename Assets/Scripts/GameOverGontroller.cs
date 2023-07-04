@@ -41,7 +41,14 @@ namespace Yes.Game.Chicken
             int id = DeckController.Get.currentLevelID;
             GameFinshData.SubmitLevelData(id, 1, (result) =>
               {
-
+                  if (result != null)
+                  {
+                      if (result.level_id > 0)
+                      {
+                          PlayerPrefs.SetInt("CurrentLevelIDMax", result.level_id);
+                          PlayerPrefs.Save();
+                      }
+                  }
               });
             successObj.SetActive(true);
             failureObj.SetActive(false);
@@ -73,8 +80,8 @@ namespace Yes.Game.Chicken
             });
         }
         public void OnNextPoint()
-        { 
-        
+        {
+            DeckController.Get.InitCreatDeck();
         }
 
         public override void OnClose()
