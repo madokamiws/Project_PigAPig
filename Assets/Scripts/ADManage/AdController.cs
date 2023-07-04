@@ -13,12 +13,13 @@ public class AdController: SingletonPatternBase<AdController>
         private StarkAdManager.BannerStyle m_style;
         private StarkAdManager.BannerAd m_bannerAdIns;
         private StarkAdManager.InterstitialAd interstitialAd;
-        StarkAdManager starkManager = StarkSDK.API.GetStarkAdManager();
+        private StarkAdManager starkManager;
 
         private bool videoAdResult;
 
         private AdController()
         {
+            starkManager = StarkSDK.API.GetStarkAdManager();
             m_style = new StarkAdManager.BannerStyle();
             ErrorLogs.Get.DisplayLog("什么时候");
         }

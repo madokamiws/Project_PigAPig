@@ -31,6 +31,11 @@ namespace Yes.Game.Chicken
         public Transform tf_CenterDeckList;
 
 
+        private int backPropNum ;
+        private int shufflePropNum ;
+        private int backThreePropNum;
+
+
         public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
 
@@ -202,6 +207,9 @@ namespace Yes.Game.Chicken
         }
         public void InitData()
         {
+            backPropNum = 1;
+            shufflePropNum = 1;
+            backThreePropNum = 1;
             centerDeckTrans.anchoredPosition = pos_centerDeckTrans;
             for (int i = 0; i < pickDeckCardIDs.Length; i++)
             {
@@ -639,6 +647,34 @@ namespace Yes.Game.Chicken
             GameOverGontroller.Get.ShowFailure();
         }
         /// <summary>
+        /// 判断当前回合道具数量是否还可以用
+        /// </summary>
+        public bool IsRoundUsed(PropFunType type)
+        {
+            int num = 0;
+            if (type == PropFunType.BACKCARD)
+            {
+                num = backPropNum;
+            }
+            else if (type == PropFunType.REARRANGE)
+            {
+                num = shufflePropNum;
+            }
+            else if (type == PropFunType.REARRANGE)
+            {
+                num = backThreePropNum;
+            }
+            else if (type == PropFunType.REARRANGE)
+            {
+                num = 999;
+            }
+
+            if (num <= 0)
+                return false;
+            else
+                return true;
+        }
+        /// <summary>
         /// 撤回三张卡牌
         /// </summary>
         public void OnBackThree()
@@ -684,6 +720,66 @@ namespace Yes.Game.Chicken
                             {
                                 cards.Add(card);
                             }
+                        }
+                        else
+                        {
+                            Debug.Log("CardTransform has been destroyed.");
+                        }
+                    });
+                    break;
+                }
+                if (cardMoveHistory.Count == 0)
+                {
+                    Debug.Log("No more moves to undo.");
+                }
+            }
+        }
+        /// <summary>
+        /// 撤回一步功能
+        /// </summary>
+        public void OnBackSelection()
+        {
+            if (IsRoundUsed(PropFunType.BACKCARD))
+            {
+                while (cardMoveHistory.Count > 0)
+                {
+                    CardMoveRecord lastMove = cardMoveHistory.Pop();
+                    if (lastMove.CardTransform == null)
+                    {
+                        // CardTransform 已被销毁，继续出栈下一个记录
+                        continue;
+                    }
+
+                    Transform tf_lastCard = lastMove.CardTransform;
+                    tf_lastCard.SetParent(tf_CenterDeckList);
+                    if (lastMove.tranIdIndex >= 0)
+                    {
+                        pickDeckCardIDs[lastMove.tranIdIndex] = -1;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < pickDeckCardIDs.Length; i++)
+                        {
+                            if (pickDeckCardIDs[i] < 0 && i - 1 >= 0)
+                            {
+                                pickDeckCardIDs[i - 1] = -1;
+                            }
+                        }
+                    }
+
+                    // 将卡牌移回原来的位置
+                    tf_lastCard.DOMove(lastMove.OriginalPos, 0.1f).OnComplete(() => {
+                        if (tf_lastCard != null)
+                        {
+                            Card card = tf_lastCard.GetComponent<Card>();
+                            card.Btn_AddListnener();
+                            SortGridPos();
+                            // 设置覆盖关系
+                            SetCoverState(card);
+                            if (!cards.Contains(card))
+                            {
+                                cards.Add(card);
+                            }
 
                         }
                         else
@@ -699,64 +795,6 @@ namespace Yes.Game.Chicken
                 }
             }
  
-        }
-        /// <summary>
-        /// 撤回一步功能
-        /// </summary>
-        public void OnBackSelection()
-        {
-            while (cardMoveHistory.Count > 0)
-            {
-                CardMoveRecord lastMove = cardMoveHistory.Pop();
-                if (lastMove.CardTransform == null)
-                {
-                    // CardTransform 已被销毁，继续出栈下一个记录
-                    continue;
-                }
-
-                Transform tf_lastCard = lastMove.CardTransform;
-                tf_lastCard.SetParent(tf_CenterDeckList);
-                if (lastMove.tranIdIndex >= 0)
-                {
-                    pickDeckCardIDs[lastMove.tranIdIndex] = -1;
-                }
-                else
-                {
-                    for (int i = 0; i < pickDeckCardIDs.Length; i++)
-                    {
-                        if (pickDeckCardIDs[i]<0 && i-1>=0)
-                        {
-                            pickDeckCardIDs[i - 1] = -1;
-                        }    
-                    }     
-                }
-
-                // 将卡牌移回原来的位置
-                tf_lastCard.DOMove(lastMove.OriginalPos, 0.1f).OnComplete(()=> {
-                    if (tf_lastCard != null)
-                    {
-                        Card card = tf_lastCard.GetComponent<Card>();
-                        card.Btn_AddListnener();
-                        SortGridPos();
-                        // 设置覆盖关系
-                        SetCoverState(card);
-                        if (!cards.Contains(card))
-                        {
-                            cards.Add(card);
-                        }
-
-                    }
-                    else
-                    {
-                        Debug.Log("CardTransform has been destroyed.");
-                    }
-                });
-                break;
-            }
-            if (cardMoveHistory.Count == 0)
-            {
-                Debug.Log("No more moves to undo.");
-            }
         }
         /// <summary>
         /// 洗牌算法
@@ -896,7 +934,6 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("watchedTime 小于等于 effectiveTime");
                 }
             });
-
         }
         public void OnLoadInsAd()
         {

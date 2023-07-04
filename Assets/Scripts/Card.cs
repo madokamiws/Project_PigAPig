@@ -113,7 +113,7 @@ namespace Yes.Game.Chicken
                     if (pickDeckCardIDs[i] != -1)
                     {
                         Vector3 _pos = new Vector3(pickDeckPosTrans[i].position.x + DeckController.Instance.cardWidth/2+15, pickDeckPosTrans[i].position.y, pickDeckPosTrans[i].position.z);
-                        pickDeckPosTrans[i].DOMove(_pos, 0.1f);
+                        pickDeckPosTrans[i].DOMove(_pos, 0.01f);
                     }
                 }
             }
