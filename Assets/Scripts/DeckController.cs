@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DG.Tweening;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 namespace Yes.Game.Chicken
 {
@@ -31,18 +32,21 @@ namespace Yes.Game.Chicken
         public Transform tf_CenterDeckList;
 
 
-        private int backPropNum ;
-        private int shufflePropNum ;
-        private int backThreePropNum;
+        //private int backPropNum ;
+        //private int shufflePropNum ;
+        //private int backThreePropNum;
+        public Text tx_backnum;
+        public Text tx_shufflenum;
+        public Text tx_backThreenum;
 
 
-        public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
+        public int[] pickDeckCardIDs ;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
 
 
         public Stack<CardMoveRecord> cardMoveHistory = new Stack<CardMoveRecord>();
 
-        private const string LevelIDKey = "CurrentLevelID";
+        //private const string LevelIDKey = "CurrentLevelID";
         private const string MaxLevelIDKey = "CurrentLevelIDMax";
 
         public int currentLevelID = -1;
@@ -88,10 +92,10 @@ namespace Yes.Game.Chicken
     centerDeckTrans.anchoredPosition = adjustedCenterDeckPosition;
         }
         // Start is called before the first frame update
-        public static int GetCurrentLevelID()
-        {
-            return PlayerPrefs.GetInt(LevelIDKey);
-        }
+        //public static int GetCurrentLevelID()
+        //{
+        //    return PlayerPrefs.GetInt(LevelIDKey);
+        //}
         public static int GetCurrentMaxLevelID()
         {
             if (PlayerPrefs.HasKey(MaxLevelIDKey))
@@ -117,6 +121,7 @@ namespace Yes.Game.Chicken
 
         public void InitCreatDeck(int level = -1)
         {
+            ErrorLogs.Get.DisplayLog("level = " + level);
             InitData();
 
 #if UNITY_EDITOR
@@ -158,7 +163,7 @@ namespace Yes.Game.Chicken
             DisplayPointData(centerDeck, DeckElementlist, totalCardNum);
 
 
-//#else
+#else
             int currentMaxId = GetCurrentMaxLevelID();
             if (level < 0)
             {
@@ -207,9 +212,7 @@ namespace Yes.Game.Chicken
         }
         public void InitData()
         {
-            backPropNum = 1;
-            shufflePropNum = 1;
-            backThreePropNum = 1;
+            UpdatePropNum();
             centerDeckTrans.anchoredPosition = pos_centerDeckTrans;
             for (int i = 0; i < pickDeckCardIDs.Length; i++)
             {
@@ -226,6 +229,37 @@ namespace Yes.Game.Chicken
             ClearChilds(leftDownDeckTrans);
             ClearChilds(rightDownDeckTrans);
             ClearChilds(empPos_BackThree);
+        }
+        /// <summary>
+        /// 刷新页面上道具数量
+        /// </summary>
+        public void  UpdatePropNum()
+        {
+            int  _backPropNum = ItemManager.Instance.GetItemCount(PropFunType.BACKCARD);
+            int _shufflePropNum = ItemManager.Instance.GetItemCount(PropFunType.REARRANGE);
+            int _backThreePropNum = ItemManager.Instance.GetItemCount(PropFunType.BACKTHREE);
+
+            tx_backnum.transform.parent.gameObject.SetActive(true);
+            tx_backnum.text = _backPropNum.ToString();
+            if (_backPropNum <= 0)
+            {
+                tx_backnum.transform.parent.gameObject.SetActive(false);
+            }
+            tx_shufflenum.transform.parent.gameObject.SetActive(true);
+            tx_shufflenum.text = _shufflePropNum.ToString();
+            if (_shufflePropNum <= 0)
+            {
+                tx_shufflenum.transform.parent.gameObject.SetActive(false);
+            }
+            tx_backThreenum.transform.parent.gameObject.SetActive(true);
+            tx_backThreenum.text = _backThreePropNum.ToString();
+            if (_backThreePropNum <= 0)
+            {
+                tx_backThreenum.transform.parent.gameObject.SetActive(false);
+            }
+
+
+
 
         }
         /// <summary>
@@ -293,7 +327,7 @@ namespace Yes.Game.Chicken
 
             AdjustCenterDeckPosition();
             ErrorLogs.Get.DisplayLog("AdjustCenterDeckPosition之后");
-            pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1, };
+            pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1};
             int temp_centerDecklist_index = 0;
             //遍历层--------------中间组
             for (int k = 0; k < layer; k++)
@@ -652,21 +686,13 @@ namespace Yes.Game.Chicken
         public bool IsRoundUsed(PropFunType type)
         {
             int num = 0;
-            if (type == PropFunType.BACKCARD)
+            if (type >= PropFunType.BACKCARD && type <= PropFunType.BACKTHREE)
             {
-                num = backPropNum;
+                num = ItemManager.Instance.GetItemCount(type);
             }
             else if (type == PropFunType.REARRANGE)
             {
-                num = shufflePropNum;
-            }
-            else if (type == PropFunType.REARRANGE)
-            {
-                num = backThreePropNum;
-            }
-            else if (type == PropFunType.REARRANGE)
-            {
-                num = 999;
+                return true;
             }
 
             if (num <= 0)
@@ -679,59 +705,69 @@ namespace Yes.Game.Chicken
         /// </summary>
         public void OnBackThree()
         {
-            for (int turn = 0; turn < 3; turn++)
+            if (IsRoundUsed(PropFunType.BACKTHREE))
             {
-                while (cardMoveHistory.Count > 0)
+                ItemManager.Instance.RemoveItem(PropFunType.BACKTHREE);//减去物品
+                UpdatePropNum();
+                for (int turn = 0; turn < 3; turn++)
                 {
-                    CardMoveRecord lastMove = cardMoveHistory.Pop();
-                    if (lastMove.CardTransform == null)
+                    while (cardMoveHistory.Count > 0)
                     {
-                        continue;
-                    }
-
-                    Transform tf_lastCard = lastMove.CardTransform;
-                    tf_lastCard.SetParent(tf_CenterDeckList);
-                    if (lastMove.tranIdIndex >= 0)
-                    {
-                        pickDeckCardIDs[lastMove.tranIdIndex] = -1;
-                    }
-                    else
-                    {
-                        for (int i = 0; i < pickDeckCardIDs.Length; i++)
+                        CardMoveRecord lastMove = cardMoveHistory.Pop();
+                        if (lastMove.CardTransform == null)
                         {
-                            if (pickDeckCardIDs[i] < 0 && i - 1 >= 0)
-                            {
-                                pickDeckCardIDs[i - 1] = -1;
-                            }
+                            continue;
                         }
-                    }
-                    var pos = empPos_BackThree.position + new Vector3(turn * cardWidth,0,0);
 
-        // 将卡牌移到EmpPos_BackThree
-        tf_lastCard.DOMove(pos, 0.1f).OnComplete(() => {
-                        if (tf_lastCard != null)
+                        Transform tf_lastCard = lastMove.CardTransform;
+                        tf_lastCard.SetParent(tf_CenterDeckList);
+                        if (lastMove.tranIdIndex >= 0)
                         {
-                            Card card = tf_lastCard.GetComponent<Card>();
-                            card.Btn_AddListnener();
-                            SortGridPos();
-                            // 设置覆盖关系
-                            SetCoverState(card);
-                            if (!cards.Contains(card))
-                            {
-                                cards.Add(card);
-                            }
+                            pickDeckCardIDs[lastMove.tranIdIndex] = -1;
                         }
                         else
                         {
-                            Debug.Log("CardTransform has been destroyed.");
+                            for (int i = 0; i < pickDeckCardIDs.Length; i++)
+                            {
+                                if (pickDeckCardIDs[i] < 0 && i - 1 >= 0)
+                                {
+                                    pickDeckCardIDs[i - 1] = -1;
+                                }
+                            }
                         }
-                    });
-                    break;
+                        var pos = empPos_BackThree.position + new Vector3(turn * cardWidth, 0, 0);
+
+                        // 将卡牌移到EmpPos_BackThree
+                        tf_lastCard.DOMove(pos, 0.1f).OnComplete(() =>
+                        {
+                            if (tf_lastCard != null)
+                            {
+                                Card card = tf_lastCard.GetComponent<Card>();
+                                card.Btn_AddListnener();
+                                SortGridPos();
+                                // 设置覆盖关系
+                                SetCoverState(card);
+                                if (!cards.Contains(card))
+                                {
+                                    cards.Add(card);
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("CardTransform has been destroyed.");
+                            }
+                        });
+                        break;
+                    }
+                    if (cardMoveHistory.Count == 0)
+                    {
+                        Debug.Log("No more moves to undo.");
+                    }
                 }
-                if (cardMoveHistory.Count == 0)
-                {
-                    Debug.Log("No more moves to undo.");
-                }
+            }
+            else
+            {
+                WatchAdTipsController.Get.ShowWatchAdTips(PropFunType.BACKTHREE);
             }
         }
         /// <summary>
@@ -741,6 +777,9 @@ namespace Yes.Game.Chicken
         {
             if (IsRoundUsed(PropFunType.BACKCARD))
             {
+                Toast.Show("使用成功");
+                ItemManager.Instance.RemoveItem(PropFunType.BACKCARD);//减去物品
+                UpdatePropNum();
                 while (cardMoveHistory.Count > 0)
                 {
                     CardMoveRecord lastMove = cardMoveHistory.Pop();
@@ -768,7 +807,8 @@ namespace Yes.Game.Chicken
                     }
 
                     // 将卡牌移回原来的位置
-                    tf_lastCard.DOMove(lastMove.OriginalPos, 0.1f).OnComplete(() => {
+                    tf_lastCard.DOMove(lastMove.OriginalPos, 0.1f).OnComplete(() =>
+                    {
                         if (tf_lastCard != null)
                         {
                             Card card = tf_lastCard.GetComponent<Card>();
@@ -794,6 +834,10 @@ namespace Yes.Game.Chicken
                     Debug.Log("No more moves to undo.");
                 }
             }
+            else
+            {
+                WatchAdTipsController.Get.ShowWatchAdTips(PropFunType.BACKCARD);
+            }
  
         }
         /// <summary>
@@ -818,38 +862,46 @@ namespace Yes.Game.Chicken
         /// </summary>
         public void UpdateCenterDeckAndIndex()
         {
-            cards.Clear();
-            List<Transform> children = new List<Transform>();
-            List<Vector3> positions = new List<Vector3>();
-            foreach (Transform child in tf_CenterDeckList)
+            if (IsRoundUsed(PropFunType.REARRANGE))
             {
-                if (child.GetComponent<Card>() != null) // If the child has Card script attached
+                ItemManager.Instance.RemoveItem(PropFunType.REARRANGE);//减去物品
+                UpdatePropNum();
+                cards.Clear();
+                List<Transform> children = new List<Transform>();
+                List<Vector3> positions = new List<Vector3>();
+                foreach (Transform child in tf_CenterDeckList)
                 {
-                    children.Add(child);
-                    positions.Add(child.position);
-                    child.GetComponent<Card>().CleanCardData();
-                    child.gameObject.SetActive(false);
+                    if (child.GetComponent<Card>() != null) // If the child has Card script attached
+                    {
+                        children.Add(child);
+                        positions.Add(child.position);
+                        child.GetComponent<Card>().CleanCardData();
+                        child.gameObject.SetActive(false);
+                    }
+                }
+                //Fisher-Yates洗牌算法打乱卡片顺序
+                for (int i = children.Count - 1; i > 0; i--)
+                {
+                    int swapIndex = UnityEngine.Random.Range(0, i + 1);
+                    Transform temp = children[i];
+                    children[i] = children[swapIndex];
+                    children[swapIndex] = temp;
+                }
+                // Swap positions
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].gameObject.SetActive(true);
+                    children[i].SetSiblingIndex(i);
+                    children[i].position = positions[i];
+                    var card = children[i].GetComponent<Card>();
+                    SetCoverState(card);
+                    cards.Add(card);
                 }
             }
-            //Fisher-Yates洗牌算法打乱卡片顺序
-            for (int i = children.Count - 1; i > 0; i--)
+            else
             {
-                int swapIndex = UnityEngine.Random.Range(0, i + 1);
-                Transform temp = children[i];
-                children[i] = children[swapIndex];
-                children[swapIndex] = temp;
+                WatchAdTipsController.Get.ShowWatchAdTips(PropFunType.REARRANGE);
             }
-            // Swap positions
-            for (int i = 0; i < children.Count; i++)
-            {
-                children[i].gameObject.SetActive(true);
-                children[i].SetSiblingIndex(i);
-                children[i].position = positions[i];
-                var card = children[i].GetComponent<Card>();
-                SetCoverState(card);
-                cards.Add(card);
-            }
-
         }
         /// <summary>
         /// cards中删掉选中的卡牌

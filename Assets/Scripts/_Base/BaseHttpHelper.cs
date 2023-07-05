@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Security.Cryptography;
 using BestHTTP;
 using UnityEngine;
@@ -44,7 +45,7 @@ public class BaseHttpHelper
 
                     if (response != null)
                     {
-                        //ErrorLogs.Get.DisplayLog(string.Format(" ErrorLogs:{0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
+                        ErrorLogs.Get.DisplayLog(string.Format(" ErrorLogs:{0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
                         Logs.Log(string.Format(" {0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
                     }
 
@@ -57,7 +58,7 @@ public class BaseHttpHelper
                     bool isReturn = CheckDic(api);
                     if (isReturn)
                     {
-
+                        ErrorLogs.Get.DisplayLog(string.Format(" HttpMethod response : " + response));
                         Logs.Log(" HttpMethod response : " + response);
                         return;
                     }
@@ -130,7 +131,7 @@ public class BaseHttpHelper
 
                 // Debug.Log(string.Format ( "  HttpMethod item.Key={0}, item.Value={1}", item.Key, item.Value ) ) ;
             }
-            string h = GetAppSignEx(new_param);
+            //string h = GetAppSignEx(new_param);
 
             /*
             Dictionary<string, string> list = BaseModel.GetCommonHttpFields();
@@ -255,14 +256,20 @@ public class BaseHttpHelper
     }
     public static string GetMD5(string myString)
     {
-        MD5 md5 = new MD5CryptoServiceProvider();
-        byte[] fromData = System.Text.Encoding.UTF8.GetBytes(myString);// System.Text.Encoding.Unicode.GetBytes(myString);
-        byte[] targetData = md5.ComputeHash(fromData);
-        string byte2String = null;
-        for (int i = 0; i < targetData.Length; i++)
+        using (MD5 md5 = MD5.Create())
         {
-            byte2String += targetData[i].ToString("x2");
+            byte[] inputBytes = Encoding.UTF8.GetBytes(myString);
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                builder.Append(hashBytes[i].ToString("x2"));
+            }
+
+            return builder.ToString();
         }
-        return byte2String;
     }
 }
+

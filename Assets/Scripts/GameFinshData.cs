@@ -24,9 +24,15 @@ namespace Yes.Game.Chicken
                 }
                 else
                     ErrorLogs.Get.DisplayLog("token没有获取到");
+                string _h = string.Format("{0}chicken.", is_pass);
+                ErrorLogs.Get.DisplayLog("_h:" + _h);
+                string h = BaseHttpHelper.GetMD5(_h);
+                ErrorLogs.Get.DisplayLog("getmd5 之后 h:" + h);
+
+
                 param.Add("user_level_record_id", id.ToString());
                 param.Add("is_pass", is_pass.ToString());
-                //param.Add("h", ));
+                param.Add("h", h);
 
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {

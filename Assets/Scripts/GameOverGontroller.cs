@@ -29,9 +29,18 @@ namespace Yes.Game.Chicken
         public void ShowFailure()
         {
             int id = DeckController.Get.currentLevelID;
+            ErrorLogs.Get.DisplayLog("ShowFailure id = "+  id);
             GameFinshData.SubmitLevelData(id, 0, (result) =>
             {
-
+                ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
+                if (result != null)
+                {
+                    if (result.level_id > 0)
+                    {
+                        PlayerPrefs.SetInt("CurrentLevelIDMax", result.level_id);
+                        PlayerPrefs.Save();
+                    }
+                }
             });
             successObj.SetActive(false);
             failureObj.SetActive(true);
@@ -39,8 +48,10 @@ namespace Yes.Game.Chicken
         public void ShowSuccess()
         {
             int id = DeckController.Get.currentLevelID;
+            ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
             GameFinshData.SubmitLevelData(id, 1, (result) =>
               {
+                  ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");
                   if (result != null)
                   {
                       if (result.level_id > 0)
@@ -81,7 +92,17 @@ namespace Yes.Game.Chicken
         }
         public void OnNextPoint()
         {
-            DeckController.Get.InitCreatDeck();
+             int level = PlayerPrefs.GetInt("CurrentLevelIDMax");
+            if (PlayerPrefs.GetInt("CurrentLevelIDMax") >= 0)
+            {
+                DeckController.Get.InitCreatDeck(level);
+                OnClose();
+            }
+            else
+            {
+                DeckController.Get.OnClickBackScence();
+            }
+
         }
 
         public override void OnClose()

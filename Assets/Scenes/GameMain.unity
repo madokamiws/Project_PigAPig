@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn_modelNormal: {fileID: 1057386733}
-  BGM_Click: {fileID: 8300000, guid: d3357763a31bf21429893cd383787cb7, type: 3}
+  BGM_Click: {fileID: 8300000, guid: e7334a213408a554ab0af5536c2734e6, type: 3}
 --- !u!1 &804779596
 GameObject:
   m_ObjectHideFlags: 0

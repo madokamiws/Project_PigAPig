@@ -1165,7 +1165,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4544446061326296013}
-        m_MethodName: OnReLife
+        m_MethodName: OnNextPoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

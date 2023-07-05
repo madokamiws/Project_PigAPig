@@ -40,9 +40,9 @@ namespace Yes.Game.Chicken
         {
             if (self_ID > 0)
             {
-                PlayerPrefs.SetInt("CurrentLevelID", self_ID);
+                PlayerPrefs.SetInt("CurrentLevelIDMax", self_ID);
                 PlayerPrefs.Save();
-                ErrorLogs.Get.DisplayLog("保存CurrentLevelID ：" + self_ID);
+                ErrorLogs.Get.DisplayLog("保存CurrentLevelIDMax ：" + self_ID);
                 SceneManager.LoadScene("GameScence");
             }
         }
