@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Yes.Game.Chicken
 {
-    public class GameFinshData
+    public class GameFinishData
     {
         public static void SubmitLevelData(int id,int is_pass, Action<FinishCallBackModel> callback = null)
         {
             try
             {
-
+                int duration = 0;
                 string url = "finish";
                 Dictionary<string, string> param = new Dictionary<string, string>();
                 if (Constant.IsDebug)
@@ -24,6 +24,10 @@ namespace Yes.Game.Chicken
                 }
                 else
                     ErrorLogs.Get.DisplayLog("token没有获取到");
+                if (CountdownController.Instance)
+                {
+                    duration = (int)CountdownController.Instance.GetTotalTime();
+                }
                 string _h = string.Format("{0}chicken.", is_pass);
                 ErrorLogs.Get.DisplayLog("_h:" + _h);
                 string h = BaseHttpHelper.GetMD5(_h);
@@ -33,7 +37,7 @@ namespace Yes.Game.Chicken
                 param.Add("user_level_record_id", id.ToString());
                 param.Add("is_pass", is_pass.ToString());
                 param.Add("h", h);
-
+                param.Add("duration", duration.ToString());
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     ErrorLogs.Get.DisplayLog("finish接口返回数据:" + data);

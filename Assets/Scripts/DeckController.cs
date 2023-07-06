@@ -161,6 +161,7 @@ namespace Yes.Game.Chicken
             //};
 
             DisplayPointData(centerDeck, DeckElementlist, totalCardNum);
+            CountdownController.Instance.SetupTimer();
 
 
 #else
@@ -206,6 +207,7 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
                     DisplayPointData(_centerDeck, _deckElementlist, totalCardNum, _centerCardIndex);
+                    CountdownController.Instance.SetupTimer(result);
                 });
             }
 #endif

@@ -30,7 +30,7 @@ namespace Yes.Game.Chicken
         {
             int id = DeckController.Get.currentLevelID;
             ErrorLogs.Get.DisplayLog("ShowFailure id = "+  id);
-            GameFinshData.SubmitLevelData(id, 0, (result) =>
+            GameFinishData.SubmitLevelData(id, 0, (result) =>
             {
                 ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
                 if (result != null)
@@ -49,7 +49,7 @@ namespace Yes.Game.Chicken
         {
             int id = DeckController.Get.currentLevelID;
             ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
-            GameFinshData.SubmitLevelData(id, 1, (result) =>
+            GameFinishData.SubmitLevelData(id, 1, (result) =>
               {
                   ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");
                   if (result != null)
