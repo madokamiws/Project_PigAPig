@@ -44,6 +44,7 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
 
         bgmAudioSource.loop = loop;
         bgmAudioSource.clip = bgm;
+        SetBGMVolume(0.3f);
         bgmAudioSource.Play();
         if (!isBGMEnabled)
         {
@@ -309,6 +310,20 @@ public class AudioManager : SingletonPatternMonoAutoBase_DontDestroyOnLoad<Audio
         GameObject go = new GameObject(name);
         go.transform.SetParent(parent);
         return go;
+    }
+    /// <summary>
+    /// 设置BGM音量
+    /// </summary>
+    /// <param name="volume">音量大小，范围在0.0到1.0之间</param>
+    public void SetBGMVolume(float volume)
+    {
+        if (volume < 0f || volume > 1f)
+        {
+            Debug.LogWarning("音量设置失败！音量必须在0.0到1.0之间。");
+            return;
+        }
+
+        bgmAudioSource.volume = volume;
     }
     public void Print()
     {
