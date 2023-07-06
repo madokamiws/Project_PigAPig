@@ -38,7 +38,7 @@ namespace Yes.Game.Chicken
                 {
  
                     currentTime -= Time.deltaTime;
-                    Debug.Log("currentTime = " + currentTime);
+                    //Debug.Log("currentTime = " + currentTime);
                     timerSlider.value = Math.Max(currentTime / countdownTime, 0); // Ensure the slider value won't go below 0
                 }
             }
@@ -64,6 +64,7 @@ namespace Yes.Game.Chicken
 
         public float GetTotalTime()
         {
+            PauseTimer();
             return totalTime;
         }
     }

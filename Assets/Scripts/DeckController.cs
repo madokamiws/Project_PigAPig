@@ -43,7 +43,7 @@ namespace Yes.Game.Chicken
         public int[] pickDeckCardIDs ;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
 
-
+        public int current_user_level_record_id = -1;
         public Stack<CardMoveRecord> cardMoveHistory = new Stack<CardMoveRecord>();
 
         //private const string LevelIDKey = "CurrentLevelID";
@@ -164,7 +164,7 @@ namespace Yes.Game.Chicken
             CountdownController.Instance.SetupTimer();
 
 
-#else
+//#else
             int currentMaxId = GetCurrentMaxLevelID();
             if (level < 0)
             {
@@ -175,6 +175,8 @@ namespace Yes.Game.Chicken
                 DeckData.GetDeckData(level, (result) =>
                 {
                     ErrorLogs.Get.DisplayLog("currentlevelId:" + level);
+                    current_user_level_record_id = result.user_level_record_id;
+                    ErrorLogs.Get.DisplayLog("current_user_level_record_id:" + current_user_level_record_id);
 
                     int[,,] _centerDeck = result.center_deck;
                     //for (int layer = 0; layer < _centerDeck.GetLength(0); layer++)

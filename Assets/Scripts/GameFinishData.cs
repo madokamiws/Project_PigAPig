@@ -28,7 +28,8 @@ namespace Yes.Game.Chicken
                 {
                     duration = (int)CountdownController.Instance.GetTotalTime();
                 }
-                string _h = string.Format("{0}chicken.", is_pass);
+
+                string _h = string.Format("{0}{1}chicken.", is_pass,duration);
                 ErrorLogs.Get.DisplayLog("_h:" + _h);
                 string h = BaseHttpHelper.GetMD5(_h);
                 ErrorLogs.Get.DisplayLog("getmd5 之后 h:" + h);

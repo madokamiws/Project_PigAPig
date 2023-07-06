@@ -28,7 +28,7 @@ namespace Yes.Game.Chicken
         }
         public void ShowFailure()
         {
-            int id = DeckController.Get.currentLevelID;
+            int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowFailure id = "+  id);
             GameFinishData.SubmitLevelData(id, 0, (result) =>
             {
@@ -47,7 +47,7 @@ namespace Yes.Game.Chicken
         }
         public void ShowSuccess()
         {
-            int id = DeckController.Get.currentLevelID;
+            int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
             GameFinishData.SubmitLevelData(id, 1, (result) =>
               {
