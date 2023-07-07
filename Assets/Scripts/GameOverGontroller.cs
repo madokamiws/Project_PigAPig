@@ -66,7 +66,7 @@ namespace Yes.Game.Chicken
         }
         public void OnBackScence()
         {
-            DeckController.Get.OnClickBackScence();
+            UIController.Instance.OnClickBackScence();
         }
         public void OnReStart()
         {
@@ -100,7 +100,7 @@ namespace Yes.Game.Chicken
             }
             else
             {
-                DeckController.Get.OnClickBackScence();
+                UIController.Instance.OnClickBackScence();
             }
 
         }

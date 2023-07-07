@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 using DG.Tweening;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 namespace Yes.Game.Chicken
 {
 
@@ -958,10 +957,6 @@ namespace Yes.Game.Chicken
                 OriginalPos = originalPos,
                 tranIdIndex = posid,
             });
-        }
-        public void OnClickBackScence()
-        {
-            SceneManager.LoadScene("GameMain");
         }
 
         public void ShowLog()
