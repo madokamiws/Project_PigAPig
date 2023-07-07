@@ -59,6 +59,7 @@ namespace Yes.Game.Chicken
         public void SetSDKRankData(int value)
         {
             string _value = value.ToString();
+
             StarkSDK.API.GetStarkRank().SetImRankData(0, _value,0,null, (boolx, stringx) =>
             {
                 string log = string.Format("SetImRankData的回调数据  boolx = {0}，stringx = {1}", boolx, stringx);
@@ -69,11 +70,23 @@ namespace Yes.Game.Chicken
         public void GetSDKRankData()
         {
             ErrorLogs.Get.DisplayLog("进入GetSDKRankData");
-            getStarkRank.GetImRankList("month", 0, null, null, null,(boolx, stringx) =>
+            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback, OnLoginFailedCallback);
+
+        }
+
+        void OnLoginSuccessCallback(string code, string anonymousCode, bool isLogin)
+        {
+            ErrorLogs.Get.DisplayLog("排行榜前的登录成功OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
+            getStarkRank.GetImRankList("month", 0, null, null, null, (boolx, stringx) =>
             {
                 string log = string.Format("GetImRankList的回调数据  boolx = {0}，stringx = {1}", boolx, stringx);
                 ErrorLogs.Get.DisplayLog(log);
             });
+
+        }
+        void OnLoginFailedCallback(string errMsg)
+        {
+            ErrorLogs.Get.DisplayLog("OnLoginFailedCallback ... errMsg：" + errMsg);
         }
 
 
