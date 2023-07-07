@@ -3,6 +3,14 @@ namespace Yes.Game.Chicken
 {
     public class ItemManager : SingletonPatternBase<ItemManager>
     {
+
+        public void SetItem(PropFunType itemType, int amount)
+        {
+            string key = GetKeyForItemType(itemType);
+            //int currentCount = PlayerPrefs.GetInt(key, 0);
+            PlayerPrefs.SetInt(key, amount);
+        }
+
         public void AddItem(PropFunType itemType, int amount = 1)
         {
             string key = GetKeyForItemType(itemType);
@@ -43,6 +51,7 @@ namespace Yes.Game.Chicken
         BACKCARD=1,
         REARRANGE=2,
         BACKTHREE=3,
-        RELIFE=4
+        RELIFE=4,
+        GOLD = 5
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,10 +55,17 @@ namespace Yes.Game.Chicken
                   ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");
                   if (result != null)
                   {
+                      ItemManager.Instance.SetItem(PropFunType.GOLD, result.current_golds);
                       if (result.level_id > 0)
                       {
+                          ErrorLogs.Get.DisplayLog("result.level_id  =" + result.level_id);
                           PlayerPrefs.SetInt("CurrentLevelIDMax", result.level_id);
                           PlayerPrefs.Save();
+                      }
+                      try { RankingData.Instance.SetSDKRankData(result.total_golds); }
+                      catch (Exception ex)
+                      {
+                          ErrorLogs.Get.DisplayLog("SetSDKRankData报错:" + ex.Message);
                       }
                   }
               });
@@ -93,7 +101,7 @@ namespace Yes.Game.Chicken
         public void OnNextPoint()
         {
              int level = PlayerPrefs.GetInt("CurrentLevelIDMax");
-            if (PlayerPrefs.GetInt("CurrentLevelIDMax") >= 0)
+            if (level >= 0)
             {
                 DeckController.Get.InitCreatDeck(level);
                 OnClose();

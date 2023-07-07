@@ -163,7 +163,7 @@ namespace Yes.Game.Chicken
             CountdownController.Instance.SetupTimer();
 
 
-//#else
+#else
             int currentMaxId = GetCurrentMaxLevelID();
             if (level < 0)
             {
@@ -207,7 +207,7 @@ namespace Yes.Game.Chicken
                     totalCardNum = result.card_total;
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
-                    DisplayPointData(_centerDeck, _deckElementlist, totalCardNum, _centerCardIndex);
+                    DisplayPointData(_centerDeck, _deckElementlist, totalCardNum);
                     CountdownController.Instance.SetupTimer(result);
                 });
             }
@@ -329,8 +329,9 @@ namespace Yes.Game.Chicken
 
 
             AdjustCenterDeckPosition();
+            pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1 };
             ErrorLogs.Get.DisplayLog("AdjustCenterDeckPosition之后");
-            pickDeckCardIDs = new int[7] { -1, -1, -1, -1, -1, -1, -1};
+
             int temp_centerDecklist_index = 0;
             //遍历层--------------中间组
             for (int k = 0; k < layer; k++)
@@ -417,11 +418,13 @@ namespace Yes.Game.Chicken
                             if (centerCardIndex != null)
                             {
                                 card.SetCardSprite(centerCardIndex[k, j, i]);
+                                //ErrorLogs.Get.DisplayLog("SetCardSprite1");
                             }
                             else
                             {
                                 card.SetCardSprite(temp_centerDecklist[temp_centerDecklist_index]);
                                 temp_centerDecklist_index++;
+                                //ErrorLogs.Get.DisplayLog("SetCardSprite2");
                             }
 
 

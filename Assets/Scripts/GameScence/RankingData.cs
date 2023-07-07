@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Yes.Game.Chicken
 {
-    public class RankingData
+    public class RankingData : SingletonPatternMonoAutoBase_DontDestroyOnLoad<RankingData>
     {
-        //public StarkRank getStarkRank;
+        public StarkRank getStarkRank;
         public RankingData()
         {
-             //var x = StarkSDK.API.GetStarkRank().SetImRankData();
+            getStarkRank = StarkSDK.API.GetStarkRank();
         }
-        public static void GetDeckData(int id, Action<DeckModel> callback = null)
+        public void GetRankingData(int id, Action<DeckModel> callback = null)
         {
             try
             {
 
-                string url = "get_item_level";
+                string url = "ranking";
                 Dictionary<string, string> param = new Dictionary<string, string>();
                 if (Constant.IsDebug)
                 {
@@ -33,8 +33,7 @@ namespace Yes.Game.Chicken
                 {
                     ErrorLogs.Get.DisplayLog("token没有获取到");
                 }
-                param.Add("config_level_id", id.ToString());
-                ErrorLogs.Get.DisplayLog("请求的 id =  " + id);
+
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     Logs.Log("get_item_level接口返回数据:" + data);
@@ -57,11 +56,26 @@ namespace Yes.Game.Chicken
                 Debug.Log("get_sign_in_lists报错:" + ex.Message);
             }
         }
-        public void SetRankData(int value)
+        public void SetSDKRankData(int value)
         {
             string _value = value.ToString();
-            //getStarkRank.SetImRankData(0, _value);
+            StarkSDK.API.GetStarkRank().SetImRankData(0, _value,0,null, (boolx, stringx) =>
+            {
+                string log = string.Format("SetImRankData的回调数据  boolx = {0}，stringx = {1}", boolx, stringx);
+                ErrorLogs.Get.DisplayLog(log);
+            });
         }
+
+        public void GetSDKRankData()
+        {
+            ErrorLogs.Get.DisplayLog("进入GetSDKRankData");
+            getStarkRank.GetImRankList("month", 0, null, null, null,(boolx, stringx) =>
+            {
+                string log = string.Format("GetImRankList的回调数据  boolx = {0}，stringx = {1}", boolx, stringx);
+                ErrorLogs.Get.DisplayLog(log);
+            });
+        }
+
 
     }
 

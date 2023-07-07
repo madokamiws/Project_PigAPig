@@ -57,8 +57,8 @@ namespace Yes.Game.Chicken
             SettingController.Get.Show();
         }
         public void OnShowRanking()
-        { 
-        
+        {
+            RankingData.Instance.GetSDKRankData();
         }
         public void OnStarkGameRecorder()
         {
