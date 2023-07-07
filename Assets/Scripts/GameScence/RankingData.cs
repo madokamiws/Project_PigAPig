@@ -77,7 +77,7 @@ namespace Yes.Game.Chicken
         void OnLoginSuccessCallback(string code, string anonymousCode, bool isLogin)
         {
             ErrorLogs.Get.DisplayLog("排行榜前的登录成功OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
-            getStarkRank.GetImRankList("month", 0, null, null, null, (boolx, stringx) =>
+            getStarkRank.GetImRankList("all", 0, "default", "金币", "排行榜", (boolx, stringx) =>
             {
                 string log = string.Format("GetImRankList的回调数据  boolx = {0}，stringx = {1}", boolx, stringx);
                 ErrorLogs.Get.DisplayLog(log);
