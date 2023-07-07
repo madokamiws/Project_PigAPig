@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections;
+using StarkSDKSpace;
 using System.Collections.Generic;
 using UnityEngine;
 namespace Yes.Game.Chicken
 {
     public class RankingData
     {
-
+        //public StarkRank getStarkRank;
+        public RankingData()
+        {
+             //var x = StarkSDK.API.GetStarkRank().SetImRankData();
+        }
         public static void GetDeckData(int id, Action<DeckModel> callback = null)
         {
             try
@@ -52,6 +57,12 @@ namespace Yes.Game.Chicken
                 Debug.Log("get_sign_in_lists报错:" + ex.Message);
             }
         }
+        public void SetRankData(int value)
+        {
+            string _value = value.ToString();
+            //getStarkRank.SetImRankData(0, _value);
+        }
+
     }
 
     public class RankModel : BaseModel

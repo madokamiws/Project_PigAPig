@@ -65,15 +65,13 @@ namespace Yes.Game.Chicken
         public int[] deck_element_list_weight { get; set; }
         public int card_total { get; set; }//卡牌总数
 
-        public int time_1 { get; set; }//
-        public int gold_1 { get; set; }//
-        public int time_2 { get; set; }//
-        public int gold_2 { get; set; }//
-        public int time_3 { get; set; }//
-        public int gold_3 { get; set; }//
-
+        public int time_1 { get; set; }//1档位时间
+        public int gold_1 { get; set; }//1档位金币
+        public int time_2 { get; set; }//2档位时间
+        public int gold_2 { get; set; }//2档位金币
+        public int time_3 { get; set; }//3档位时间
+        public int gold_3 { get; set; }//3档位金币
     }
-
     /// <summary>
     /// 主牌堆卡牌的生成状态枚举
     /// </summary>
