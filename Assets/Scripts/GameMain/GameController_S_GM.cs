@@ -56,6 +56,10 @@ namespace Yes.Game.Chicken
         {
             SettingController.Get.Show();
         }
+        public void OnShowRanking()
+        { 
+        
+        }
         public void OnStarkGameRecorder()
         {
             GameRecorderController.Instance.StartRecord();
