@@ -14,15 +14,10 @@ namespace Yes.Game.Chicken
         void Start()
 		{
 
-            //调用API时会弹出调试框
-            StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
+            //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
             try
 			{
-
                 CheckSession();
-//                StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
-//OnLoginFailedCallback);
-
             }
 			catch (Exception ex)
 			{

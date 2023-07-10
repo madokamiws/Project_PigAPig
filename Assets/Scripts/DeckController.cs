@@ -696,7 +696,7 @@ namespace Yes.Game.Chicken
             {
                 num = ItemManager.Instance.GetItemCount(type);
             }
-            else if (type == PropFunType.REARRANGE)
+            else if (type == PropFunType.RELIFE)
             {
                 return true;
             }
@@ -709,6 +709,7 @@ namespace Yes.Game.Chicken
         /// <summary>
         /// 撤回三张卡牌
         /// </summary>
+        /// <param name="isrelife">是否是relife触发</param>
         public void OnBackThree()
         {
             if (IsRoundUsed(PropFunType.BACKTHREE))
@@ -774,6 +775,65 @@ namespace Yes.Game.Chicken
             else
             {
                 WatchAdTipsController.Get.ShowWatchAdTips(PropFunType.BACKTHREE);
+            }
+        }
+        public void OnBackThree(bool isrelife)
+        {
+            CountdownController.Instance.StartTimer();
+            for (int turn = 0; turn < 3; turn++)
+            {
+                while (cardMoveHistory.Count > 0)
+                {
+                    CardMoveRecord lastMove = cardMoveHistory.Pop();
+                    if (lastMove.CardTransform == null)
+                    {
+                        continue;
+                    }
+
+                    Transform tf_lastCard = lastMove.CardTransform;
+                    tf_lastCard.SetParent(tf_CenterDeckList);
+                    if (lastMove.tranIdIndex >= 0)
+                    {
+                        pickDeckCardIDs[lastMove.tranIdIndex] = -1;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < pickDeckCardIDs.Length; i++)
+                        {
+                            if (pickDeckCardIDs[i] < 0 && i - 1 >= 0)
+                            {
+                                pickDeckCardIDs[i - 1] = -1;
+                            }
+                        }
+                    }
+                    var pos = empPos_BackThree.position + new Vector3(turn * cardWidth, 0, 0);
+
+                    // 将卡牌移到EmpPos_BackThree
+                    tf_lastCard.DOMove(pos, 0.1f).OnComplete(() =>
+                    {
+                        if (tf_lastCard != null)
+                        {
+                            Card card = tf_lastCard.GetComponent<Card>();
+                            card.Btn_AddListnener();
+                            SortGridPos();
+                                // 设置覆盖关系
+                                SetCoverState(card);
+                            if (!cards.Contains(card))
+                            {
+                                cards.Add(card);
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("CardTransform has been destroyed.");
+                        }
+                    });
+                    break;
+                }
+                if (cardMoveHistory.Count == 0)
+                {
+                    Debug.Log("No more moves to undo.");
+                }
             }
         }
         /// <summary>

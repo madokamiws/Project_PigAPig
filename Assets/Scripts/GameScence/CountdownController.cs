@@ -35,12 +35,12 @@ namespace Yes.Game.Chicken
             }
             else
             {
-                countdownTime = 90f;
+                countdownTime = 20f;
                 ResetTimer();
 
                 float ratio1 = 0;
-                float ratio2 = (float)30 / 90;
-                float ratio3 = (float)60 / 90;
+                float ratio2 = (float)7 / 20;
+                float ratio3 = (float)15 / 20;
 
                 SetPosition(goldRank1, ratio1);
                 SetPosition(goldRank2, ratio2);
