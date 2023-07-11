@@ -11,6 +11,12 @@ namespace Yes.Game.Chicken
         public RectTransform goldRank2;
         public RectTransform goldRank3;
 
+        public Text tx_gold1;//1阶段奖励
+
+        public Text tx_gold2;//2阶段奖励
+
+        public Text tx_gold3;//3阶段奖励
+
         private float countdownTime; // Set the countdown time
         private float currentTime;
         private float totalTime;
@@ -24,10 +30,18 @@ namespace Yes.Game.Chicken
                 this.countdownTime = time_3;
                 ResetTimer();
 
+                float _time2 = deckmodel.time_3 - deckmodel.time_2;
+                float _time3 = deckmodel.time_3 - deckmodel.time_1;
+
                 // Calculate the ratios and set the positions of the gold ranks
                 float ratio1 = 0;
-                float ratio2 = (float)deckmodel.time_1 / deckmodel.time_3;
-                float ratio3 = (float)deckmodel.time_2 / deckmodel.time_3;
+                float ratio2 = _time2 / deckmodel.time_3;
+                float ratio3 = _time3 / deckmodel.time_3;
+
+                tx_gold3.text = deckmodel.gold_3.ToString();
+                tx_gold2.text = deckmodel.gold_2.ToString();
+                tx_gold1.text = deckmodel.gold_1.ToString();
+
                 SetPosition(goldRank1, ratio1);
                 SetPosition(goldRank2, ratio2);
                 SetPosition(goldRank3, ratio3);
@@ -41,6 +55,10 @@ namespace Yes.Game.Chicken
                 float ratio1 = 0;
                 float ratio2 = (float)7 / 20;
                 float ratio3 = (float)15 / 20;
+
+                tx_gold1.text = "30";
+                tx_gold2.text = "50";
+                tx_gold3.text = "90";
 
                 SetPosition(goldRank1, ratio1);
                 SetPosition(goldRank2, ratio2);

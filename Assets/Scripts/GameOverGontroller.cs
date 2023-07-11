@@ -10,6 +10,8 @@ namespace Yes.Game.Chicken
     {
         public GameObject successObj;
         public GameObject failureObj;
+        public AudioClip sound_success;
+        public AudioClip sound_failure;
         public static GameOverGontroller _instance;
         public static GameOverGontroller Get
         {
@@ -31,6 +33,7 @@ namespace Yes.Game.Chicken
         {
             int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowFailure id = "+  id);
+            AudioManager.Instance.PlaySound(sound_failure);
             GameFinishData.SubmitLevelData(id, 0, (result) =>
             {
                 ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
@@ -50,6 +53,7 @@ namespace Yes.Game.Chicken
         {
             int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
+            AudioManager.Instance.PlaySound(sound_success);
             GameFinishData.SubmitLevelData(id, 1, (result) =>
               {
                   ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");

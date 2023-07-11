@@ -522,6 +522,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   successObj: {fileID: 4544446062511506769}
   failureObj: {fileID: 4544446061918270923}
+  sound_success: {fileID: 8300000, guid: e3224042be1a1aa4cbbab1eb89dfd4c8, type: 3}
+  sound_failure: {fileID: 8300000, guid: 26326088cffc10944b21d42ae163bd7e, type: 3}
 --- !u!1 &4544446061371245299
 GameObject:
   m_ObjectHideFlags: 0
