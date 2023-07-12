@@ -268,10 +268,6 @@ namespace Yes.Game.Chicken
             {
                 tx_backThreenum.transform.parent.gameObject.SetActive(false);
             }
-
-
-
-
         }
         /// <summary>
         /// 清除父物体下面的所有子物体
@@ -447,19 +443,15 @@ namespace Yes.Game.Chicken
                             if (centerCardIndex != null)
                             {
                                 card.SetCardSprite(centerCardIndex[k, j, i]);
-                                ErrorLogs.Get.DisplayLog("SetCardSprite1");
                             }
                             else
                             {
                                 card.SetCardSprite(temp_centerDecklist[temp_centerDecklist_index]);
                                 temp_centerDecklist_index++;
-                                ErrorLogs.Get.DisplayLog("SetCardSprite2");
                             }
 
-                            ErrorLogs.Get.DisplayLog("SetCoverState前");
                             //设置覆盖关系
                             SetCoverState(card);
-                            ErrorLogs.Get.DisplayLog("SetCoverState后");
                             cards.Add(card);
                             createCardNum++;
                             card.row = j;

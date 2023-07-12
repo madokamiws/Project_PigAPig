@@ -29,17 +29,19 @@ namespace Yes.Game.Chicken
 
         public void DisplayLog(string logs,bool ishuanhang = true)
         {
-            if (ishuanhang)
+            if (Constant.IsDebug)
             {
-                tx_logs.text += "\n------" + logs;
-                Debug.Log(logs);
+                if (ishuanhang)
+                {
+                    tx_logs.text += "\n------" + logs;
+                    Debug.Log(logs);
+                }
+                else
+                {
+                    tx_logs.text += logs;
+                    Debug.Log(logs);
+                }
             }
-            else
-            {
-                tx_logs.text +=  logs;
-                Debug.Log(logs);
-            }
-
         }
         public void ShowLog()
         {
