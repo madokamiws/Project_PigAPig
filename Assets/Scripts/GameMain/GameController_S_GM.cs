@@ -9,7 +9,7 @@ namespace Yes.Game.Chicken
     public class GameController_S_GM : MonoBehaviour
     {
         public Button btn_modelNormal;
-
+        public Text goldNum;
         //public GameObject checkpointObj;
         public AudioClip BGM_Click;
 
@@ -36,6 +36,7 @@ namespace Yes.Game.Chicken
             //btn_modelNormal.onClick.AddListener(OnClickModelNormal);
             //GameRecorderController.Instance.Show();
             AudioManager.Instance.PlayBGM(BGM_Click);
+            goldNum.text = ItemManager.Instance.GetItemCount(PropFunType.GOLD).ToString();
         }
         public void ShowCheckpoint()
         {

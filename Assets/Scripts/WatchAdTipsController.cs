@@ -63,11 +63,19 @@ namespace Yes.Game.Chicken
                         ItemManager.Instance.AddItem(currentType);
                         DeckController.Get.UpdatePropNum();
                     }
-                    Destroy(gameObject);
+                    AdController.Instance.SubmitADData(2, 1, null, (result) =>
+                    {
+
+                        Destroy(gameObject);
+                    });
                 }
                 else
                 {
-                    Toast.Show("观看广告失败，没有获得奖励");
+                    AdController.Instance.SubmitADData(2, 2, "观看广告时间不足", (result) =>
+                    {
+                        Toast.Show("观看广告失败，没有获得奖励");
+                    });
+
                 }
 
             });

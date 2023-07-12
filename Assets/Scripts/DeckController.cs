@@ -120,6 +120,11 @@ namespace Yes.Game.Chicken
 
         public void InitCreatDeck(int level = -1)
         {
+            if (level>0)
+            {
+                currentLevelID = level;
+            }
+
             ErrorLogs.Get.DisplayLog("level = " + level);
             InitData();
 
@@ -141,9 +146,9 @@ namespace Yes.Game.Chicken
         };
 
             int[] DeckElementlist = new int[]
-                {1,2,3,4,5,6,7,8,9,10};
+                {1,2,3,4,5,6};
             int[] deckElementlist_weight = new int[]
-                {100,200};
+                {1,1,1,1,1,1};
                 
             //        int[,,] centerCardIndex = new int[,,]//层 行 列
             //{
@@ -159,7 +164,7 @@ namespace Yes.Game.Chicken
             //            }
             //};
 
-            DisplayPointData(centerDeck, DeckElementlist, totalCardNum);
+            DisplayPointData(centerDeck, DeckElementlist, deckElementlist_weight, totalCardNum);
             CountdownController.Instance.SetupTimer();
 
 
@@ -197,6 +202,7 @@ namespace Yes.Game.Chicken
 
                     int[] _deckElementlist = result.deck_element_list;
                     //ErrorLogs.Get.DisplayLog("deckElementlist:");
+                    int[] _deck_element_list_weight = result.deck_element_list_weight;
 
                     int[,,] _centerCardIndex = result.center_card_index;
 
@@ -207,7 +213,7 @@ namespace Yes.Game.Chicken
                     totalCardNum = result.card_total;
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
-                    DisplayPointData(_centerDeck, _deckElementlist, totalCardNum);
+                    DisplayPointData(_centerDeck, _deckElementlist, _deck_element_list_weight, totalCardNum);
                     CountdownController.Instance.SetupTimer(result);
                 });
             }
@@ -216,6 +222,8 @@ namespace Yes.Game.Chicken
         public void InitData()
         {
             UpdatePropNum();
+
+            cards.Clear();
             centerDeckTrans.anchoredPosition = pos_centerDeckTrans;
             for (int i = 0; i < pickDeckCardIDs.Length; i++)
             {
@@ -280,8 +288,13 @@ namespace Yes.Game.Chicken
             }
 
         }
-            public void DisplayPointData(int[,,] centerDeck,int[] deckElementlist ,int totalCardNum, int[,,] centerCardIndex = null)
+            public void DisplayPointData(int[,,] centerDeck,int[] deckElementlist ,int[] deck_element_list_weight,int totalCardNum, int[,,] centerCardIndex = null)
         {
+            int pro_total = 0;
+            for (int i = 0; i < deck_element_list_weight.Length; i++)
+            {
+                pro_total += deck_element_list_weight[i];
+            }
 
             layer = centerDeck.GetLength(0);
             ErrorLogs.Get.DisplayLog("centerDeck_layer" + layer);
@@ -312,15 +325,31 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("配置totalCardNum与centerDeck配置数量不符，请检查配置");
                     return;
                 }
-
+                if (deckElementlist.Length != deck_element_list_weight.Length)
+                {
+                    ErrorLogs.Get.DisplayLog("配置deckElementlist与deck_element_list_weight配置数量不符，请检查配置");
+                    return;
+                }
                 ErrorLogs.Get.DisplayLog("检测没有错误");
                 for (int i = 0; i < totalCardNum; i += 3)
                 {
+                    int index = 0;
 
-                    int index = UnityEngine.Random.Range(0, deckElementlist.Length);
-                    temp_centerDecklist.Add(deckElementlist[index]);
-                    temp_centerDecklist.Add(deckElementlist[index]);
-                    temp_centerDecklist.Add(deckElementlist[index]);
+                    int randomNumber = UnityEngine.Random.Range(0, pro_total+1);
+
+                    int cumulativeWeight = 0;
+                    for (int p = 0; p < deck_element_list_weight.Length; p++)
+                    {
+                        cumulativeWeight += deck_element_list_weight[p];
+                        if (randomNumber <= cumulativeWeight)
+                        {
+                            index = deckElementlist[p];
+                            break;
+                        }
+                    }
+                    temp_centerDecklist.Add(index);
+                    temp_centerDecklist.Add(index);
+                    temp_centerDecklist.Add(index);
                 }
                 Shuffle(temp_centerDecklist);
 
@@ -418,19 +447,19 @@ namespace Yes.Game.Chicken
                             if (centerCardIndex != null)
                             {
                                 card.SetCardSprite(centerCardIndex[k, j, i]);
-                                //ErrorLogs.Get.DisplayLog("SetCardSprite1");
+                                ErrorLogs.Get.DisplayLog("SetCardSprite1");
                             }
                             else
                             {
                                 card.SetCardSprite(temp_centerDecklist[temp_centerDecklist_index]);
                                 temp_centerDecklist_index++;
-                                //ErrorLogs.Get.DisplayLog("SetCardSprite2");
+                                ErrorLogs.Get.DisplayLog("SetCardSprite2");
                             }
 
-
+                            ErrorLogs.Get.DisplayLog("SetCoverState前");
                             //设置覆盖关系
                             SetCoverState(card);
-
+                            ErrorLogs.Get.DisplayLog("SetCoverState后");
                             cards.Add(card);
                             createCardNum++;
                             card.row = j;
@@ -442,6 +471,7 @@ namespace Yes.Game.Chicken
                     }
                 }
             }
+            ErrorLogs.Get.DisplayLog("设置完");
             int createGroupNum = (totalCardNum - createCardNum) / 4;
             int redundantNum = totalCardNum - createCardNum - createGroupNum * 4;
             //左竖
@@ -466,7 +496,6 @@ namespace Yes.Game.Chicken
             }
 
         }
-
         /// <summary>
         /// 旁边卡碟
         /// </summary>
@@ -1039,13 +1068,20 @@ namespace Yes.Game.Chicken
             {
                 if (isWatchedTimeGreater)
                 {
-                    // watchedTime 大于 effectiveTime 的处理逻辑
                     ErrorLogs.Get.DisplayLog("watchedTime 大于 effectiveTime");
+                    AdController.Instance.SubmitADData(2, 1, null, (result) =>
+                    {
+                    });
+                    // watchedTime 大于 effectiveTime 的处理逻辑
+
                 }
                 else
                 {
                     // watchedTime 小于等于 effectiveTime 的处理逻辑
                     ErrorLogs.Get.DisplayLog("watchedTime 小于等于 effectiveTime");
+                    AdController.Instance.SubmitADData(2, 2, "观看广告时间不足", (result) =>
+                    {
+                    });
                 }
             });
         }

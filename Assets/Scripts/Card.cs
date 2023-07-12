@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+
+
 namespace Yes.Game.Chicken
 {
     public class Card : MonoBehaviour
@@ -44,6 +47,7 @@ namespace Yes.Game.Chicken
         public void SetCardSprite(int cardIndex)
         {
             id = cardIndex;
+            //ErrorLogs.Get.DisplayLog("SetCardSprite 中1 cardIndex ="+ cardIndex);
             imgCard.sprite = clickSprites[cardIndex - 1];
             SpriteState ss = btnCard.spriteState;
             ss.disabledSprite = coveredSprites[cardIndex - 1];
@@ -54,7 +58,7 @@ namespace Yes.Game.Chicken
         /// </summary>
         public void SetCardSprite()
         {
-            id = Random.Range(1, 15);
+            id = UnityEngine.Random.Range(1, 15);
             imgCard.sprite = clickSprites[id - 1];
             SpriteState ss = btnCard.spriteState;
             ss.disabledSprite = coveredSprites[id - 1];

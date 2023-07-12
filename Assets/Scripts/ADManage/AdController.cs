@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using StarkSDKSpace;
 using UnityEngine;
+
 
 namespace Yes.Game.Chicken
 {
@@ -161,19 +163,65 @@ public class AdController: SingletonPatternBase<AdController>
             // height 表示广告高度
         }
         #endregion
+
+        /// <summary>
+        /// 广告数据提交
+        /// </summary>
+        /// <param name="type">必选[1、2、3 ] (1是激励,2是插屏,3是banner)</param>
+        /// <param name="status">必选参数 是否正常播放 1是正常, 2异常</param>
+        /// <param name="reason">可选参数 广告异常 提交异常描述</param>
+        /// <param name="callback"></param>
+        public void SubmitADData(int type, int status, string reason = null, Action<AdModel> callback = null)
+        {
+            try
+            {
+                int duration = 0;
+                string url = "ads/report";
+                Dictionary<string, string> param = new Dictionary<string, string>();
+                if (Constant.IsDebug)
+                {
+                    param.Add("debug", "1");
+                }
+                if (PlayerPrefs.HasKey("user_token"))
+                {
+                    string _token = PlayerPrefs.GetString("user_token");
+                    param.Add("token", _token);
+                }
+                else
+                    ErrorLogs.Get.DisplayLog("token没有获取到");
+                param.Add("type", type.ToString());
+                param.Add("status", status.ToString());
+                if (reason!=null)
+                {
+                    param.Add("reason", reason);
+                }
+                BaseHttpHelper.HttpMethod(url, param, (string data) =>
+                {
+                    ErrorLogs.Get.DisplayLog("finish接口返回数据:" + data);
+                    AdModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<AdModel>(data);
+                    if (model.error_code >= 0)
+                    {
+                        ErrorLogs.Get.DisplayLog("序列化成功");
+                        if (callback != null)
+                            callback(model);
+                    }
+                    else
+                    {
+
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                ErrorLogs.Get.DisplayLog("finish报错:" + ex.Message);
+            }
+        }
+
+    }
+    public class AdModel : BaseModel
+    { 
+    
     }
 
-    //private static AdController instance;
 
-    //public static AdController Instance
-    //{
-    //    get
-    //    {
-    //        if (instance == null)
-    //        {
-    //            instance = new AdController();
-    //        }
-    //        return instance;
-    //    }
-    //}
 }

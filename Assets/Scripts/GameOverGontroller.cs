@@ -92,27 +92,36 @@ namespace Yes.Game.Chicken
                 if (isWatchedTimeGreater)
                 {
                     DeckController.Get.OnBackThree(true);
-                    OnClose();
-                    ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 大于 effectiveTime");
+
+                    AdController.Instance.SubmitADData(2, 1, null, (result) =>
+                    {
+                        ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 大于 effectiveTime");
+                        OnClose();
+                    });
                 }
                 else
                 {
                     // watchedTime 小于等于 effectiveTime 的处理逻辑
                     ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 小于等于 effectiveTime");
+                    AdController.Instance.SubmitADData(2, 2, "观看广告时间不足", (result) =>
+                    {
+
+                    });
                 }
             });
         }
         public void OnNextPoint()
         {
-             int level = PlayerPrefs.GetInt("CurrentLevelIDMax");
-            if (level >= 0)
+            //DeckController.Get.InitCreatDeck(DeckController.Get.currentLevelID);
+            int level = DeckController.Get.currentLevelID + 1;
+            if (level <= DeckController.GetCurrentMaxLevelID())
             {
                 DeckController.Get.InitCreatDeck(level);
                 OnClose();
             }
             else
             {
-                UIController.Instance.OnClickBackScence();
+                DeckController.Get.InitCreatDeck(DeckController.GetCurrentMaxLevelID());
             }
 
         }
