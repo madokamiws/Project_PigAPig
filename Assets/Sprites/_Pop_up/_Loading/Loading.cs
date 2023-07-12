@@ -71,17 +71,6 @@ namespace Yes.Game.Chicken
                                 rect.pivot = new Vector2(0, anchor.y + 0.50f);
                             }
 
-                            /*
-                            RectTransform rect = loading.GetComponent<RectTransform> ();
-                            if ( rect != null ) {
-                                Vector2 anchor = rect.pivot;
-                                // rect.pivot = new Vector2 (0, anchor.y + 0.50f);
-                                rect.position =  new Vector3 ( 0.0f, 0.0f, 0.0f ) ; 
-                            }
-                            */
-
-                            // loading.transform.position = new Vector3 ( 0.0f, 0.0f, 0.0f ) ;
-
                         }
                     }
                 }
@@ -92,8 +81,6 @@ namespace Yes.Game.Chicken
         void Awake() {
             _instance = this;
         }
-
-         
 
         static float mDataRefreshLeftTime = 5f ;
         // Update is called once per frame
@@ -153,14 +140,6 @@ namespace Yes.Game.Chicken
         private void _show(LoadingStyle style = LoadingStyle.clear) {
  
             if ( style == LoadingStyle.clear ) {
-
-                /*
-                if (background == null || background.Length < 5) { }
-                else {
-                    back.sprite = background[Random.Range(0, 2)];
-                }
-                */
-
             }
             else  {
 
@@ -172,7 +151,7 @@ namespace Yes.Game.Chicken
 
             gameObject.SetActive(true);
 
-            Timer.Schedule(this, 6, () => {
+            Timer.Schedule(this, 8, () => {
                 Hide();
             });
 
@@ -212,7 +191,7 @@ namespace Yes.Game.Chicken
         public static void Show(string message)
         {
             Loading.Instance._show(message);
-            // gameObject.SetActive ( false ) ;
+
         }
 
         // loadingText

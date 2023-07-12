@@ -34,8 +34,10 @@ namespace Yes.Game.Chicken
             int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowFailure id = "+  id);
             AudioManager.Instance.PlaySound(sound_failure);
+            Loading.Show();
             GameFinishData.SubmitLevelData(id, 0, (result) =>
             {
+                Loading.Hide();
                 ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
                 if (result != null)
                 {
@@ -54,8 +56,10 @@ namespace Yes.Game.Chicken
             int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
             AudioManager.Instance.PlaySound(sound_success);
+            Loading.Show();
             GameFinishData.SubmitLevelData(id, 1, (result) =>
               {
+                  Loading.Hide();
                   ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");
                   if (result != null)
                   {
@@ -93,7 +97,7 @@ namespace Yes.Game.Chicken
                 {
                     DeckController.Get.OnBackThree(true);
 
-                    AdController.Instance.SubmitADData(2, 1, null, (result) =>
+                    AdController.Instance.SubmitADData(1, 1, null, (result) =>
                     {
                         ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 大于 effectiveTime");
                         OnClose();
@@ -103,7 +107,7 @@ namespace Yes.Game.Chicken
                 {
                     // watchedTime 小于等于 effectiveTime 的处理逻辑
                     ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 小于等于 effectiveTime");
-                    AdController.Instance.SubmitADData(2, 2, "观看广告时间不足", (result) =>
+                    AdController.Instance.SubmitADData(1, 2, "观看广告时间不足", (result) =>
                     {
 
                     });

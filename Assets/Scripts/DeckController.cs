@@ -78,11 +78,11 @@ namespace Yes.Game.Chicken
         void AdjustCenterDeckPosition()
         {
 
-            int col_offset = column > 7 ? 7 : column;
+            int col_offset = column > 8 ? 8 : column;
 
-            int row_offset = row > 8 ? 7 : row;
+            int row_offset = row > 8 ? 8 : row;
 
-            float offsetX = (7 - col_offset) * cardWidth * 0.5f;
+            float offsetX = (8 - col_offset) * cardWidth * 0.5f;
             float offsetY = (8 - row_offset) * cardHeight * 1f;
 
             // 在现有位置上进行微调
@@ -114,8 +114,7 @@ namespace Yes.Game.Chicken
             pos_centerDeckTrans = centerDeckTrans.anchoredPosition;
             AdController.Instance.ShowInterstitialAd();
             currentLevelID = GetCurrentMaxLevelID();
-            InitCreatDeck(currentLevelID);
-
+            InitCreatDeck(currentLevelID); 
         }
 
         public void InitCreatDeck(int level = -1)
@@ -129,21 +128,122 @@ namespace Yes.Game.Chicken
             InitData();
 
 #if UNITY_EDITOR
-            int totalCardNum = 12;
+            int totalCardNum = 66;
 
 
             int[,,] centerDeck = new int[,,]//层 行 列
-        {
-                {
-            {0,0,4,0,0,0,0},
-            {0,4,4,4,4,4,0}
-        },
-        {
-            {0,4,0,4,0,3,0},
-            {0,3,0,5,0,4,0}
-
-                }
-        };
+{
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 3, 3, 3, 0, 0},
+        {0, 0, 3, 3, 3, 0, 0},
+        {0, 0, 3, 3, 3, 0, 0},
+        {0, 3, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 9, 9, 9, 0, 0, 0},
+        {0, 9, 0, 9, 0, 0, 0},
+        {0, 9, 9, 9, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 3, 3, 3, 0, 0, 0},
+        {0, 3, 0, 3, 0, 0, 0},
+        {0, 3, 3, 3, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {9, 9, 9, 0, 0, 0, 0},
+        {9, 0, 9, 0, 0, 0, 0},
+        {9, 9, 9, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {3, 3, 3, 0, 0, 0, 0},
+        {3, 0, 3, 0, 0, 0, 0},
+        {3, 3, 3, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {10, 10, 10, 0, 0, 0, 0},
+        {10, 0, 10, 0, 0, 0, 0},
+        {10, 10, 10, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 3, 0, 0},
+        {0, 0, 0, 3, 0, 0, 0},
+        {3, 0, 3, 0, 0, 0, 0},
+        {3, 3, 3, 0, 0, 0, 0},
+        {3, 0, 3, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {5, 0, 5, 0, 0, 0, 0},
+        {5, 0, 5, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 7, 0, 0, 0, 0, 0},
+        {0, 7, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    },
+    {
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 11, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0}
+    }
+};
 
             int[] DeckElementlist = new int[]
                 {1,2,3,4,5,6};
@@ -176,8 +276,10 @@ namespace Yes.Game.Chicken
             }
             if (level > 0)
             {
+                Loading.Show();
                 DeckData.GetDeckData(level, (result) =>
                 {
+                    Loading.Hide();
                     ErrorLogs.Get.DisplayLog("currentlevelId:" + level);
                     current_user_level_record_id = result.user_level_record_id;
                     ErrorLogs.Get.DisplayLog("current_user_level_record_id:" + current_user_level_record_id);
@@ -1061,7 +1163,7 @@ namespace Yes.Game.Chicken
                 if (isWatchedTimeGreater)
                 {
                     ErrorLogs.Get.DisplayLog("watchedTime 大于 effectiveTime");
-                    AdController.Instance.SubmitADData(2, 1, null, (result) =>
+                    AdController.Instance.SubmitADData(1, 1, null, (result) =>
                     {
                     });
                     // watchedTime 大于 effectiveTime 的处理逻辑
@@ -1071,7 +1173,7 @@ namespace Yes.Game.Chicken
                 {
                     // watchedTime 小于等于 effectiveTime 的处理逻辑
                     ErrorLogs.Get.DisplayLog("watchedTime 小于等于 effectiveTime");
-                    AdController.Instance.SubmitADData(2, 2, "观看广告时间不足", (result) =>
+                    AdController.Instance.SubmitADData(1, 2, "观看广告时间不足", (result) =>
                     {
                     });
                 }

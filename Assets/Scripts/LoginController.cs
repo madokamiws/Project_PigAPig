@@ -85,9 +85,11 @@ OnLoginFailedCallback);
                     Constant.province = scUserInfo.province;
                     Constant.country = scUserInfo.country;
                     Constant.language = scUserInfo.language;
+
+                    Loading.Show();
                     LoginData.UpdateUser((updateUserresult) =>
-                    { 
-                    
+                    {
+                        Loading.Hide();
                     });
 
                 }, OnGetScUserInfoFailedCallback);

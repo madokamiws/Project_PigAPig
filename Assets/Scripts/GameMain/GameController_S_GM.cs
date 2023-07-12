@@ -40,8 +40,10 @@ namespace Yes.Game.Chicken
         }
         public void ShowCheckpoint()
         {
+            Loading.Show();
             CheckPointModel.GetPointData(1, 20, (result) =>
             {
+                Loading.Hide();
                 checkPointModel = result;
                 ErrorLogs.Get.DisplayLog("回调成功");
 
