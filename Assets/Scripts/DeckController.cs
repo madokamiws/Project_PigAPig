@@ -39,7 +39,7 @@ namespace Yes.Game.Chicken
         public Text tx_backThreenum;
 
 
-        public int[] pickDeckCardIDs ;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
+        public int[] pickDeckCardIDs;//存放当前选中卡牌堆里的卡牌ID（跟当前位置一一对应）
         private int createCardNum = 0;
 
         public int current_user_level_record_id = -1;
@@ -85,10 +85,10 @@ namespace Yes.Game.Chicken
             float offsetX = (7 - col_offset) * cardWidth * 0.5f;
             float offsetY = (8 - row_offset) * cardHeight * 1f;
 
-    // 在现有位置上进行微调
-    Vector2 currentCenterDeckPosition = centerDeckTrans.anchoredPosition;
-    Vector2 adjustedCenterDeckPosition = currentCenterDeckPosition + new Vector2(offsetX, -offsetY);
-    centerDeckTrans.anchoredPosition = adjustedCenterDeckPosition;
+            // 在现有位置上进行微调
+            Vector2 currentCenterDeckPosition = centerDeckTrans.anchoredPosition;
+            Vector2 adjustedCenterDeckPosition = currentCenterDeckPosition + new Vector2(offsetX, -offsetY);
+            centerDeckTrans.anchoredPosition = adjustedCenterDeckPosition;
         }
         // Start is called before the first frame update
         //public static int GetCurrentLevelID()
@@ -120,7 +120,7 @@ namespace Yes.Game.Chicken
 
         public void InitCreatDeck(int level = -1)
         {
-            if (level>0)
+            if (level > 0)
             {
                 currentLevelID = level;
             }
@@ -149,7 +149,7 @@ namespace Yes.Game.Chicken
                 {1,2,3,4,5,6};
             int[] deckElementlist_weight = new int[]
                 {1,1,1,1,1,1};
-                
+
             //        int[,,] centerCardIndex = new int[,,]//层 行 列
             //{
             //            {
@@ -244,9 +244,9 @@ namespace Yes.Game.Chicken
         /// <summary>
         /// 刷新页面上道具数量
         /// </summary>
-        public void  UpdatePropNum()
+        public void UpdatePropNum()
         {
-            int  _backPropNum = ItemManager.Instance.GetItemCount(PropFunType.BACKCARD);
+            int _backPropNum = ItemManager.Instance.GetItemCount(PropFunType.BACKCARD);
             int _shufflePropNum = ItemManager.Instance.GetItemCount(PropFunType.REARRANGE);
             int _backThreePropNum = ItemManager.Instance.GetItemCount(PropFunType.BACKTHREE);
 
@@ -288,7 +288,7 @@ namespace Yes.Game.Chicken
             }
 
         }
-            public void DisplayPointData(int[,,] centerDeck,int[] deckElementlist ,int[] deck_element_list_weight,int totalCardNum, int[,,] centerCardIndex = null)
+        public void DisplayPointData(int[,,] centerDeck, int[] deckElementlist, int[] deck_element_list_weight, int totalCardNum, int[,,] centerCardIndex = null)
         {
             int pro_total = 0;
             for (int i = 0; i < deck_element_list_weight.Length; i++)
@@ -303,9 +303,9 @@ namespace Yes.Game.Chicken
             column = centerDeck.GetLength(2);//列
             ErrorLogs.Get.DisplayLog("centerDeck_column" + column);
 
-            List<int> temp_centerDecklist= new List<int>();
+            List<int> temp_centerDecklist = new List<int>();
 
-            if (centerCardIndex == null )
+            if (centerCardIndex == null)
             {
                 int nonZeroCount = 0;
                 foreach (int item in centerDeck)
@@ -335,7 +335,7 @@ namespace Yes.Game.Chicken
                 {
                     int index = 0;
 
-                    int randomNumber = UnityEngine.Random.Range(0, pro_total+1);
+                    int randomNumber = UnityEngine.Random.Range(0, pro_total + 1);
 
                     int cumulativeWeight = 0;
                     for (int p = 0; p < deck_element_list_weight.Length; p++)
@@ -522,7 +522,7 @@ namespace Yes.Game.Chicken
             go.transform.SetParent(tf_CenterDeckList);
             go.GetComponent<RectTransform>().anchoredPosition =
                 centerDeckTrans.anchoredPosition +
-                new Vector2(cardWidth * (column + 0.5f * dirX), -cardHeight * (row + 0.5f * dirY)); 
+                new Vector2(cardWidth * (column + 0.5f * dirX), -cardHeight * (row + 0.5f * dirY));
             return go;
         }
         /// <summary>
@@ -533,7 +533,7 @@ namespace Yes.Game.Chicken
         {
             for (int i = 0; i < cards.Count; i++)
             {
-                if (card!= cards[i])
+                if (card != cards[i])
                 {
                     card.SetCoverCardState(cards[i]);
                 }
@@ -684,12 +684,12 @@ namespace Yes.Game.Chicken
                         pickDeckCardIDs[j] = -1;
                         child.DOScale(Vector3.zero, 0.25f).OnComplete(() =>
                         {
-                                Destroy(child.gameObject);
-                                countToFinish--;
-                                if (countToFinish == 0)
-                                {
-                                    StartCoroutine(DestroyAndSort(child.gameObject));
-                                }
+                            Destroy(child.gameObject);
+                            countToFinish--;
+                            if (countToFinish == 0)
+                            {
+                                StartCoroutine(DestroyAndSort(child.gameObject));
+                            }
                         });
                     }
                     break;
@@ -707,7 +707,7 @@ namespace Yes.Game.Chicken
             }
             for (int i = 0; i < pickDeckCardIDs.Length; i++)
             {
-                if (pickDeckCardIDs[i]==-1)
+                if (pickDeckCardIDs[i] == -1)
                 {
                     return;
                 }
@@ -845,8 +845,8 @@ namespace Yes.Game.Chicken
                             Card card = tf_lastCard.GetComponent<Card>();
                             card.Btn_AddListnener();
                             SortGridPos();
-                                // 设置覆盖关系
-                                SetCoverState(card);
+                            // 设置覆盖关系
+                            SetCoverState(card);
                             if (!cards.Contains(card))
                             {
                                 cards.Add(card);
@@ -933,7 +933,7 @@ namespace Yes.Game.Chicken
             {
                 WatchAdTipsController.Get.ShowWatchAdTips(PropFunType.BACKCARD);
             }
- 
+
         }
         /// <summary>
         /// 洗牌算法
@@ -1041,7 +1041,7 @@ namespace Yes.Game.Chicken
 
             public int tranIdIndex;
         }
-        public void AddCardToPickDeck(Transform cardTransform, Vector3 originalPos,int posid)
+        public void AddCardToPickDeck(Transform cardTransform, Vector3 originalPos, int posid)
         {
             cardMoveHistory.Push(new CardMoveRecord
             {
