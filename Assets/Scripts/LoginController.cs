@@ -78,6 +78,7 @@ OnLoginFailedCallback);
 
                 StarkSDK.API.GetAccountManager().GetScUserInfo((ref ScUserInfo scUserInfo) =>
                 {
+                    ErrorLogs.Get.DisplayLog("GetScUserInfo：");
                     Constant.avatarUrl = scUserInfo.avatarUrl;
                     Constant.nickName = scUserInfo.nickName;
                     Constant.gender = scUserInfo.gender;

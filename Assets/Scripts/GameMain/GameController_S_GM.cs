@@ -14,6 +14,11 @@ namespace Yes.Game.Chicken
         public AudioClip BGM_Click;
 
         public CheckPointModel checkPointModel;
+
+
+        public GameObject startRecodObj; 
+        public GameObject stopRecodObj;
+
         public static GameController_S_GM Instance { get; private set; }
         public static GameController_S_GM Get
         {
@@ -37,6 +42,7 @@ namespace Yes.Game.Chicken
             //GameRecorderController.Instance.Show();
             AudioManager.Instance.PlayBGM(BGM_Click);
             goldNum.text = ItemManager.Instance.GetItemCount(PropFunType.GOLD).ToString();
+            UpdataRecordStatue();
         }
         public void ShowCheckpoint()
         {
@@ -65,11 +71,43 @@ namespace Yes.Game.Chicken
         }
         public void OnStarkGameRecorder()
         {
-            GameRecorderController.Instance.StartRecord();
+            if (!GameRecorderController.Instance.isrecoding)
+            {
+                GameRecorderController.Instance.StartRecording();
+            }
+            UpdataRecordStatue();
+        }
+        public void OnStopGameRecorder()
+        {
+            if (GameRecorderController.Instance.isrecoding)
+            {
+                GameRecorderController.Instance.StopRecording();
+            }
+            UpdataRecordStatue();
+        }
+        public void OnShareGameRecorder()
+        {
+            GameRecorderController.Instance.ShareRecord();
         }
         public void EXstart()
         {
             SceneManager.LoadScene("GameScence");
+        }
+
+
+        public void UpdataRecordStatue()
+        {
+            if (GameRecorderController.Instance.isrecoding)
+            {
+                startRecodObj.SetActive(false);
+                stopRecodObj.SetActive(true);
+            }
+            else
+            {
+                startRecodObj.SetActive(true);
+                stopRecodObj.SetActive(false);
+
+            }
         }
 
     }

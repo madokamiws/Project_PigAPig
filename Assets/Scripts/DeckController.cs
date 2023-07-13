@@ -78,11 +78,11 @@ namespace Yes.Game.Chicken
         void AdjustCenterDeckPosition()
         {
 
-            int col_offset = column > 8 ? 8 : column;
+            int col_offset = column > 7 ? 7 : column;
 
             int row_offset = row > 8 ? 8 : row;
 
-            float offsetX = (8 - col_offset) * cardWidth * 0.5f;
+            float offsetX = (7 - col_offset) * cardWidth * 0.5f;
             float offsetY = (8 - row_offset) * cardHeight * 1f;
 
             // 在现有位置上进行微调
@@ -268,7 +268,7 @@ namespace Yes.Game.Chicken
             CountdownController.Instance.SetupTimer();
 
 
-#else
+//#else
             int currentMaxId = GetCurrentMaxLevelID();
             if (level < 0)
             {
@@ -285,23 +285,6 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("current_user_level_record_id:" + current_user_level_record_id);
 
                     int[,,] _centerDeck = result.center_deck;
-                    //for (int layer = 0; layer < _centerDeck.GetLength(0); layer++)
-                    //{
-                    //    for (int row = 0; row < _centerDeck.GetLength(1); row++)
-                    //    {
-                    //        for (int column = 0; column < _centerDeck.GetLength(2); column++)
-                    //        {
-                    //            int element = _centerDeck[layer, row, column];
-                    //            ErrorLogs.Get.DisplayLog(element.ToString(),false);
-                    //        }
-
-                    //        ErrorLogs.Get.DisplayLog(""); // 在每行结束后打印换行符
-                    //    }
-
-                    //    ErrorLogs.Get.DisplayLog(""); // 在每层结束后打印换行符
-                    //}
-                    //ErrorLogs.Get.DisplayLog("centerDeck:");
-
                     int[] _deckElementlist = result.deck_element_list;
                     //ErrorLogs.Get.DisplayLog("deckElementlist:");
                     int[] _deck_element_list_weight = result.deck_element_list_weight;
@@ -316,7 +299,8 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("totalCardNum" + totalCardNum);
 
                     DisplayPointData(_centerDeck, _deckElementlist, _deck_element_list_weight, totalCardNum);
-                    CountdownController.Instance.SetupTimer(result);
+                    CountdownController.Instance.SetupTimer(result);//开始倒计时
+                    GameRecorderController.Instance.StartSCRecord();
                 });
             }
 #endif

@@ -12,6 +12,8 @@ namespace Yes.Game.Chicken
         public GameObject failureObj;
         public AudioClip sound_success;
         public AudioClip sound_failure;
+        public Text tx_successGold;
+        public GameObject shareRecodingObj;
         public static GameOverGontroller _instance;
         public static GameOverGontroller Get
         {
@@ -53,6 +55,11 @@ namespace Yes.Game.Chicken
         }
         public void ShowSuccess()
         {
+            if (GameRecorderController.Instance.isrecoding)
+            {
+                GameRecorderController.Instance.StopRecording();
+                shareRecodingObj.SetActive(true);
+            }
             int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
             AudioManager.Instance.PlaySound(sound_success);
@@ -63,6 +70,7 @@ namespace Yes.Game.Chicken
                   ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");
                   if (result != null)
                   {
+                      tx_successGold.text = string.Format("获得了<color='#FF0010'>{0}</color>枚金币!!!", result.now_golds);
                       ItemManager.Instance.SetItem(PropFunType.GOLD, result.current_golds);
                       if (result.level_id > 0)
                       {
@@ -128,6 +136,11 @@ namespace Yes.Game.Chicken
                 DeckController.Get.InitCreatDeck(DeckController.GetCurrentMaxLevelID());
             }
 
+        }
+
+        public void OnShareRecording()
+        {
+            GameRecorderController.Instance.ShareRecord();
         }
 
         public override void OnClose()

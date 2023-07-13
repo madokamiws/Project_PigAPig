@@ -68,6 +68,6 @@ namespace Yes.Game.Chicken
         public int config_level_id { get; set; }//关卡配置后台记录id
         public int total_golds { get; set; }//金币总数
         public int current_golds { get; set; }//当前金币数
-        
+        public int now_golds { get; set; }//当前这关获得金币数
     }
 }

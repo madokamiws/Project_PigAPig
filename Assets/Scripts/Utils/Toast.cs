@@ -78,54 +78,15 @@ namespace Yes.Game.Chicken
         {
             transform.SetAsLastSibling();
             PlayAnimator("playup");
-            //if (time == 2)
-            //    PlayAnimator("open2");
-            //else if (time >= 3)
-            //    PlayAnimator("open3");
-            //else
-            //    PlayAnimator("open2");
-
-            int fontsize = 38;
-
-
-            Font font = tx_messages.font;
-            font.RequestCharactersInTexture(message, fontsize, FontStyle.Normal);
-            CharacterInfo characterInfo;
-            float width = 0f;
-            for (int i = 0; i < message.Length; i++)
-            {
-                font.GetCharacterInfo(message[i], out characterInfo, fontsize);
-                width += characterInfo.advance;
-            }
-
-            background.SetHeight(96);
-
-            if (width > 600)
-            {
-
-                float line = (width / 600.0f);
-                int lineNum = (int)line;
-
-                if (line > lineNum)
-                {
-                    lineNum += 1;
-                }
-
-                background.SetHeight(32 + lineNum * 50);
-
-                if (width / 600 > 3)
-                {
-
-                }
-                background.SetWidth(680);
-            }
-            else
-            {
-                background.SetWidth(width + 100f);
-                background.SetHeight(96);
-            }
 
             tx_messages.text = message;
+            tx_messages.fontSize = 50;
+
+            float width = tx_messages.preferredWidth;
+            float height = tx_messages.preferredHeight;
+
+            background.sizeDelta = new Vector2(width + 120f, height + 50f);
+
             gameObject.SetActive(true);
             StartCoroutine(HideAfterDelay(time));
         }
