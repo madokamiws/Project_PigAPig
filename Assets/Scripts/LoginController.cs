@@ -72,7 +72,7 @@ OnLoginFailedCallback);
             tx_Logs.text = sucesslog;
             try
             {
-                StarkSDK.API.Authorize("userInfo", (string successmsg, JsonData jsonData) =>
+                StarkSDK.API.Authorize("scope.userInfo", (string successmsg, JsonData jsonData) =>
                 {
                     ErrorLogs.Get.DisplayLog("Authorization successful. Message: " + successmsg);
                     if (jsonData.IsObject)
