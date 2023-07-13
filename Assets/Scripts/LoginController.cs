@@ -5,12 +5,14 @@ using StarkSDKSpace;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using StarkSDKSpace.UNBridgeLib.LitJson;
 namespace Yes.Game.Chicken
 {
-	public class LoginController : MonoBehaviour
-	{
+	public class LoginController : SingletonPatternMonoBase<LoginController>
+    {
         public Text tx_Logs;
         public Text api_Log;
+        public string user_code;
         void Start()
 		{
 
@@ -36,7 +38,7 @@ namespace Yes.Game.Chicken
             ErrorLogs.Get.DisplayLog("CheckSession 接口调用成功 ");
             if (PlayerPrefs.HasKey("user_token"))
             {
-                GameStart.Get.StartGame();
+                GameStart.Instance.StartGame();
             }
             else
             {
@@ -61,13 +63,32 @@ OnLoginFailedCallback);
         /// <param name="isLogin">判断在当前 APP(头条、抖音等)是否处于登录状态</param>
         void OnLoginSuccessCallback(string code, string anonymousCode, bool isLogin)
         {
+            user_code = code;
             ErrorLogs.Get.DisplayLog("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
             ErrorLogs.Get.DisplayLog(sucesslog);
             tx_Logs.text = sucesslog;
+            StarkSDK.API.Authorize("scope.userInfo", (string successmsg, JsonData jsonData) =>
+            {
+                // 在成功回调中打印日志
+                ErrorLogs.Get.DisplayLog("Authorization successful. Message: " + successmsg);
+                if (jsonData.IsObject)
+                {
+                    ErrorLogs.Get.DisplayLog("Json data received: " + jsonData.ToJson());
+                }
+
+            }, (string failmsg, string failmsg2) =>
+            {
+                ErrorLogs.Get.DisplayLog("Authorization failed. Message: " + failmsg + " " + failmsg2);
+            });
+
+            //CopyDebug.OnClickCopyText(sucesslog);
+        }
+        public void OnSeverlogin(Action<bool> isover)
+        {
             Loading.Show();
-            LoginData.GetLoginData(code, (result) =>
+            LoginData.GetLoginData(user_code, (result) =>
             {
                 Loading.Hide();
                 PlayerPrefs.SetString("user_token", result.user.token);
@@ -91,14 +112,15 @@ OnLoginFailedCallback);
                     LoginData.UpdateUser((updateUserresult) =>
                     {
                         Loading.Hide();
+
+                        isover(true);
                     });
 
                 }, OnGetScUserInfoFailedCallback);
             });
-
-
-            //CopyDebug.OnClickCopyText(sucesslog);
         }
+
+
         /// <summary>
         /// 检查Session接口调用失败的回调函数
         /// </summary>
