@@ -29,7 +29,7 @@ public class BaseHttpHelper
             api_url = string.Format("{0}{1}", ip, api);
         }
 
-        // Logs.Log(" *****HttpMethod请求数据***** url =" + api_url) ;
+        Logs.Log(" *****HttpMethod请求数据***** url =" + api_url);
 
         Uri uri = new Uri(api_url);
 
@@ -79,6 +79,12 @@ public class BaseHttpHelper
                 SetApinum(api);
 
                 string resultText = response.DataAsText;
+
+                if (response.StatusCode == 401)
+                {
+                    ErrorLogs.Get.DisplayLog("返回首页进行登录流程");
+                    callback(response.DataAsText);
+                }
 
                 if (response.StatusCode == 200)
                 {
@@ -194,7 +200,7 @@ public class BaseHttpHelper
     {
         if (ip_dic.ContainsKey(api))
         {
-            if (ip_dic[api] >= 3)
+            if (ip_dic[api] >= 1)
             {
                 return true;
             }

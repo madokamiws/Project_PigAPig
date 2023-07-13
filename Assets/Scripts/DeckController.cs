@@ -268,7 +268,7 @@ namespace Yes.Game.Chicken
             CountdownController.Instance.SetupTimer();
 
 
-//#else
+#else
             int currentMaxId = GetCurrentMaxLevelID();
             if (level < 0)
             {

@@ -11,16 +11,17 @@ namespace Yes.Game.Chicken
         public Button startBtn;
 
         private AsyncOperation ao;
-        public bool ifLoadGameScene;
+        //public bool ifLoadGameScene;
 
         void Start()
         {
             //开启关注抖音号API的MOCK
-            StarkSDKSpace.MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
+            //StarkSDKSpace.MockSetting.SwithMockModule(StarkSDKSpace.MockModule.FollowDouyin, true);
 
             //调用API时会弹出调试框
             //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
-            startBtn.onClick.AddListener(StartGame);
+
+            //startBtn.onClick.AddListener(StartGame(false));
 
             ao = SceneManager.LoadSceneAsync(1);
             ao.allowSceneActivation = false;
@@ -34,16 +35,24 @@ namespace Yes.Game.Chicken
         { 
         
         }
-        public void StartGame()
-        {
-            LoginController.Instance.OnSeverlogin((result)=>
-            {
-                if (result)
-                {
-                    ao.allowSceneActivation = true;
-                }
 
-            });
+        public void StartGame(bool isneedverify = false)
+        {
+            if (isneedverify)
+            {
+                LoginController.Instance.OnSeverlogin((result) =>
+                {
+                    if (result)
+                    {
+                        ao.allowSceneActivation = true;
+                    }
+
+                });
+            }
+            else
+            {
+                ao.allowSceneActivation = true;
+            }
 
             //else
             //{

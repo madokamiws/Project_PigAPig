@@ -13,9 +13,10 @@ namespace Yes.Game.Chicken
         public Text tx_Logs;
         public Text api_Log;
         public string user_code;
+        public StarkAccount starkAccount;
         void Start()
 		{
-
+            starkAccount = StarkSDK.API.GetAccountManager();
             //StarkSDK.API.FollowDouYinUserProfile(OnFollowCallback, OnFollowError);
             try
 			{
@@ -29,7 +30,7 @@ namespace Yes.Game.Chicken
 		}
         void CheckSession()
         {
-            StarkSDK.API.GetAccountManager().CheckSession(OnCheckSessionSuccessCallback, OnCheckSessionFailedCallback);
+            starkAccount.CheckSession(OnCheckSessionSuccessCallback, OnCheckSessionFailedCallback);
         }
 
         void OnCheckSessionSuccessCallback()
@@ -38,11 +39,11 @@ namespace Yes.Game.Chicken
             ErrorLogs.Get.DisplayLog("CheckSession 接口调用成功 ");
             if (PlayerPrefs.HasKey("user_token"))
             {
-                GameStart.Instance.StartGame();
+                GameStart.Instance.StartGame(false);
             }
             else
             {
-                StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+                starkAccount.Login(OnLoginSuccessCallback,
 OnLoginFailedCallback);
             }
         }
@@ -69,19 +70,27 @@ OnLoginFailedCallback);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
             ErrorLogs.Get.DisplayLog(sucesslog);
             tx_Logs.text = sucesslog;
-            StarkSDK.API.Authorize("scope.userInfo", (string successmsg, JsonData jsonData) =>
+            try
             {
-                // 在成功回调中打印日志
-                ErrorLogs.Get.DisplayLog("Authorization successful. Message: " + successmsg);
-                if (jsonData.IsObject)
+                StarkSDK.API.Authorize("userInfo", (string successmsg, JsonData jsonData) =>
                 {
-                    ErrorLogs.Get.DisplayLog("Json data received: " + jsonData.ToJson());
-                }
+                    ErrorLogs.Get.DisplayLog("Authorization successful. Message: " + successmsg);
+                    if (jsonData.IsObject)
+                    {
+                        ErrorLogs.Get.DisplayLog("Json data received: " + jsonData.ToJson());
+                    }
 
-            }, (string failmsg, string failmsg2) =>
+                }, (string failmsg, string failmsg2) =>
+                {
+                    ErrorLogs.Get.DisplayLog("Authorization failed. Message: " + failmsg + " " + failmsg2);
+                });
+            }
+            catch (Exception ex)
             {
-                ErrorLogs.Get.DisplayLog("Authorization failed. Message: " + failmsg + " " + failmsg2);
-            });
+                Debug.Log(" StarkSDK.API.Authorize报错:" + ex.Message);
+            }
+
+
 
             //CopyDebug.OnClickCopyText(sucesslog);
         }
@@ -96,27 +105,35 @@ OnLoginFailedCallback);
                 //记录 result
                 ErrorLogs.Get.DisplayLog("记录 token = " + result.user.token);
                 api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
-
-                StarkSDK.API.GetAccountManager().GetScUserInfo((ref ScUserInfo scUserInfo) =>
+                try
                 {
-                    ErrorLogs.Get.DisplayLog("GetScUserInfo：");
-                    Constant.avatarUrl = scUserInfo.avatarUrl;
-                    Constant.nickName = scUserInfo.nickName;
-                    Constant.gender = scUserInfo.gender;
-                    Constant.city = scUserInfo.city;
-                    Constant.province = scUserInfo.province;
-                    Constant.country = scUserInfo.country;
-                    Constant.language = scUserInfo.language;
-
-                    Loading.Show();
-                    LoginData.UpdateUser((updateUserresult) =>
+                    StarkSDK.API.GetAccountManager().GetScUserInfo((ref ScUserInfo scUserInfo) =>
                     {
-                        Loading.Hide();
+                        ErrorLogs.Get.DisplayLog("GetScUserInfo：");
+                        Constant.avatarUrl = scUserInfo.avatarUrl;
+                        Constant.nickName = scUserInfo.nickName;
+                        Constant.gender = scUserInfo.gender;
+                        Constant.city = scUserInfo.city;
+                        Constant.province = scUserInfo.province;
+                        Constant.country = scUserInfo.country;
+                        Constant.language = scUserInfo.language;
 
-                        isover(true);
-                    });
+                        Loading.Show();
+                        LoginData.UpdateUser((updateUserresult) =>
+                        {
+                            ErrorLogs.Get.DisplayLog("UpdateUser返回成功");
+                            Loading.Hide();
 
-                }, OnGetScUserInfoFailedCallback);
+                            isover(true);
+                        });
+
+                    }, OnGetScUserInfoFailedCallback);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log(" StarkSDK.API.GetAccountManager().GetScUserInfo报错:" + ex.Message);
+                }
+
             });
         }
 
@@ -146,6 +163,20 @@ OnLoginFailedCallback);
             ErrorLogs.Get.DisplayLog("errMsg =" + errMsg);
         }
 
+
+        public void GetUserInfoAuth()
+        {
+
+          StarkSDK.API.GetAccountManager().GetUserInfoAuth(OnGetUserInfoAuthSuccess, OnGetUserInfoAuthFail);
+        }
+        void OnGetUserInfoAuthSuccess(bool auth)
+        {
+            ErrorLogs.Get.DisplayLog("OnGetUserInfoAuthSuccess:auth = " + auth);
+        }
+        void OnGetUserInfoAuthFail(string errMsg)
+        {
+            ErrorLogs.Get.DisplayLog("OnGetUserInfoAuthFail:errMsg = " + errMsg);
+        }
     }
 
 }

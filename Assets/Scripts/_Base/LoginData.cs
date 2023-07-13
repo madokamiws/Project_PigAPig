@@ -64,7 +64,7 @@ namespace Yes.Game.Chicken
                 param.Add("province", Constant.province);
                 param.Add("country", Constant.country);
 
-
+                ErrorLogs.Get.DisplayLog("update_user接口：");
                 //ErrorLogs.Get.DisplayLog(code);
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
