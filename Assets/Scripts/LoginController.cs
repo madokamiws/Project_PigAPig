@@ -10,8 +10,6 @@ namespace Yes.Game.Chicken
 {
 	public class LoginController : SingletonPatternMonoBase<LoginController>
     {
-        public Text tx_Logs;
-        public Text api_Log;
         public string user_code;
         public StarkAccount starkAccount;
         void Start()
@@ -69,12 +67,11 @@ OnLoginFailedCallback);
             Debug.Log("OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin);
             sucesslog = string.Format("登录成功\n OnLoginSuccessCallback ... code：" + code + " ，anonymousCode：" + anonymousCode + " ，isLogin：" + isLogin + "\n");
             ErrorLogs.Get.DisplayLog(sucesslog);
-            tx_Logs.text = sucesslog;
             try
             {
                 StarkSDK.API.Authorize("scope.userInfo", (string successmsg, JsonData jsonData) =>
                 {
-                    ErrorLogs.Get.DisplayLog("Authorization successful. Message: " + successmsg);
+                    ErrorLogs.Get.DisplayLog("Authorization successful. Message: ");
                     if (jsonData.IsObject)
                     {
                         ErrorLogs.Get.DisplayLog("Json data received: " + jsonData.ToJson());
@@ -87,7 +84,7 @@ OnLoginFailedCallback);
             }
             catch (Exception ex)
             {
-                Debug.Log(" StarkSDK.API.Authorize报错:" + ex.Message);
+                ErrorLogs.Get.DisplayLog(" StarkSDK.API.Authorize报错:" + ex.Message);
             }
 
 
@@ -104,7 +101,6 @@ OnLoginFailedCallback);
                 PlayerPrefs.Save();
                 //记录 result
                 ErrorLogs.Get.DisplayLog("记录 token = " + result.user.token);
-                api_Log.text = string.Format("api/login接口返回数据:{0}" + result);
                 try
                 {
                     StarkSDK.API.GetAccountManager().GetScUserInfo((ref ScUserInfo scUserInfo) =>
@@ -131,9 +127,10 @@ OnLoginFailedCallback);
                 }
                 catch (Exception ex)
                 {
-                    Debug.Log(" StarkSDK.API.GetAccountManager().GetScUserInfo报错:" + ex.Message);
+                    ErrorLogs.Get.DisplayLog("StarkSDK.API.GetAccountManager().GetScUserInfo报错:" + ex.Message);
                 }
-
+                ErrorLogs.Get.DisplayLog("获取用户信息失败，走以下流程");
+                GameStart.Instance.StartGame(false);
             });
         }
 
@@ -147,7 +144,6 @@ OnLoginFailedCallback);
             Debug.Log("OnLoginFailedCallback ... errMsg：" + errMsg);
             ErrorLogs.Get.DisplayLog("OnLoginFailedCallback ... errMsg：" + errMsg);
             failedlog = string.Format(sucesslog + "登录失败\n OnLoginFailedCallback ... errMsg：" + errMsg + "\n");
-            tx_Logs.text = failedlog;
         }
 
         void OnFollowCallback()
