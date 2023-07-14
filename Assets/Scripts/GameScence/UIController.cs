@@ -11,7 +11,24 @@ namespace Yes.Game.Chicken
 
         public void OnClickBackScence()
         {
-            SceneManager.LoadScene("GameMain");
+            int id = DeckController.Get.current_user_level_record_id;
+            ErrorLogs.Get.DisplayLog("BackShowFailure id = " + id);
+            Loading.Show();
+            GameFinishData.SubmitLevelData(id, 0, (result) =>
+            {
+                Loading.Hide();
+                ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
+                if (result != null)
+                {
+                    if (result.level_id > 0)
+                    {
+                        PlayerPrefs.SetInt("CurrentLevelIDMax", result.level_id);
+                        PlayerPrefs.Save();
+                    }
+                    SceneManager.LoadScene("GameMain");
+                }
+            });
+
         }
         public void OnRankingList()
         {
