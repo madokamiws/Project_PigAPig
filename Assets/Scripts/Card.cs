@@ -28,6 +28,8 @@ namespace Yes.Game.Chicken
 
         public AudioClip sound_Click;
 
+        private bool isLogicComplete = false;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -97,6 +99,13 @@ namespace Yes.Game.Chicken
             AudioManager.Instance.PlaySound(sound_Click);
             btnCard.onClick.RemoveAllListeners();
             transform.SetSiblingIndex(500);
+            DeckController.Get.EnqueueCard(this);
+
+
+        }
+
+        public void CardClickEventLogin()
+        {
             DeckController.Get.DeleteSelectedCard(this);
             //需要移出所有被覆盖的卡牌
             for (int i = 0; i < coverCardList.Count; i++)
@@ -110,27 +119,24 @@ namespace Yes.Game.Chicken
             //移动posID及其之后的卡牌向后排列一格
             var pickDeckPosTrans = DeckController.Instance.pickDeckPosTrans;
             var pickDeckCardIDs = DeckController.Instance.pickDeckCardIDs;
-            if (posID!=-1)
+            if (posID != -1)
             {
                 for (int i = posID; i < pickDeckPosTrans.Length; i++)
                 {
                     if (pickDeckCardIDs[i] != -1)
                     {
-                        Vector3 _pos = new Vector3(pickDeckPosTrans[i].position.x + DeckController.Instance.cardWidth/2+15, pickDeckPosTrans[i].position.y, pickDeckPosTrans[i].position.z);
+                        Vector3 _pos = new Vector3(pickDeckPosTrans[i].position.x + DeckController.Instance.cardWidth / 2 + 15, pickDeckPosTrans[i].position.y, pickDeckPosTrans[i].position.z);
                         pickDeckPosTrans[i].DOMove(_pos, 0.01f);
                     }
                 }
             }
 
-            DeckController.Instance.AddCardToPickDeck(transform, transform.position,posID);
+            DeckController.Instance.AddCardToPickDeck(transform, transform.position, posID);
             transform.DOMove(targetTrans.position, 0.1f).OnComplete(() =>
             {
                 coverCardList.Clear();
                 if (targetTrans.childCount > 0)
                 {
-                    //Transform newParent = DeckController.Instance.GetEmptyPickDeckTargetTrans(posID);
-                    //transform.SetParent(newParent);
-                    //transform.DOLocalMove(Vector3.zero, 10f);
                     transform.SetParent(DeckController.Instance.GetEmptyPickDeckTargetTrans(posID));
                 }
                 else
@@ -141,10 +147,13 @@ namespace Yes.Game.Chicken
                 transform.localPosition = Vector3.zero;
                 DeckController.Instance.JudgeClearCard();
                 DeckController.Instance.JudgeGameover();
-
+                isLogicComplete = true;//完成处理逻辑
             });
         }
-
+        public bool IsLogicComplete()
+        {
+            return isLogicComplete;
+        }
 
         /// <summary>
         /// 目标卡牌覆盖了当前卡牌（我们自身去调用目标卡牌的方法）

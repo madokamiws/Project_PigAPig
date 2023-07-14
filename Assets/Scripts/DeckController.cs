@@ -65,6 +65,10 @@ namespace Yes.Game.Chicken
 
         //private int[,,] centerCardIndex = new int[,,]//层 行 列
 
+
+        private Queue<Card> cardQueue;
+        private bool isProcessing;
+
         public static DeckController Instance { get; private set; }
         public static DeckController Get
         {
@@ -120,7 +124,10 @@ namespace Yes.Game.Chicken
             pos_centerDeckTrans = centerDeckTrans.anchoredPosition;
             AdController.Instance.ShowInterstitialAd();
             currentLevelID = GetCurrentMaxLevelID();
-            InitCreatDeck(currentLevelID); 
+            InitCreatDeck(currentLevelID);
+
+            cardQueue = new Queue<Card>();
+            isProcessing = false;
         }
 
         public void InitCreatDeck(int level = -1)
@@ -1198,6 +1205,32 @@ namespace Yes.Game.Chicken
         {
 
             AdController.Instance.DisplayInterstitialAd();
+        }
+
+        public void EnqueueCard(Card card)
+        {
+            cardQueue.Enqueue(card);
+        }
+        public bool ishaveCardClickEvent = false;
+
+        private void Update()
+        {
+            if (cardQueue.Count>0)
+            {
+                Card currentCard = cardQueue.Peek();
+                if (!ishaveCardClickEvent)
+                {
+                    currentCard.CardClickEventLogin();
+                    ishaveCardClickEvent = true;
+                }
+                bool isLogicComplete = currentCard.IsLogicComplete();
+                if (isLogicComplete)
+                {
+                    cardQueue.Dequeue();  // 逻辑完成后移除当前卡牌
+                    ishaveCardClickEvent = false;
+                }
+
+            }
         }
     }
 }
