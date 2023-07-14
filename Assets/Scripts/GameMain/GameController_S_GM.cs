@@ -12,7 +12,8 @@ namespace Yes.Game.Chicken
         public Text goldNum;
         //public GameObject checkpointObj;
         public AudioClip BGM_Click;
-
+        public GameObject guild_Obj;
+        private const string FirstLaunchKey = "FirstGuild";
         public CheckPointModel checkPointModel;
 
 
@@ -43,6 +44,18 @@ namespace Yes.Game.Chicken
             AudioManager.Instance.PlayBGM(BGM_Click);
             goldNum.text = ItemManager.Instance.GetItemCount(PropFunType.GOLD).ToString();
             UpdataRecordStatue();
+
+            bool isFirstLaunchGuild = PlayerPrefs.GetInt(FirstLaunchKey, 0) == 0;
+
+            if (isFirstLaunchGuild)
+            {
+                guild_Obj.SetActive(true);
+
+            }
+            else
+            {
+                guild_Obj.SetActive(false);
+            }
         }
         public void ShowCheckpoint()
         {
@@ -50,6 +63,7 @@ namespace Yes.Game.Chicken
             CheckPointModel.GetPointData(1, 20, (result) =>
             {
                 Loading.Hide();
+                PlayerPrefs.SetInt(FirstLaunchKey, 1);
                 checkPointModel = result;
                 ErrorLogs.Get.DisplayLog("回调成功");
 

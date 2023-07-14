@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using BestHTTP;
 using UnityEngine;
 using Yes.Game.Chicken;
+using UnityEngine.SceneManagement;
 public class BaseHttpHelper
 {
     static int response_error = 0;
@@ -29,7 +30,7 @@ public class BaseHttpHelper
             api_url = string.Format("{0}{1}", ip, api);
         }
 
-        Logs.Log(" *****HttpMethod请求数据***** url =" + api_url);
+        //Logs.Log(" *****HttpMethod请求数据***** url =" + api_url);
 
         Uri uri = new Uri(api_url);
 
@@ -48,7 +49,16 @@ public class BaseHttpHelper
                         ErrorLogs.Get.DisplayLog(string.Format(" ErrorLogs:{0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
                         Logs.Log(string.Format(" {0}-> HttpMethod responseStatusCode: {1} Message: {2} ", api_url, response.StatusCode, response.Message));
                     }
-
+#if UNITY_EDITOR
+#else
+                    if (response.StatusCode == 401)
+                    {
+                        ErrorLogs.Get.DisplayLog("StatusCode401：返回首页进行登录流程");
+                        PlayerPrefs.DeleteKey("user_token");
+                        SceneManager.LoadScene("GameStart");
+                        return;
+                    }
+#endif
                     response_error++;
                     if (response_error >= 3)
                     {
@@ -80,11 +90,6 @@ public class BaseHttpHelper
 
                 string resultText = response.DataAsText;
 
-                if (response.StatusCode == 401)
-                {
-                    ErrorLogs.Get.DisplayLog("返回首页进行登录流程");
-                    callback(response.DataAsText);
-                }
 
                 if (response.StatusCode == 200)
                 {

@@ -48,7 +48,7 @@ OnLoginFailedCallback);
         void OnCheckSessionFailedCallback(string errMsg)
         {
             ErrorLogs.Get.DisplayLog("CheckSession 接口调用失败，进入登录流程");
-            StarkSDK.API.GetAccountManager().Login(OnLoginSuccessCallback,
+            starkAccount.Login(OnLoginSuccessCallback,
 OnLoginFailedCallback);
 
         }

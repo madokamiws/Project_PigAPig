@@ -45,6 +45,12 @@ namespace Yes.Game.Chicken
         public int current_user_level_record_id = -1;
         public Stack<CardMoveRecord> cardMoveHistory = new Stack<CardMoveRecord>();
 
+        public AudioClip sound_ji;
+        public AudioClip sound_ni;
+        public AudioClip sound_tai;
+        public AudioClip sound_mei;
+
+
         //private const string LevelIDKey = "CurrentLevelID";
         private const string MaxLevelIDKey = "CurrentLevelIDMax";
 
@@ -246,7 +252,7 @@ namespace Yes.Game.Chicken
 };
 
             int[] DeckElementlist = new int[]
-                {1,2,3,4,5,6};
+                {11,12,13,14,5,6};
             int[] deckElementlist_weight = new int[]
                 {1,1,1,1,1,1};
 
@@ -756,6 +762,8 @@ namespace Yes.Game.Chicken
                 if (sameCount >= 3)
                 {
                     int countToFinish = 3;
+                    int cardIndexId = pickDeckPosTrans[startIndex].GetChild(0).GetComponent<Card>().id;
+                    CardSoundEffects(cardIndexId);
                     for (int j = startIndex; j < startIndex + 3; j++)
                     {
                         Transform child = pickDeckPosTrans[j].GetChild(0);
@@ -773,6 +781,24 @@ namespace Yes.Game.Chicken
                     break;
                 }
 
+            }
+        }
+        public void CardSoundEffects(int index)
+        {
+            switch (index)
+            {
+                case 11:
+                    AudioManager.Instance.PlaySound(sound_ji);
+                    break;
+                case 12:
+                    AudioManager.Instance.PlaySound(sound_ni);
+                    break;
+                case 13:
+                    AudioManager.Instance.PlaySound(sound_tai);
+                    break;
+                case 14:
+                    AudioManager.Instance.PlaySound(sound_mei);
+                    break;
             }
         }
         public void JudgeGameover()
