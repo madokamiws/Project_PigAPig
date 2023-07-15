@@ -43,6 +43,7 @@ namespace Yes.Game.Chicken
             isrecoding = true;
             Toast.Show("已开启录屏", 3);
             ErrorLogs.Get.DisplayLog("开始录屏");
+            GameController_S_GM.Instance.UpdataRecordStatue();
         }
         void OnRecordErrorCallback(int errCode, string errMsg)
         {
