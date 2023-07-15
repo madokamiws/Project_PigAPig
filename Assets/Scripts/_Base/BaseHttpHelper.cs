@@ -60,9 +60,9 @@ public class BaseHttpHelper
                     }
 #endif
                     response_error++;
-                    if (response_error >= 3)
+                    if (response_error >= 1)
                     {
-                        //Constant.IP_INDEX += 1;
+                        return;
                     }
 
                     bool isReturn = CheckDic(api);

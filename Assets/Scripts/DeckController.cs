@@ -313,7 +313,7 @@ namespace Yes.Game.Chicken
 
                     DisplayPointData(_centerDeck, _deckElementlist, _deck_element_list_weight, totalCardNum);
                     CountdownController.Instance.SetupTimer(result);//开始倒计时
-                    GameRecorderController.Instance.StartSCRecord();
+                    //GameRecorderController.Instance.StartSCRecord();
                 });
             }
 #endif

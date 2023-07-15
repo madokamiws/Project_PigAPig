@@ -16,8 +16,8 @@ namespace Yes.Game.Chicken
 
         public void StartRecording()
         {
-            isrecoding = true;
-            Toast.Show("已开启录屏，进入关卡时自动开始录制",3);
+            starkManager.StartRecord(true, 600, OnRecordStartCallback, OnRecordErrorCallback, OnRecordCompleteCallback);
+
             
         }
         /// <summary>
@@ -40,10 +40,14 @@ namespace Yes.Game.Chicken
         }
         void OnRecordStartCallback()
         {
+            isrecoding = true;
+            Toast.Show("已开启录屏", 3);
             ErrorLogs.Get.DisplayLog("开始录屏");
         }
         void OnRecordErrorCallback(int errCode, string errMsg)
         {
+            isrecoding = false;
+            Toast.Show("未获得录屏权限，请手动开启", 3);
             string log = string.Format("录屏errCode = {0},  errMsg = {1}", errCode, errMsg);
 
             ErrorLogs.Get.DisplayLog(log);
