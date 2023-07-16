@@ -69,6 +69,7 @@ namespace Yes.Game.Chicken
 
         void OnShareVideoFailedCallback(string errMsg)
         {
+            Toast.Show("未获得录屏权限，请手动开启", 3);
             string log = string.Format("分享录屏  errMsg = {0}", errMsg);
 
             ErrorLogs.Get.DisplayLog(log);
