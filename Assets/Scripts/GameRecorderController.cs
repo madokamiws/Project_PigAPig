@@ -48,7 +48,7 @@ namespace Yes.Game.Chicken
         void OnRecordErrorCallback(int errCode, string errMsg)
         {
             isrecoding = false;
-            Toast.Show("未获得录屏权限，请手动开启", 3);
+            Toast.Show("录制失败，未获得录屏权限，请手动开启", 3);
             string log = string.Format("录屏errCode = {0},  errMsg = {1}", errCode, errMsg);
 
             ErrorLogs.Get.DisplayLog(log);

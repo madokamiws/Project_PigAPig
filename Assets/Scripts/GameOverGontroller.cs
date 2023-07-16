@@ -37,7 +37,7 @@ namespace Yes.Game.Chicken
             ErrorLogs.Get.DisplayLog("ShowFailure id = "+  id);
             AudioManager.Instance.PlaySound(sound_failure);
             Loading.Show();
-            GameFinishData.SubmitLevelData(id, 0, (result) =>
+            GameFinishData.SubmitLevelData(id, 0, 0,(result) =>
             {
                 Loading.Hide();
                 ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
@@ -64,7 +64,8 @@ namespace Yes.Game.Chicken
             ErrorLogs.Get.DisplayLog("ShowSuccess id = " + id);
             AudioManager.Instance.PlaySound(sound_success);
             Loading.Show();
-            GameFinishData.SubmitLevelData(id, 1, (result) =>
+            int is_revive = DeckController.Get.isRelife;
+            GameFinishData.SubmitLevelData(id, 1, is_revive, (result) =>
               {
                   Loading.Hide();
                   ErrorLogs.Get.DisplayLog("SubmitLevelData  成功回调");

@@ -25,7 +25,7 @@ namespace Yes.Game.Chicken
 
         private float countdownTime; // Set the countdown time
         private float currentTime;
-        private float totalTime;
+        private float totalTime = 1;
         private bool isPaused = true;
 
         private float time_cover2;
@@ -134,7 +134,7 @@ namespace Yes.Game.Chicken
         public void ResetTimer()
         {
             currentTime = countdownTime;
-            totalTime = 0;
+            totalTime = 1;
             timerSlider.value = 1; // Set Slider to full value
             isPaused = false;
         }

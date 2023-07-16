@@ -6,7 +6,7 @@ namespace Yes.Game.Chicken
 {
     public class GameFinishData
     {
-        public static void SubmitLevelData(int id,int is_pass, Action<FinishCallBackModel> callback = null)
+        public static void SubmitLevelData(int id,int is_pass, int is_revive = 0 ,Action<FinishCallBackModel> callback = null)
         {
             try
             {
@@ -36,9 +36,12 @@ namespace Yes.Game.Chicken
 
 
                 param.Add("user_level_record_id", id.ToString());
+                param.Add("is_revive", is_revive.ToString());
                 param.Add("is_pass", is_pass.ToString());
                 param.Add("h", h);
                 param.Add("duration", duration.ToString());
+
+
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     ErrorLogs.Get.DisplayLog("finish接口返回数据:" + data);

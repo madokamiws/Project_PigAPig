@@ -43,8 +43,8 @@ namespace Yes.Game.Chicken
                     ErrorLogs.Get.DisplayLog("token没有获取到");
                 }
 
-                param.Add("page", page.ToString());
-                param.Add("per_page", per_page.ToString());
+                //param.Add("page", page.ToString());
+                //param.Add("per_page", per_page.ToString());
 
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {

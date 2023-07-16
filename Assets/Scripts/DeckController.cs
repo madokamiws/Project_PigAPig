@@ -54,7 +54,7 @@ namespace Yes.Game.Chicken
         //private const string LevelIDKey = "CurrentLevelID";
         private const string MaxLevelIDKey = "CurrentLevelIDMax";
 
-        public bool isRelife = false;
+        public int  isRelife = 0;
         public int currentLevelID = -1;
         /// <summary>
         /// 卡牌总数
@@ -321,7 +321,7 @@ namespace Yes.Game.Chicken
         public void InitData()
         {
             UpdatePropNum();
-
+            isRelife = 0;
             cards.Clear();
             centerDeckTrans.anchoredPosition = pos_centerDeckTrans;
             for (int i = 0; i < pickDeckCardIDs.Length; i++)
@@ -919,6 +919,10 @@ namespace Yes.Game.Chicken
         }
         public void OnBackThree(bool isrelife)
         {
+            if (isrelife)
+            {
+                isRelife = 1;
+            }
             CountdownController.Instance.StartTimer();
             for (int turn = 0; turn < 3; turn++)
             {
@@ -1213,7 +1217,7 @@ namespace Yes.Game.Chicken
         }
         public bool ishaveCardClickEvent = false;
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (cardQueue.Count>0)
             {

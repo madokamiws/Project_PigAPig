@@ -14,7 +14,7 @@ namespace Yes.Game.Chicken
             int id = DeckController.Get.current_user_level_record_id;
             ErrorLogs.Get.DisplayLog("BackShowFailure id = " + id);
             Loading.Show();
-            GameFinishData.SubmitLevelData(id, 0, (result) =>
+            GameFinishData.SubmitLevelData(id, 0,0, (result) =>
             {
                 Loading.Hide();
                 ErrorLogs.Get.DisplayLog("SubmitLevelData  ShowFailure  成功回调");
