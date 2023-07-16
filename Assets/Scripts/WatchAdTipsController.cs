@@ -65,9 +65,8 @@ namespace Yes.Game.Chicken
                     }
                     AdController.Instance.SubmitADData(1, 1, null, (result) =>
                     {
-
-                        Destroy(gameObject);
                     });
+                    Destroy(gameObject);
                 }
                 else
                 {

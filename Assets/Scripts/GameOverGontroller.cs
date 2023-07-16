@@ -104,12 +104,13 @@ namespace Yes.Game.Chicken
                 if (isWatchedTimeGreater)
                 {
                     DeckController.Get.OnBackThree(true);
+                    ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 大于 effectiveTime");
 
                     AdController.Instance.SubmitADData(1, 1, null, (result) =>
                     {
-                        ErrorLogs.Get.DisplayLog("GameOverGontroller中激励广告: watchedTime 大于 effectiveTime");
-                        OnClose();
                     });
+                    OnClose();
+
                 }
                 else
                 {

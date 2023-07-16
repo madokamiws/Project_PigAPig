@@ -54,6 +54,7 @@ namespace Yes.Game.Chicken
         //private const string LevelIDKey = "CurrentLevelID";
         private const string MaxLevelIDKey = "CurrentLevelIDMax";
 
+        public bool isRelife = false;
         public int currentLevelID = -1;
         /// <summary>
         /// 卡牌总数

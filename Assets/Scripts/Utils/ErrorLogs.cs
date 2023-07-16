@@ -45,7 +45,7 @@ namespace Yes.Game.Chicken
         }
         public void ShowLog()
         {
-            gameObject.SetActive(true);
+            //gameObject.SetActive(true);
         }
         public void OnClickCloseLog()
         {

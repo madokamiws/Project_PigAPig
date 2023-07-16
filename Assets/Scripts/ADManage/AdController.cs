@@ -199,7 +199,7 @@ public class AdController: SingletonPatternBase<AdController>
                 BaseHttpHelper.HttpMethod(url, param, (string data) =>
                 {
                     Loading.Hide();
-                    ErrorLogs.Get.DisplayLog("finish接口返回数据:" + data);
+                    ErrorLogs.Get.DisplayLog("ads/report接口返回数据:" + data);
                     AdModel model = Newtonsoft.Json.JsonConvert.DeserializeObject<AdModel>(data);
                     if (model.error_code >= 0)
                     {
