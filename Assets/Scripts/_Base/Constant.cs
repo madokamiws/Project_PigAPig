@@ -13,7 +13,7 @@ namespace Yes.Game.Chicken
 
         public static readonly string HTTP_DATA_EMPTY = "";
 
-        public static readonly bool IsDebug = true;
+        public static readonly bool IsDebug = false;
 
         public static string avatarUrl { get; set; }
         public static string nickName { get; set; }

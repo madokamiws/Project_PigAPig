@@ -283,6 +283,7 @@ MonoBehaviour:
   sound_tai: {fileID: 8300000, guid: a4143c748b1f0ab4ebf4abbd2852c5c7, type: 3}
   sound_mei: {fileID: 8300000, guid: feaace406d772644d889afb0e4b96de4, type: 3}
   currentLevelID: -1
+  ishaveCardClickEvent: 0
 --- !u!1 &78985829
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,7 +1361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &763578482
 RectTransform:
   m_ObjectHideFlags: 0
