@@ -16,8 +16,8 @@ MonoBehaviour:
   stripEngineCode: 0
   appId: tt48113eacd72de81907
   needCompress: 1
-  wasmResourceUrl: 
-  webglPackagePath: 
+  wasmResourceUrl: http://
+  webglPackagePath: E:\workspace\home\SheepA\Project_Pig\Project_pig\Build\webgl\webgl_package-20230717_122835.zip
   useByteAudioAPI: 0
   useNewFileSystem: 0
   wasmMemorySize: 512
