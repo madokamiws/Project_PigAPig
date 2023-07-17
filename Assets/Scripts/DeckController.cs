@@ -114,7 +114,7 @@ namespace Yes.Game.Chicken
             }
             else
             {
-                return -1;
+                return 1;
             }
 
 
@@ -137,6 +137,9 @@ namespace Yes.Game.Chicken
             {
                 currentLevelID = level;
             }
+            else
+                currentLevelID = 1;
+
 
             ErrorLogs.Get.DisplayLog("level = " + level);
             InitData();
